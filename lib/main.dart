@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'activitymanager.dart';
-import 'activity.dart';
 
 void main() => runApp(OrientxApp());
 

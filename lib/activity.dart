@@ -13,13 +13,10 @@ class RootActivity extends StatelessWidget {
   RootActivity({
     @required this.name,
     @required this.builder,
-  }) {
-    print('[RootActivity Widget] Constructor');
-  }
+  });
 
   @override
   Widget build(BuildContext context) {
-    print('[RootActivity Widget] build()');
     return Scaffold(
       appBar: AppBar(
         title: Text(name),
@@ -29,6 +26,7 @@ class RootActivity extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class Activity extends StatelessWidget {
   final String image;
   final String imageText;
@@ -42,14 +40,11 @@ class Activity extends StatelessWidget {
     this.imageText,
     this.labels,
     this.time,
-  }) {
-    print('[Activity Widget] Constructor');
-  }
+  });
 
   @override
   Widget build(BuildContext context) {
     _context = context;
-    print('[Activity Widget] build()');
     _startTimeout(time);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,

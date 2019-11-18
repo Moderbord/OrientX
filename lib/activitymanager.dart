@@ -16,13 +16,10 @@ class ActivityManager extends StatelessWidget {
   final ActivityAnswerCount activityAnswerCount;
 
   ActivityManager(
-      {this.activityType, this.activityConclusion, this.activityAnswerCount}) {
-    print('[ActivityManager Widget] Constructor');
-  }
+      {this.activityType, this.activityConclusion, this.activityAnswerCount});
 
   @override
   Widget build(BuildContext context) {
-    print('[_ActivityManagerState State] build()');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [

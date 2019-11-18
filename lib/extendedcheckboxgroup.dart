@@ -6,13 +6,10 @@ class ExtendedCheckboxGroup extends StatefulWidget {
 
   ExtendedCheckboxGroup({
     @required this.labels,
-  }) {
-    print('[ExtentedCheckboxGroup Widget] Constructor');
-  }
+  });
 
   @override
   State<StatefulWidget> createState() {
-    print('[ExtentedCheckboxGroup Widget] createState()');
     return _ExtendedCheckboxGroupState();
   }
 }
@@ -23,7 +20,6 @@ class _ExtendedCheckboxGroupState extends State<ExtendedCheckboxGroup> {
 
   @override
   Widget build(BuildContext context) {
-    print('[_ExtentedCheckboxGroupState Widget] build()');
     return Column(
       children: <Widget>[
         CheckboxGroup(
