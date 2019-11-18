@@ -43,13 +43,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2"
-  device_info:
-    dependency: transitive
-    description:
-      name: device_info
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.1+1"
+<<<<<<< HEAD
   firebase_auth:
     dependency: "direct main"
     description:
@@ -64,6 +58,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.1+5"
+=======
+  device_info:
+    dependency: transitive
+    description:
+      name: device_info
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.1+1"
+>>>>>>> 35177dddeea20b9e4e76d8acee095123895f4a5a
   flutter:
     dependency: "direct main"
     description: flutter
@@ -200,4 +203,8 @@ packages:
     version: "2.0.8"
 sdks:
   dart: ">=2.2.2 <3.0.0"
+<<<<<<< HEAD
   flutter: ">=1.9.1+hotfix.5 <2.0.0"
+=======
+  flutter: ">=1.6.7 <2.0.0"
+>>>>>>> 35177dddeea20b9e4e76d8acee095123895f4a5a

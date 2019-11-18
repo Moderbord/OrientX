@@ -47,8 +47,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        testInstrumentationRunner
-        multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -71,12 +70,17 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     testImplementation 'junit:junit:4.12'
+<<<<<<< HEAD
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.google.firebase:firebase-analytics:17.2.0'
+=======
     // background_geolocation requires androidx test implementations
     androidTestImplementation 'androidx.test:runner:1.1.1'                   // or higher
-    implementation 'com.google.firebase:firebase-analytics:17.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'   // or higher
     //androidTestImplementation 'com.android.support.test:runner:1.0.2'
     //androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+>>>>>>> 35177dddeea20b9e4e76d8acee095123895f4a5a
 }
 
 apply plugin: 'com.google.gms.google-services'

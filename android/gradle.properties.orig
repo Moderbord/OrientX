@@ -1,0 +1,8 @@
+org.gradle.jvmargs=-Xmx1536M
+<<<<<<< HEAD
+android.useAndroidX = true
+android.enableJetifier = true
+=======
+android.enableJetifier=true
+android.useAndroidX=true
+>>>>>>> 35177dddeea20b9e4e76d8acee095123895f4a5a
