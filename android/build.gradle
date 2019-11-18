@@ -1,12 +1,18 @@
 buildscript {
-    ext.kotlin_version = '1.2.71'
+    ext.kotlin_version = '1.3.0' // Must use 1.3.0 or higher (used to be 1.2.71)
+    ext {
+        compileSdkVersion   = 28                // or higher
+        targetSdkVersion    = 28                // or higher
+        appCompatVersion    = "1.0.2"           // or higher
+        playServicesLocationVersion = "17.0.0"  // or higher
+    }
     repositories {
         google()
         jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.1' // used to be 3.2.1
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
