@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "646429315789",
+    "firebase_url": "https://login-page-2cca3.firebaseio.com",
+    "project_id": "login-page-2cca3",
+    "storage_bucket": "login-page-2cca3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:646429315789:android:b30797b731f5ff15328f84",
+        "android_client_info": {
+          "package_name": "com.gumlin.orientx"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "646429315789-v6toipk97vlf5k9gddsrkcc6slbscrgm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gumlin.orientx",
+            "certificate_hash": "edf6d8b8cbb48cbdcc12c894c25d102c68f30db6"
+          }
+        },
+        {
+          "client_id": "646429315789-6uvn3uermfkbfahf5p65s8o8gupeakro.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjqA0v_PDvYJBbPomNXqA_sdvDwAuvlhE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "646429315789-6uvn3uermfkbfahf5p65s8o8gupeakro.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "646429315789-fshf4kur9shbdmmfgdp04jff3uspbro4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.student.signInFlutter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
