@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:orientx/activitytimer.dart';
-
 import 'package:orientx/extendedcheckboxgroup.dart';
+import 'package:orientx/videoitem.dart';
+import 'package:video_player/video_player.dart';
 
 class RootActivity extends StatelessWidget {
   final String name;
@@ -57,5 +58,26 @@ class Activity extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class VideoActivity extends StatelessWidget {
+  final String url;
+
+
+  VideoActivity({
+    @required this.url,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        VideoItem(
+          videoPlayerController: VideoPlayerController.network("https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4"),
+          looping: true,
+        )
+      ],
+    ); //temp
   }
 }

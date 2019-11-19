@@ -43,11 +43,14 @@ class ActivityManager extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => RootActivity(
           name: 'Väsande aktivitet',
-          builder: (context) => Activity(
+          /*builder: (context) => Activity(
             image: 'assets/väs.jpg',
             imageText: 'Vad är detta för gudomlighet?',
             labels: <String>['Hej', 'då', 'gammal', 'kod'],
             time: 5,
+          ),*/
+          builder: (context) => VideoActivity(
+            url: "text",
           ),
         ),
       ),

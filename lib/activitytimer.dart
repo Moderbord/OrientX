@@ -40,8 +40,7 @@ class _ActivityTimerState extends State<ActivityTimer>
   }
 
   @override
-  void dispose()
-  {
+  void dispose() {
     _controller.dispose();
     super.dispose();
   }
