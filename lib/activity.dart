@@ -39,9 +39,6 @@ class Activity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ActivityTimer activityTimer = new ActivityTimer(
-        time: time,
-        onFinish: () => Navigator.pop(context, "Activity timed out"));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
@@ -51,12 +48,13 @@ class Activity extends StatelessWidget {
           child: Text(imageText),
           alignment: Alignment.centerLeft,
         ),
-        activityTimer,
+        ActivityTimer(
+            time: time,
+            onFinish: () => Navigator.pop(context, "Activity timed out")),
         ExtendedCheckboxGroup(
-            labels: labels,
-            onClick: (List<String> answers) {
-              Navigator.pop(context, answers);
-            })
+          labels: labels,
+          onClick: (List<String> answers) => Navigator.pop(context, answers),
+        ),
       ],
     );
   }
