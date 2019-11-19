@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:orientx/activitytimer.dart';
 
@@ -26,14 +24,11 @@ class RootActivity extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
 class Activity extends StatelessWidget {
   final String image;
   final String imageText;
   final List<String> labels;
   final int time;
-
-  BuildContext _context;
 
   Activity({
     this.image,
@@ -44,8 +39,9 @@ class Activity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _context = context;
-    _startTimeout(time);
+    ActivityTimer activityTimer = new ActivityTimer(
+        time: time,
+        onFinish: () => Navigator.pop(context, "Activity timed out"));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
@@ -55,26 +51,14 @@ class Activity extends StatelessWidget {
           child: Text(imageText),
           alignment: Alignment.centerLeft,
         ),
-        ActivityTimer(
-          time: time,
-        ),
+        activityTimer,
         ExtendedCheckboxGroup(
-          labels: labels,
-        )
+            labels: labels,
+            onClick: (List<String> answers) {
+              activityTimer.onBreak();
+              Navigator.pop(context, answers);
+            })
       ],
     );
-  }
-
-  Timer _startTimeout([int time]) {
-    print("Timer started");
-    const timeout = const Duration(seconds: 999);
-    const ms = const Duration(milliseconds: 1000);
-
-    var duration = time == null ? timeout : ms * time;
-    return new Timer(duration, _activityTimeoutCallback);
-  }
-
-  void _activityTimeoutCallback() {
-    Navigator.pop(_context, "Activity timed out");
   }
 }

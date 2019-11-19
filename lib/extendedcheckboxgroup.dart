@@ -3,9 +3,11 @@ import 'package:grouped_buttons/grouped_buttons.dart';
 
 class ExtendedCheckboxGroup extends StatefulWidget {
   final List<String> labels;
+  final void Function(List<String> anwsers) onClick;
 
   ExtendedCheckboxGroup({
     @required this.labels,
+    @required this.onClick,
   });
 
   @override
@@ -31,8 +33,7 @@ class _ExtendedCheckboxGroupState extends State<ExtendedCheckboxGroup> {
               });
             }),
         RaisedButton(
-          onPressed:
-              buttonIsDisabled ? null : () => Navigator.pop(context, answers),
+          onPressed: buttonIsDisabled ? null : () => widget.onClick(answers),
           child: Text('Answer'),
         )
       ],
