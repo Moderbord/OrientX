@@ -55,7 +55,6 @@ class Activity extends StatelessWidget {
         ExtendedCheckboxGroup(
             labels: labels,
             onClick: (List<String> answers) {
-              activityTimer.onBreak();
               Navigator.pop(context, answers);
             })
       ],
