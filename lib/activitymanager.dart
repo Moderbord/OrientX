@@ -10,8 +10,9 @@ class ActivityManager {
   String dataSource;
   DataType dataType;
   String description;
-  List<String> labels;
-  String correct;
+  List<String> questions;
+  QuestionType questionType;
+  List<String> answers;
   int duration;
 
   void newActivity(
@@ -23,8 +24,9 @@ class ActivityManager {
     dataSource    = package.dataSource;
     dataType      = package.dataType      ?? DataType.Undefined;
     description   = package.description   ?? "VÄÄÄÄÄÄÄS!! Måste ha TEXT!";
-    labels        = package.labels;
-    correct       = package.correct;
+    questions     = package.questions;
+    questionType  = package.questionType;
+    answers       = package.answers;
     duration      = package.duration;
 
     _startActivity(context);
@@ -35,14 +37,15 @@ class ActivityManager {
       context,
       MaterialPageRoute(
         builder: (context) => Activity(
-          activityName: activityName,
-          id: id,
-          dataSource: dataSource,
-          dataType: dataType,
-          description: description,
-          labels: labels,
-          correct: correct,
-          duration: duration,
+           activityName: activityName,
+           id: id,
+           dataSource: dataSource,
+           dataType: dataType,
+           description: description,
+           questions: questions,
+           questionType: questionType,
+           answers: answers,
+           duration: duration,
         )
       ),
     );

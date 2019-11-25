@@ -8,14 +8,21 @@ enum DataType {
   Game,
 }
 
+enum QuestionType {
+  Undefined,
+  Single,
+  Multiple,
+}
+
 class ActivityPackage {
   final String activityName;
   final int id;
   final String dataSource;
   final DataType dataType;
   final String description;
-  final List<String> labels;
-  final String correct;
+  final List<String> questions;
+  final QuestionType questionType;
+  final List<String> answers;
   final int duration;
 
   ActivityPackage(
@@ -24,7 +31,8 @@ class ActivityPackage {
       this.dataSource,
       this.dataType,
       @required this.description,
-      this.labels,
-      this.correct,
+      this.questions,
+      this.questionType,
+      this.answers,
       this.duration});
 }
