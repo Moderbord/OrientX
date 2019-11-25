@@ -1,58 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:orientx/activitypackage.dart';
 
 import 'activity.dart';
 
-enum ActivityType { Question, Video, Sound, Game }
+class ActivityManager {
 
-enum ActivityConclusion { Choice, Written, Task, Passive }
+  String activityName;
+  int id;
+  String dataSource;
+  DataType dataType;
+  String description;
+  List<String> questions;
+  QuestionType questionType;
+  List<String> answers;
+  int duration;
 
-enum ActivityAnswerCount { Single, Multiple }
+  void newActivity(
+      {@required BuildContext context,
+      @required ActivityPackage package})
+  {
+    activityName  = package.activityName  ?? "Väääääs! Måste ha TITEL!";
+    id            = package.id            ?? 0;
+    dataSource    = package.dataSource;
+    dataType      = package.dataType      ?? DataType.Undefined;
+    description   = package.description   ?? "VÄÄÄÄÄÄÄS!! Måste ha TEXT!";
+    questions     = package.questions;
+    questionType  = package.questionType;
+    answers       = package.answers;
+    duration      = package.duration;
 
-class ActivityManager extends StatelessWidget {
-  final ActivityType activityType;
-
-  final ActivityConclusion activityConclusion;
-
-  final ActivityAnswerCount activityAnswerCount;
-
-  ActivityManager(
-      {this.activityType, this.activityConclusion, this.activityAnswerCount});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          margin: EdgeInsets.all(7.0),
-          child: RaisedButton(
-            onPressed: () {
-              // Transitions to a new activity
-              _startActivity(context);
-            },
-            child: Text('Actify me'),
-          ),
-        ),
-      ],
-    );
+    _startActivity(context);
   }
 
   _startActivity(BuildContext context) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => RootActivity(
-          name: 'Väsande aktivitet',
-          builder: (context) => Activity(
-            image: 'assets/väs.jpg',
-            imageText: 'Vad är detta för gudomlighet?',
-            labels: <String>['Hej', 'då', 'gammal', 'kod'],
-            time: 5,
-          ),
-        ),
+        builder: (context) => Activity(
+           activityName: activityName,
+           id: id,
+           dataSource: dataSource,
+           dataType: dataType,
+           description: description,
+           questions: questions,
+           questionType: questionType,
+           answers: answers,
+           duration: duration,
+        )
       ),
     );
-
+    // Display short Snackbar
     Scaffold.of(context)
       ..removeCurrentSnackBar()
       ..showSnackBar(SnackBar(content: Text('$result')));
