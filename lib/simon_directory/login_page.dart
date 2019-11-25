@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import "package:firebase_auth/firebase_auth.dart";
-import "package:google_sign_in/google_sign_in.dart";
 import "sign_in.dart";
 import "first_screen.dart";
 
@@ -23,11 +21,9 @@ class _LoginPageState extends State<LoginPage>
         body: Container
         (
             decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [color1,color3]
-                )
+                gradient: LinearGradient(colors: [color1,color3],
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft)
             ),
           child: Center
           (
