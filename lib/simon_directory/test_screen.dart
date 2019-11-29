@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'sign_in.dart';
-import 'package:orientx/activitypackage.dart';
-import 'package:orientx/activitymanager.dart';
+import 'package:orientx/spaken_directory/activitypackage.dart';
+import 'package:orientx/spaken_directory/activitymanager.dart';
 
 class TestPage extends StatelessWidget {
   final ActivityPackage rndImagePkg = ActivityPackage(
