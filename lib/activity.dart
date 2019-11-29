@@ -47,7 +47,7 @@ class Activity extends StatelessWidget {
                   ),
                   ActivityTimer(
                       time: duration,
-                      onFinish: () => Navigator.pop(context, "Activity timed out")),
+                      onFinish: () => Navigator.pop(context, List<String>())),
                   ExtendedCheckboxGroup(
                      labels: questions,
                      type: questionType,

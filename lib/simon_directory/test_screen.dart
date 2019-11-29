@@ -14,7 +14,7 @@ class TestPage extends StatelessWidget
       questions: <String>["Hemligt", "Oklart", "Drake"],
       questionType: QuestionType.Single,
       answers: <String>["Oklart"],
-      duration: 10,
+      duration: 5,
    );
 
    final ActivityPackage videoPkg = ActivityPackage(

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:orientx/activitypackage.dart';
 
@@ -49,9 +50,14 @@ class ActivityManager {
         )
       ),
     );
+
+    Function deepEq = const DeepCollectionEquality.unordered().equals;
+
+    bool hej = deepEq(result, answers);
+
     // Display short Snackbar
     Scaffold.of(context)
       ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('$result')));
+      ..showSnackBar(SnackBar(content: Text('$hej')));
   }
 }
