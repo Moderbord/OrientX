@@ -61,8 +61,8 @@ class MapViewState extends State<MapView>
     bg.BackgroundGeolocation.addGeofence(bg.Geofence(
         identifier: "Test fence",
         radius: 200.0,
-        latitude: 51.6,
-        longitude: -0.10,
+        latitude: _center.latitude + 0.1,
+        longitude: _center.longitude,
         notifyOnEntry: true,
         notifyOnExit: true,
         notifyOnDwell: true,
@@ -82,7 +82,6 @@ class MapViewState extends State<MapView>
       timeout: 30,         // <-- wait 30s before giving up.
       samples: 3,           // <-- sample just 1 location
     ).then((bg.Location location) {
-      print('[getCurrentPosition] - $location');
       _mapController.move(LatLng(location.coords.latitude, location.coords.longitude), 16);
     }).catchError((error) {
       print('[getCurrentPosition] ERROR: $error');
