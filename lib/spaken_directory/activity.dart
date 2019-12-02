@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:orientx/activitytimer.dart';
-import 'package:orientx/extendedcheckboxgroup.dart';
-import 'package:orientx/videoitem.dart';
-import 'package:orientx/activitypackage.dart';
+import 'package:orientx/spaken_directory/activitytimer.dart';
+import 'package:orientx/spaken_directory/extendedcheckboxgroup.dart';
+import 'package:orientx/spaken_directory/videoitem.dart';
+import 'package:orientx/spaken_directory/activitypackage.dart';
 
 class Activity extends StatelessWidget {
    final String activityName;
@@ -47,7 +47,7 @@ class Activity extends StatelessWidget {
                   ),
                   ActivityTimer(
                       time: duration,
-                      onFinish: () => Navigator.pop(context, "Activity timed out")),
+                      onFinish: () => Navigator.pop(context, List<String>())),
                   ExtendedCheckboxGroup(
                      labels: questions,
                      type: questionType,
