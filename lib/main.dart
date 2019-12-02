@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:orientx/simon_directory/first_screen.dart';
 import "simon_directory/login_page.dart";
+import 'package:orientx/fredrik_directory/track.dart' as fredde;
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
@@ -23,6 +24,13 @@ class MyApp extends StatelessWidget {
         bg.BackgroundGeolocation.start();
       }
     });
+
+    bg.BackgroundGeolocation.onGeofence(
+        (bg.GeofenceEvent event) =>
+        {
+
+        }
+    );
 
     return MaterialApp(
         title: 'OrientX',

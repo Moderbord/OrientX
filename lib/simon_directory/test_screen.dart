@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:orientx/fredrik_directory/mapview.dart';
 import 'sign_in.dart';
 import 'package:orientx/spaken_directory/activitypackage.dart';
 import 'package:orientx/spaken_directory/activitymanager.dart';
+import 'package:orientx/fredrik_directory/station.dart';
+import 'package:orientx/fredrik_directory/track.dart';
+import 'package:latlong/latlong.dart';
 
 class TestPage extends StatelessWidget {
   final ActivityPackage rndImagePkg = ActivityPackage(
@@ -44,7 +48,22 @@ class TestPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<ActivityPackage> lista = [rndImagePkg, videoPkg, enTill];
+
+    final List<Station> stationList = [
+      Station(name: "Lakeside Shrubbery", point: LatLng(37.4320, 122.0941)),
+      Station(name: "Shrekway Bus Station", point: LatLng(37.5320, 122.1041)),
+      Station(name: "3 boys in a sleeping bag", point: LatLng(37.4325, 122.0951))
+    ];
+    final List<ActivityPackage> activityList = [rndImagePkg, videoPkg, enTill];
+
+    Track track = Track(
+      name: "Mysslinga",
+      stations: stationList,
+      activities: activityList,
+      type: circuitType.standard
+    );
+
+
     int index = 0;
 
     return Container(
@@ -54,36 +73,7 @@ class TestPage extends StatelessWidget {
               begin: Alignment.topRight,
               end: Alignment.bottomLeft)),
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            RaisedButton(
-              onPressed: () {
-                // Transitions to a new activity
-                ActivityManager().newActivity(
-                  context: context,
-                  package: lista[index],
-                );
-              },
-              child: Text('Trigger'),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 100.0),
-              child: RaisedButton(
-                onPressed: () {
-                  index++;
-                  if (index >= lista.length) {
-                    index = 0;
-                  }
-                  print(index);
-                },
-                child: Text(
-                  'Activity: ' + index.toString(),
-                ),
-              ),
-            ),
-          ],
-        ),
+        child: MapView(track: track)
       ),
     );
   }

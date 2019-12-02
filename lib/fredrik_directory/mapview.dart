@@ -4,16 +4,20 @@ import 'package:flutter_background_geolocation/flutter_background_geolocation.da
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong/latlong.dart';
-import 'package:orientx/station.dart';
+import 'package:orientx/fredrik_directory/station.dart';
+import 'package:orientx/fredrik_directory/track.dart';
 
 class MapView extends StatefulWidget {
+  final Track track;
+
+  MapView({@required this.track});
+
   @override
   State createState() => MapViewState();
 }
 
 class MapViewState extends State<MapView>
     with AutomaticKeepAliveClientMixin<MapView> {
-
   @override
   bool get wantKeepAlive {
     return true;
@@ -54,23 +58,26 @@ class MapViewState extends State<MapView>
     bg.BackgroundGeolocation.onLocation(_onLocation);
     bg.BackgroundGeolocation.onMotionChange(_onMotionChange);
     bg.BackgroundGeolocation.onGeofence(_onGeofence);
-    bg.BackgroundGeolocation.onGeofencesChange(_onGeofencesChange);
+    //bg.BackgroundGeolocation.onGeofencesChange(_onGeofencesChange);
     bg.BackgroundGeolocation.onEnabledChange(_onEnabledChange);
 
-    bg.BackgroundGeolocation.addGeofence(bg.Geofence(
-        identifier: "Test fence",
+    for (Station station in widget.track.stations) {
+      bg.Geofence fence = bg.Geofence(
+        identifier: station.name,
         radius: 200.0,
-        latitude: _center.latitude + 0.1,
+        latitude: _center.latitude,
         longitude: _center.longitude,
         notifyOnEntry: true,
-        notifyOnExit: true,
-        notifyOnDwell: true,
         loiteringDelay: 5,
-    )).then((bool success) {
-      print('[addGeofence] SUCCESS');
-    }).catchError((error) {
-      print('[addGeofence] ERROR: $error');
-    });
+      );
+
+      bg.BackgroundGeolocation.addGeofence(fence).then((bool success) {
+        print('[addGeofence] SUCCESS');
+        _geofences.add(GeofenceMarker(fence));
+      }).catchError((error) {
+        print('[addGeofence] ERROR: $error');
+      });
+    }
   }
 
   void _onCenterCurrent(LatLng position) {
@@ -81,7 +88,8 @@ class MapViewState extends State<MapView>
       timeout: 30,
       samples: 3,
     ).then((bg.Location location) {
-      _mapController.move(LatLng(location.coords.latitude, location.coords.longitude), 16);
+      _mapController.move(
+          LatLng(location.coords.latitude, location.coords.longitude), 16);
     }).catchError((error) {
       print('[getCurrentPosition] ERROR: $error');
     });
@@ -121,7 +129,7 @@ class MapViewState extends State<MapView>
   }
 
   void _onGeofencesChange(bg.GeofencesChangeEvent event) {
-    print('[${bg.Event.GEOFENCESCHANGE}] - $event');
+    print('DUTTMANS EPISTEL [${bg.Event.GEOFENCESCHANGE}] - $event');
     event.off.forEach((String identifier) {
       _geofences.removeWhere((GeofenceMarker marker) {
         return marker.geofence.identifier == identifier;

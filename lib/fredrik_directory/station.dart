@@ -7,5 +7,5 @@ class Station {
   LatLng point;
   String resourceUrl;
 
-  Station(this.name, this.desc, this.point, this.resourceUrl);
+  Station({this.name, this.desc, this.point, this.resourceUrl});
 }
