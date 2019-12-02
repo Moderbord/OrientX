@@ -33,13 +33,12 @@ class MapViewState extends State<MapView>
     super.initState();
 
     bg.BackgroundGeolocation.getCurrentPosition(
-      persist: true,       // <-- do not persist this location
-      desiredAccuracy: 40, // <-- desire an accuracy of 40 meters or less
-      maximumAge: 10000,   // <-- Up to 10s old is fine.
-      timeout: 30,         // <-- wait 30s before giving up.
-      samples: 3,           // <-- sample just 1 location
+      persist: true,
+      desiredAccuracy: 40,
+      maximumAge: 10000,
+      timeout: 30,
+      samples: 3,
     ).then((bg.Location location) {
-      print('[getCurrentPosition] - $location');
       _center = LatLng(location.coords.latitude, location.coords.longitude);
     }).catchError((error) {
       print('[getCurrentPosition] ERROR: $error');
@@ -76,11 +75,11 @@ class MapViewState extends State<MapView>
 
   void _onCenterCurrent(LatLng position) {
     bg.BackgroundGeolocation.getCurrentPosition(
-      persist: true,       // <-- do not persist this location
-      desiredAccuracy: 40, // <-- desire an accuracy of 40 meters or less
-      maximumAge: 10000,   // <-- Up to 10s old is fine.
-      timeout: 30,         // <-- wait 30s before giving up.
-      samples: 3,           // <-- sample just 1 location
+      persist: true,
+      desiredAccuracy: 40,
+      maximumAge: 10000,
+      timeout: 30,
+      samples: 3,
     ).then((bg.Location location) {
       _mapController.move(LatLng(location.coords.latitude, location.coords.longitude), 16);
     }).catchError((error) {
