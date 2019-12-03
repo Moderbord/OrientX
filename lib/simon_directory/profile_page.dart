@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'sign_in.dart';
+import 'first_screen.dart';
 
 class ProfilePage extends StatelessWidget
 {
@@ -7,9 +8,7 @@ class ProfilePage extends StatelessWidget
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [color1,color3],
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft),
+            color: currentTheme.backgroundColor
         ),
         child: Center(
             child: Column(
@@ -27,7 +26,7 @@ class ProfilePage extends StatelessWidget
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: color2
+                        color: currentTheme.primaryColor
                     )
                 ),
               ],
