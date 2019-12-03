@@ -21,9 +21,7 @@ class _LoginPageState extends State<LoginPage>
         body: Container
         (
             decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [color1,color3],
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft)
+                color: currentTheme.backgroundColor
             ),
           child: Center
           (
@@ -32,7 +30,7 @@ class _LoginPageState extends State<LoginPage>
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                FlutterLogo(size: 150,colors: color2,),
+                FlutterLogo(size: 150,colors: currentTheme.primaryColor,),
                 _signInButton(),
               ]
             )
@@ -46,7 +44,7 @@ class _LoginPageState extends State<LoginPage>
   {
     return OutlineButton
       (
-        splashColor: color2,
+        splashColor: currentTheme.primaryColor,
         onPressed: ()
         {
           signInWithGoogle().whenComplete(()
@@ -63,7 +61,7 @@ class _LoginPageState extends State<LoginPage>
         },
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
         highlightElevation: 0,
-        borderSide: BorderSide(color: color2),
+        borderSide: BorderSide(color: currentTheme.primaryColor),
         child: Padding
           (
             padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -80,7 +78,7 @@ class _LoginPageState extends State<LoginPage>
                     child: Text
                       (
                         "Sign in with Google",
-                        style:TextStyle(fontSize: 15,color:color2,)
+                        style:TextStyle(fontSize: 15,color: currentTheme.primaryColor,)
                     )
                 )
               ],

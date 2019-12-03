@@ -1,7 +1,25 @@
 import 'package:flutter/material.dart';
 import 'sign_in.dart';
 import 'profile_page.dart';
-import 'test_screen.dart';
+import 'start_screen.dart';
+import 'settings_page.dart';
+
+ThemeData original = ThemeData(
+  primaryColor: Colors.orange,
+  backgroundColor: Colors.white,
+                        );
+
+ThemeData dark = ThemeData(
+    primaryColor: Colors.black,
+    backgroundColor: Colors.grey,
+);
+
+ThemeData wacky = ThemeData(
+    primaryColor: Colors.pink,
+    backgroundColor: Colors.purple,
+);
+
+ThemeData currentTheme = original;
 
 class FirstScreen extends StatefulWidget
 {
@@ -14,42 +32,49 @@ class FirstScreen extends StatefulWidget
 
 class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStateMixin
 {
-
   TabController controller;
 
   @override
-  void initState() {
+  void initState()
+  {
     super.initState();
-    controller = TabController(vsync: this,length: 2);
+    controller = TabController(vsync: this,length: 3);
   }
 
   @override
-  void dispose() {
+  void dispose()
+  {
     controller.dispose();
     super.dispose();
+  }
+
+  refresh() {
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("OrientX",style: TextStyle(color: color3),),
-        backgroundColor: color1,
+        title: Text("OrientX",style: TextStyle(color: currentTheme.backgroundColor),),
+        backgroundColor: currentTheme.primaryColor,
       ),
       bottomNavigationBar: Material(
-      color: color2,
-      child: TabBar(
+      color: currentTheme.primaryColor,
+      child: TabBar( ///WHEN ADDING NEW TABS REMEMBER TO CHANGE THE LENGHT IN THE CONTROLLER
         controller: controller,
         tabs: <Widget>[
-          Tab(icon: Icon(Icons.account_box, color: color3,),child: Text("ompa")),
-          Tab(icon: Icon(Icons.settings, color: color3),child: Text("lompa"))
+          Tab(icon: Icon(Icons.account_box, color: currentTheme.backgroundColor,),child: Text("Profile")),
+          Tab(icon: Icon(Icons.play_circle_outline, color: currentTheme.backgroundColor),child: Text("Start")),
+          Tab(icon: Icon(Icons.settings, color: currentTheme.backgroundColor,),child: Text("Settings"),)
         ],
       )),
       body: TabBarView(
         controller: controller,
         children: <Widget>[
           ProfilePage(),
-          TestPage(),
+          StartRun(),
+          SettingsPage(notifyParent: refresh,)
         ],
       ),
       drawer:_drawerList(),
@@ -63,15 +88,15 @@ Drawer _drawerList()
     child: ListView(
       padding: EdgeInsets.zero,
       children: <Widget>[
- //       SizedBox(
- //         width: 1000,
- //         height: 25,
- //       ),
- //       _createDrawerItem(text: "Menu"),
-        _createDrawerHeader(image: "assets/images/orange.jpg",text:"menu stuffs", color: color2),
-        _createDrawerItem(icon: Icons.home,text: "Home", color: color1), //TODO add onTap
-        _createDrawerItem(icon: Icons.account_box,text: "Profile", color: color2), //TODO add onTap
-        _createDrawerItem(icon: Icons.settings,text: "Settings", color: color3), //TODO add onTap
+       Container(
+         height: 50,
+         width: 100,
+         color: currentTheme.primaryColor,
+         child: Center(child:Text("Menu",style: TextStyle(fontSize: 16,color: currentTheme.backgroundColor),)),
+       ),
+        _createDrawerItem(icon: Icons.home,text: "Home", color: currentTheme.primaryColor), //TODO add onTap
+        _createDrawerItem(icon: Icons.account_box,text: "Profile", color: currentTheme.primaryColor), //TODO add onTap
+        _createDrawerItem(icon: Icons.settings,text: "Settings", color:currentTheme.primaryColor), //TODO add onTap
       ],
     ),
   );
