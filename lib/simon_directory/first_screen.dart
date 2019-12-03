@@ -32,6 +32,7 @@ class FirstScreen extends StatefulWidget
 
 class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStateMixin
 {
+  List<Widget> _children;
   TabController controller;
 
   @override
@@ -39,6 +40,11 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
   {
     super.initState();
     controller = TabController(vsync: this,length: 3);
+    _children = [
+      ProfilePage(),
+      StartRun(),
+      SettingsPage(notifyParent: refresh,)
+    ];
   }
 
   @override
@@ -70,12 +76,9 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
         ],
       )),
       body: TabBarView(
+        physics: NeverScrollableScrollPhysics(),
         controller: controller,
-        children: <Widget>[
-          ProfilePage(),
-          StartRun(),
-          SettingsPage(notifyParent: refresh,)
-        ],
+        children: _children,
       ),
       drawer:_drawerList(),
       );

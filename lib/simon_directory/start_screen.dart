@@ -10,12 +10,16 @@ class StartRun extends StatefulWidget {
   }
 }
 
-class _StartRunState extends State<StartRun>{
+class _StartRunState extends State<StartRun> with AutomaticKeepAliveClientMixin<StartRun>{
   String result = "";
   bool runTrack = false;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+     super.build(context);
     return runTrack == false
         ? Container(
             decoration: BoxDecoration(color: currentTheme.backgroundColor),
