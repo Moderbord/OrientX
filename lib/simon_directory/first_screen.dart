@@ -48,8 +48,8 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
       body: TabBarView(
         controller: controller,
         children: <Widget>[
-          ProfilePage(),
           TestPage(),
+          ProfilePage(),
         ],
       ),
       drawer:_drawerList(),

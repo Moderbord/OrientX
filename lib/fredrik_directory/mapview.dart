@@ -6,11 +6,14 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong/latlong.dart';
 import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/fredrik_directory/track.dart';
+import 'package:orientx/spaken_directory/activitymanager.dart';
+
 
 class MapView extends StatefulWidget {
   final Track track;
+  final BuildContext context;
 
-  MapView({@required this.track});
+  MapView({@required this.track, this.context});
 
   @override
   State createState() => MapViewState();
@@ -58,22 +61,21 @@ class MapViewState extends State<MapView>
     bg.BackgroundGeolocation.onLocation(_onLocation);
     bg.BackgroundGeolocation.onMotionChange(_onMotionChange);
     bg.BackgroundGeolocation.onGeofence(_onGeofence);
-    //bg.BackgroundGeolocation.onGeofencesChange(_onGeofencesChange);
+    bg.BackgroundGeolocation.onGeofencesChange(_onGeofencesChange);
     bg.BackgroundGeolocation.onEnabledChange(_onEnabledChange);
 
     for (Station station in widget.track.stations) {
       bg.Geofence fence = bg.Geofence(
         identifier: station.name,
         radius: 200.0,
-        latitude: _center.latitude,
-        longitude: _center.longitude,
+        latitude: station.point.latitude,
+        longitude: station.point.longitude,
         notifyOnEntry: true,
         loiteringDelay: 5,
       );
 
       bg.BackgroundGeolocation.addGeofence(fence).then((bool success) {
         print('[addGeofence] SUCCESS');
-        _geofences.add(GeofenceMarker(fence));
       }).catchError((error) {
         print('[addGeofence] ERROR: $error');
       });
@@ -111,6 +113,7 @@ class MapViewState extends State<MapView>
   }
 
   void _onGeofence(bg.GeofenceEvent event) {
+    print(event.identifier);
     GeofenceMarker marker = _geofences.firstWhere(
         (GeofenceMarker marker) =>
             marker.geofence.identifier == event.identifier,
@@ -126,6 +129,19 @@ class MapViewState extends State<MapView>
           '[onGeofence] WARNING - FAILED TO FIND GEOFENCE MARKER FOR GEOFENCE: ${event.identifier}');
       return;
     }
+    // Remove green
+    _geofences.removeWhere((GeofenceMarker marker) {
+      return marker.geofence.identifier == event.identifier;
+    });
+    // Add black
+    _geofences.add(GeofenceMarker(marker.geofence, true));
+    // Their version
+    /*GeofenceMarker eventMarker = _geofenceEvents.firstWhere((GeofenceMarker marker) => marker.geofence.identifier == event.identifier, orElse: () => null);
+    if (eventMarker == null) _geofenceEvents.add(GeofenceMarker(geofence, true));*/
+
+    int i = widget.track.circuit[0];
+    //Event
+    ActivityManager().newActivity(context: widget.context, package: widget.track.activities[i]);
   }
 
   void _onGeofencesChange(bg.GeofencesChangeEvent event) {

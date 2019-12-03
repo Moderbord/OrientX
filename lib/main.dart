@@ -11,13 +11,13 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     bg.BackgroundGeolocation.ready(bg.Config(
             desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
             distanceFilter: 10.0,
-            stopOnTerminate: false,
+            stopOnTerminate: true,
             startOnBoot: true,
             debug: true,
+            //forceReloadOnBoot: true,
             logLevel: bg.Config.LOG_LEVEL_WARNING))
         .then((bg.State state) {
       if (!state.enabled) {
@@ -25,18 +25,14 @@ class MyApp extends StatelessWidget {
       }
     });
 
-    bg.BackgroundGeolocation.onGeofence(
-        (bg.GeofenceEvent event) =>
-        {
 
-        }
-    );
+
 
     return MaterialApp(
         title: 'OrientX',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: LoginPage());
+        home: FirstScreen());
   }
 }
