@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/spaken_directory/activitypackage.dart';
@@ -31,7 +33,7 @@ class Track {
         {
           circuit.add(i);
         }
-        circuit.shuffle();
+        circuit.shuffle(Random(DateTime.now().millisecondsSinceEpoch));
         break;
       default:
         break;
