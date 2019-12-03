@@ -9,14 +9,11 @@ enum circuitType{
   random,
 }
 
-
 class Track {
   final String name;
   final List<Station> stations;
   final List<ActivityPackage> activities;
   List<int> circuit = [];
-
-
 
   Track({this.name, this.stations, this.activities, circuitType type = circuitType.standard})
   {
@@ -41,6 +38,5 @@ class Track {
   }
 
   Track.fromCircuit({this.name, this.stations, this.activities, this.circuit});
-
 
 }

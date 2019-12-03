@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
             stopOnTerminate: true,
             startOnBoot: true,
             debug: true,
+
             //forceReloadOnBoot: true,
             logLevel: bg.Config.LOG_LEVEL_WARNING))
         .then((bg.State state) {
