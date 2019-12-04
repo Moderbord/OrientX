@@ -8,7 +8,6 @@ import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/fredrik_directory/track.dart';
 import 'package:orientx/spaken_directory/activitymanager.dart';
 
-
 class MapView extends StatefulWidget {
   final Track track;
   final BuildContext context;
@@ -53,7 +52,6 @@ class MapViewState extends State<MapView>
 
     _mapOptions = MapOptions(
         onPositionChanged: _onPositionChanged,
-        onLongPress: _onCenterCurrent,
         center: _center,
         zoom: 16.0);
     _mapController = MapController();
@@ -74,15 +72,13 @@ class MapViewState extends State<MapView>
         loiteringDelay: 5,
       );
 
-      bg.BackgroundGeolocation.addGeofence(fence).then((bool success) {
-        print('[addGeofence] SUCCESS');
-      }).catchError((error) {
+      bg.BackgroundGeolocation.addGeofence(fence).catchError((error) {
         print('[addGeofence] ERROR: $error');
       });
     }
   }
 
-  void _onCenterCurrent(LatLng position) {
+  void _onCenterCurrent() {
     _mapController.move(_currentPosition[0].point, 16);
   }
 
@@ -107,34 +103,31 @@ class MapViewState extends State<MapView>
         (GeofenceMarker marker) =>
             marker.geofence.identifier == event.identifier,
         orElse: () => null);
+
     if (marker == null) {
       print(
           "[_onGeofence] failed to find geofence marker: ${event.identifier}");
       return;
     }
 
-    if (marker == null) {
-      print(
-          '[onGeofence] WARNING - FAILED TO FIND GEOFENCE MARKER FOR GEOFENCE: ${event.identifier}');
-      return;
-    }
     // Remove green
     _geofences.removeWhere((GeofenceMarker marker) {
       return marker.geofence.identifier == event.identifier;
     });
+
     // Add black
     _geofences.add(GeofenceMarker(marker.geofence, true));
-    // Their version
-    /*GeofenceMarker eventMarker = _geofenceEvents.firstWhere((GeofenceMarker marker) => marker.geofence.identifier == event.identifier, orElse: () => null);
-    if (eventMarker == null) _geofenceEvents.add(GeofenceMarker(geofence, true));*/
 
     int i = widget.track.circuit[0];
+
     //Event
-    ActivityManager().newActivity(context: widget.context, package: widget.track.activities[i]);
+    ActivityManager().newActivity(
+        context: widget.context, package: widget.track.activities[i]);
   }
 
   void _onGeofencesChange(bg.GeofencesChangeEvent event) {
     print('[${bg.Event.GEOFENCESCHANGE}] - $event');
+
     event.off.forEach((String identifier) {
       _geofences.removeWhere((GeofenceMarker marker) {
         return marker.geofence.identifier == identifier;
@@ -152,6 +145,7 @@ class MapViewState extends State<MapView>
 
   void _onLocation(bg.Location location) {
     LatLng ll = LatLng(location.coords.latitude, location.coords.longitude);
+
     _mapController.move(ll, _mapController.zoom);
 
     _updateCurrentPositionMarker(ll);
@@ -187,30 +181,72 @@ class MapViewState extends State<MapView>
 
   @override
   Widget build(BuildContext context) {
-    return FlutterMap(
-      mapController: _mapController,
-      options: _mapOptions,
-      layers: [
-        TileLayerOptions(
-          urlTemplate: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-          subdomains: ['a', 'b', 'c'],
-          maxZoom: 17,
-          additionalOptions: {
-            'id': 'opentopomap',
-          },
-        ),
-        PolylineLayerOptions(
-          polylines: [
-            Polyline(
-              points: _polyline,
-              strokeWidth: 10.0,
-              color: Color.fromRGBO(0, 179, 253, 0.8),
+    return Stack(
+      children: <Widget>[
+        FlutterMap(
+          mapController: _mapController,
+          options: _mapOptions,
+          layers: [
+            TileLayerOptions(
+              urlTemplate: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+              subdomains: ['a', 'b', 'c'],
+              maxZoom: 17,
+              additionalOptions: {
+                'id': 'opentopomap',
+              },
             ),
+            PolylineLayerOptions(
+              polylines: [
+                Polyline(
+                  points: _polyline,
+                  isDotted: true,
+                  strokeWidth: 10.0,
+                  color: Color.fromRGBO(0, 179, 253, 0.8),
+                ),
+              ],
+            ),
+            CircleLayerOptions(circles: _geofences),
+            CircleLayerOptions(circles: _locations),
+            CircleLayerOptions(circles: _currentPosition),
           ],
         ),
-        CircleLayerOptions(circles: _geofences),
-        CircleLayerOptions(circles: _locations),
-        CircleLayerOptions(circles: _currentPosition),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: Text(
+            " © OpenTopoMap (CC-BY-SA) ",
+            style: TextStyle(
+                backgroundColor: Colors.black54.withOpacity(0.5),
+                color: Colors.white),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Container(
+            margin: EdgeInsets.all(0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0)),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.gps_fixed),
+                    onPressed: _onCenterCurrent,
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.local_activity),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.directions_walk),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
