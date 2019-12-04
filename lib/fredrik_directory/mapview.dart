@@ -91,10 +91,6 @@ class MapViewState extends State<MapView>
 
   void _onMotionChange(bg.Location location) async {
     LatLng ll = LatLng(location.coords.latitude, location.coords.longitude);
-
-    _updateCurrentPositionMarker(ll);
-
-    _mapController.move(ll, _mapController.zoom);
   }
 
   void _onGeofence(bg.GeofenceEvent event) {
@@ -146,33 +142,12 @@ class MapViewState extends State<MapView>
   void _onLocation(bg.Location location) {
     LatLng ll = LatLng(location.coords.latitude, location.coords.longitude);
 
-    _mapController.move(ll, _mapController.zoom);
-
-    _updateCurrentPositionMarker(ll);
-
     if (location.sample) {
       return;
     }
 
     // Add a point to the tracking polyline.
     _polyline.add(ll);
-    // Add a marker for the recorded location.
-    //_locations.add(_buildLocationMarker(location));
-    _locations.add(CircleMarker(point: ll, color: Colors.black, radius: 5.0));
-
-    _locations.add(CircleMarker(point: ll, color: Colors.blue, radius: 4.0));
-  }
-
-  /// Update Big Blue current position dot.
-  void _updateCurrentPositionMarker(LatLng ll) {
-    _currentPosition.clear();
-
-    // White background
-    _currentPosition
-        .add(CircleMarker(point: ll, color: Colors.white, radius: 10));
-    // Blue foreground
-    _currentPosition
-        .add(CircleMarker(point: ll, color: Colors.blue, radius: 7));
   }
 
   void _onPositionChanged(MapPosition pos, bool hasGesture) {

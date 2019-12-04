@@ -22,7 +22,7 @@ class ProfilePage extends StatelessWidget
                 ),
                 SizedBox(height:35),
                 Text(
-                    "Welcome " +name + "!",
+                    "Welcome, " +name + "!",
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
