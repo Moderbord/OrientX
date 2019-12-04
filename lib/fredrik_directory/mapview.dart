@@ -83,18 +83,7 @@ class MapViewState extends State<MapView>
   }
 
   void _onCenterCurrent(LatLng position) {
-    bg.BackgroundGeolocation.getCurrentPosition(
-      persist: true,
-      desiredAccuracy: 40,
-      maximumAge: 10000,
-      timeout: 30,
-      samples: 3,
-    ).then((bg.Location location) {
-      _mapController.move(
-          LatLng(location.coords.latitude, location.coords.longitude), 16);
-    }).catchError((error) {
-      print('[getCurrentPosition] ERROR: $error');
-    });
+    _mapController.move(_currentPosition[0].point, 16);
   }
 
   void _onEnabledChange(bool enabled) {
@@ -145,7 +134,7 @@ class MapViewState extends State<MapView>
   }
 
   void _onGeofencesChange(bg.GeofencesChangeEvent event) {
-    print('DUTTMANS EPISTEL [${bg.Event.GEOFENCESCHANGE}] - $event');
+    print('[${bg.Event.GEOFENCESCHANGE}] - $event');
     event.off.forEach((String identifier) {
       _geofences.removeWhere((GeofenceMarker marker) {
         return marker.geofence.identifier == identifier;
