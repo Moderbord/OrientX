@@ -8,6 +8,8 @@ import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/fredrik_directory/track.dart';
 import 'package:orientx/spaken_directory/activitymanager.dart';
 
+import 'package:orientx/simon_directory/first_screen.dart';
+
 class MapView extends StatefulWidget {
   final Track track;
   final BuildContext context;
@@ -26,11 +28,16 @@ class MapViewState extends State<MapView>
   }
 
   List<CircleMarker> _currentPosition = [];
-  List<LatLng> _polyline = [];
-  List<CircleMarker> _locations = [];
+  List<LatLng> _trackHistory = [];
+  List<LatLng> _trackStations = [];
   List<GeofenceMarker> _geofences = [];
+  List<Marker> _markers = [];
+
+  bool _showOnMap = false;
 
   LatLng _center = LatLng(0, 0);
+  LatLng _lastKnown = LatLng(0, 0);
+
   MapController _mapController;
   MapOptions _mapOptions;
 
@@ -45,15 +52,27 @@ class MapViewState extends State<MapView>
       timeout: 30,
       samples: 3,
     ).then((bg.Location location) {
-      _center = LatLng(location.coords.latitude, location.coords.longitude);
+
+      _lastKnown = LatLng(location.coords.latitude, location.coords.longitude);
+      _mapOptions.center = _lastKnown;
+
+      _markers.add(
+        Marker(
+          point: _lastKnown,
+          builder: (BuildContext context) {
+            return Icon(Icons.gps_fixed, color: currentTheme.primaryColor);
+          },
+        ),
+      );
+
+      _mapController.move(_lastKnown, 16);
+
     }).catchError((error) {
       print('[getCurrentPosition] ERROR: $error');
     });
 
     _mapOptions = MapOptions(
-        onPositionChanged: _onPositionChanged,
-        center: _center,
-        zoom: 16.0);
+        onPositionChanged: _onPositionChanged, center: _center, zoom: 16.0);
     _mapController = MapController();
 
     bg.BackgroundGeolocation.onLocation(_onLocation);
@@ -65,12 +84,24 @@ class MapViewState extends State<MapView>
     for (Station station in widget.track.stations) {
       bg.Geofence fence = bg.Geofence(
         identifier: station.name,
-        radius: 200.0,
+        radius: 15.0,
         latitude: station.point.latitude,
         longitude: station.point.longitude,
         notifyOnEntry: true,
         loiteringDelay: 5,
       );
+
+      _markers.add(Marker(
+        point: station.point,
+        builder: (BuildContext context) {
+          return Icon(
+            Icons.location_on,
+            color: currentTheme.primaryColor,
+          );
+        },
+      ));
+
+      _trackStations.add(station.point);
 
       bg.BackgroundGeolocation.addGeofence(fence).catchError((error) {
         print('[addGeofence] ERROR: $error');
@@ -82,10 +113,47 @@ class MapViewState extends State<MapView>
     _mapController.move(_currentPosition[0].point, 16);
   }
 
+  void _onCenterLast() {
+    _mapController.move(_lastKnown, 16);
+  }
+
+  void _onForfeitDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Avbryt slinga?"),
+          content: Text(
+              "Avbryter banan och visar din position.\nDu kommer inte kunna fortsätta efteråt."),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Ja"),
+              onPressed: () {
+                _onForfeit();
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text("Nej"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  void _onForfeit() {
+    setState(() {
+      _showOnMap = true;
+    });
+  }
+
   void _onEnabledChange(bool enabled) {
     if (!enabled) {
-      _locations.clear();
-      _polyline.clear();
+      _trackHistory.clear();
     }
   }
 
@@ -94,7 +162,7 @@ class MapViewState extends State<MapView>
 
     _updateCurrentPositionMarker(ll);
 
-    _mapController.move(ll, _mapController.zoom);
+    if (_showOnMap) _mapController.move(ll, _mapController.zoom);
   }
 
   void _onGeofence(bg.GeofenceEvent event) {
@@ -117,6 +185,9 @@ class MapViewState extends State<MapView>
 
     // Add black
     _geofences.add(GeofenceMarker(marker.geofence, true));
+
+    // Set last known position
+    _lastKnown = marker.point;
 
     int i = widget.track.circuit[0];
 
@@ -146,21 +217,16 @@ class MapViewState extends State<MapView>
   void _onLocation(bg.Location location) {
     LatLng ll = LatLng(location.coords.latitude, location.coords.longitude);
 
-    _mapController.move(ll, _mapController.zoom);
-
     _updateCurrentPositionMarker(ll);
+
+    if (_showOnMap) _mapController.move(ll, _mapController.zoom);
 
     if (location.sample) {
       return;
     }
 
     // Add a point to the tracking polyline.
-    _polyline.add(ll);
-    // Add a marker for the recorded location.
-    //_locations.add(_buildLocationMarker(location));
-    _locations.add(CircleMarker(point: ll, color: Colors.black, radius: 5.0));
-
-    _locations.add(CircleMarker(point: ll, color: Colors.blue, radius: 4.0));
+    _trackHistory.add(ll);
   }
 
   /// Update Big Blue current position dot.
@@ -181,34 +247,85 @@ class MapViewState extends State<MapView>
 
   @override
   Widget build(BuildContext context) {
+    List<LayerOptions> mapLayers = [
+      TileLayerOptions(
+        urlTemplate: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+        subdomains: ['a', 'b', 'c'],
+        maxZoom: 17,
+        additionalOptions: {
+          'id': 'opentopomap',
+        },
+      ),
+      PolylineLayerOptions(polylines: [
+        Polyline(
+          points: _trackStations,
+          strokeWidth: 2,
+          color: Colors.black54,
+        )
+      ]),
+      CircleLayerOptions(circles: _geofences),
+      MarkerLayerOptions(markers: _markers)
+    ];
+
+    if (_showOnMap) {
+      mapLayers.addAll([
+        PolylineLayerOptions(
+          polylines: [
+            Polyline(
+              points: _trackHistory,
+              isDotted: true,
+              strokeWidth: 5.0,
+              color: currentTheme.primaryColor,
+            ),
+          ],
+        ),
+        CircleLayerOptions(circles: _currentPosition),
+      ]);
+    }
+
     return Stack(
       children: <Widget>[
         FlutterMap(
           mapController: _mapController,
           options: _mapOptions,
-          layers: [
-            TileLayerOptions(
-              urlTemplate: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-              subdomains: ['a', 'b', 'c'],
-              maxZoom: 17,
-              additionalOptions: {
-                'id': 'opentopomap',
-              },
-            ),
-            PolylineLayerOptions(
-              polylines: [
-                Polyline(
-                  points: _polyline,
-                  isDotted: true,
-                  strokeWidth: 10.0,
-                  color: Color.fromRGBO(0, 179, 253, 0.8),
+          layers: mapLayers,
+        ),
+        Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+            decoration: BoxDecoration(color: Colors.black54.withOpacity(0.6)),
+            padding: EdgeInsets.all(5.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.directions_walk,
+                  color: Colors.white,
+                ),
+                Text(
+                  "512m",
+                  style: TextStyle(color: Colors.white),
+                ),
+                SizedBox(width: 15.0),
+                Icon(
+                  Icons.flag,
+                  color: Colors.white,
+                ),
+                Text(
+                  "1/3",
+                  style: TextStyle(color: Colors.white),
+                ),
+                SizedBox(width: 15.0),
+                Icon(
+                  Icons.access_time,
+                  color: Colors.white,
+                ),
+                Text(
+                  "13:37",
+                  style: TextStyle(color: Colors.white),
                 ),
               ],
             ),
-            CircleLayerOptions(circles: _geofences),
-            CircleLayerOptions(circles: _locations),
-            CircleLayerOptions(circles: _currentPosition),
-          ],
+          ),
         ),
         Align(
           alignment: Alignment.bottomLeft,
@@ -234,13 +351,14 @@ class MapViewState extends State<MapView>
                 children: <Widget>[
                   IconButton(
                     icon: Icon(Icons.gps_fixed),
-                    onPressed: _onCenterCurrent,
+                    onPressed: _onCenterLast,
                   ),
                   IconButton(
                     icon: Icon(Icons.local_activity),
                   ),
                   IconButton(
-                    icon: Icon(Icons.directions_walk),
+                    icon: Icon(Icons.cancel),
+                    onPressed: _showOnMap ? null : _onForfeitDialog,
                   )
                 ],
               ),
@@ -260,8 +378,8 @@ class GeofenceMarker extends CircleMarker {
             useRadiusInMeter: true,
             radius: geofence.radius,
             color: (triggered)
-                ? Colors.black26.withOpacity(0.2)
-                : Colors.green.withOpacity(0.3),
+                ? Colors.black54.withOpacity(0.1)
+                : currentTheme.primaryColor.withOpacity(0.1),
             point: LatLng(geofence.latitude, geofence.longitude)) {
     this.geofence = geofence;
   }

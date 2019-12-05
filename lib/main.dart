@@ -16,9 +16,6 @@ class MyApp extends StatelessWidget {
             distanceFilter: 10.0,
             stopOnTerminate: true,
             startOnBoot: true,
-            debug: true,
-
-            //forceReloadOnBoot: true,
             logLevel: bg.Config.LOG_LEVEL_WARNING))
         .then((bg.State state) {
       if (!state.enabled) {
