@@ -42,19 +42,21 @@ class _SettingsPageState extends State<SettingsPage>
                   //when options are changed function down below
                   onChanged: (String newValue)
                   {
-                    dropdownValue = newValue;
-                    switch(newValue)
-                    {
-                      case "Original":
-                        currentTheme = original;
-                        break;
-                      case "Dark":
-                        currentTheme = dark;
-                        break;
-                      case "Wacky":
-                        currentTheme = wacky;
-                        break;
-                    }
+                    setState(() {
+                      dropdownValue = newValue;
+                      switch(newValue)
+                      {
+                        case "Original":
+                          currentTheme = original;
+                          break;
+                        case "Dark":
+                          currentTheme = dark;
+                          break;
+                        case "Wacky":
+                          currentTheme = wacky;
+                          break;
+                      }
+                    });
                     widget.notifyParent();
                   },
                   //Options

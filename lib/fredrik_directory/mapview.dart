@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
 import 'package:flutter_map/flutter_map.dart';
@@ -27,6 +31,10 @@ class MapViewState extends State<MapView>
     return true;
   }
 
+  Timer _timer;
+  int _timerSeconds = 3600;
+  final df = DateFormat('hh:mm');
+
   List<CircleMarker> _currentPosition = [];
   List<LatLng> _trackHistory = [];
   List<LatLng> _trackStations = [];
@@ -34,6 +42,8 @@ class MapViewState extends State<MapView>
   List<Marker> _markers = [];
 
   bool _showOnMap = false;
+  int _completed = 0;
+  int _steps = 0;
 
   LatLng _center = LatLng(0, 0);
   LatLng _lastKnown = LatLng(0, 0);
@@ -45,6 +55,14 @@ class MapViewState extends State<MapView>
   void initState() {
     super.initState();
 
+    bg.BackgroundGeolocation.onLocation(_onLocation);
+    bg.BackgroundGeolocation.onMotionChange(_onMotionChange);
+    bg.BackgroundGeolocation.onGeofence(_onGeofence);
+    bg.BackgroundGeolocation.onGeofencesChange(_onGeofencesChange);
+    bg.BackgroundGeolocation.onEnabledChange(_onEnabledChange);
+
+    bg.BackgroundGeolocation.setOdometer(0);
+
     bg.BackgroundGeolocation.getCurrentPosition(
       persist: true,
       desiredAccuracy: 40,
@@ -52,7 +70,6 @@ class MapViewState extends State<MapView>
       timeout: 30,
       samples: 3,
     ).then((bg.Location location) {
-
       _lastKnown = LatLng(location.coords.latitude, location.coords.longitude);
       _mapOptions.center = _lastKnown;
 
@@ -60,13 +77,12 @@ class MapViewState extends State<MapView>
         Marker(
           point: _lastKnown,
           builder: (BuildContext context) {
-            return Icon(Icons.gps_fixed, color: currentTheme.primaryColor);
+            return Icon(Icons.flag, color: currentTheme.primaryColor);
           },
         ),
       );
 
       _mapController.move(_lastKnown, 16);
-
     }).catchError((error) {
       print('[getCurrentPosition] ERROR: $error');
     });
@@ -75,12 +91,17 @@ class MapViewState extends State<MapView>
         onPositionChanged: _onPositionChanged, center: _center, zoom: 16.0);
     _mapController = MapController();
 
-    bg.BackgroundGeolocation.onLocation(_onLocation);
-    bg.BackgroundGeolocation.onMotionChange(_onMotionChange);
-    bg.BackgroundGeolocation.onGeofence(_onGeofence);
-    bg.BackgroundGeolocation.onGeofencesChange(_onGeofencesChange);
-    bg.BackgroundGeolocation.onEnabledChange(_onEnabledChange);
+    _setupTrack();
+    _startTimer();
+  }
 
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void _setupTrack() {
     for (Station station in widget.track.stations) {
       bg.Geofence fence = bg.Geofence(
         identifier: station.name,
@@ -109,12 +130,38 @@ class MapViewState extends State<MapView>
     }
   }
 
-  void _onCenterCurrent() {
-    _mapController.move(_currentPosition[0].point, 16);
+  void _startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+      (Timer timer) => setState(
+        () {
+          if (_timerSeconds < 1) {
+            timer.cancel();
+          } else {
+            _timerSeconds = _timerSeconds - 1;
+          }
+        },
+      ),
+    );
   }
 
-  void _onCenterLast() {
-    _mapController.move(_lastKnown, 16);
+  String _formatTimer(int seconds) {
+    if (seconds <= 0) return "Tiden är ute!";
+
+    int hours = (seconds / 3600).truncate();
+    seconds = (seconds % 3600).truncate();
+    int minutes = (seconds / 60).truncate();
+
+    String hoursStr = (hours).toString().padLeft(2, '0');
+    String minutesStr = (minutes).toString().padLeft(2, '0');
+    String secondsStr = (seconds % 60).toString().padLeft(2, '0');
+
+    if (hours == 0) {
+      return "$minutesStr:$secondsStr";
+    }
+
+    return "$hoursStr:$minutesStr:$secondsStr";
   }
 
   void _onForfeitDialog() {
@@ -188,6 +235,7 @@ class MapViewState extends State<MapView>
 
     // Set last known position
     _lastKnown = marker.point;
+    _completed++;
 
     int i = widget.track.circuit[0];
 
@@ -218,6 +266,10 @@ class MapViewState extends State<MapView>
     LatLng ll = LatLng(location.coords.latitude, location.coords.longitude);
 
     _updateCurrentPositionMarker(ll);
+
+    bg.BackgroundGeolocation.odometer.then((double value) {
+      _steps = value.toInt();
+    });
 
     if (_showOnMap) _mapController.move(ll, _mapController.zoom);
 
@@ -302,7 +354,7 @@ class MapViewState extends State<MapView>
                   color: Colors.white,
                 ),
                 Text(
-                  "512m",
+                  "$_steps steps",
                   style: TextStyle(color: Colors.white),
                 ),
                 SizedBox(width: 15.0),
@@ -311,7 +363,7 @@ class MapViewState extends State<MapView>
                   color: Colors.white,
                 ),
                 Text(
-                  "1/3",
+                  "$_completed/${_trackStations.length}",
                   style: TextStyle(color: Colors.white),
                 ),
                 SizedBox(width: 15.0),
@@ -320,7 +372,7 @@ class MapViewState extends State<MapView>
                   color: Colors.white,
                 ),
                 Text(
-                  "13:37",
+                  "${_formatTimer(_timerSeconds)}",
                   style: TextStyle(color: Colors.white),
                 ),
               ],
@@ -351,7 +403,9 @@ class MapViewState extends State<MapView>
                 children: <Widget>[
                   IconButton(
                     icon: Icon(Icons.gps_fixed),
-                    onPressed: _onCenterLast,
+                    onPressed: () {
+                      _mapController.move(_lastKnown, 16);
+                    },
                   ),
                   IconButton(
                     icon: Icon(Icons.local_activity),
