@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/spaken_directory/activitypackage.dart';
 

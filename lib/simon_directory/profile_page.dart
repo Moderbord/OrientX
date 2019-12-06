@@ -7,9 +7,6 @@ class ProfilePage extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
-            color: currentTheme.backgroundColor
-        ),
         child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -26,7 +23,6 @@ class ProfilePage extends StatelessWidget
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: currentTheme.primaryColor
                     )
                 ),
               ],

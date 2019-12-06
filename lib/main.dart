@@ -1,16 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:orientx/simon_directory/first_screen.dart';
 import "simon_directory/login_page.dart";
-import 'package:orientx/fredrik_directory/track.dart' as fredde;
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:orientx/fredrik_directory/theme_notifier.dart';
+import 'package:orientx/fredrik_directory/themes.dart';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
 
-void main() => runApp(MyApp());
+void main() {
+  SharedPreferences.getInstance().then((prefs) {
+
+    int theme = prefs.getInt('theme') ?? 0;
+
+    runApp(
+      ChangeNotifierProvider<ThemeNotifier>(
+        create: (_) => ThemeNotifier(themeFromEnum(Themes.values[theme])),
+        child: MyApp(),
+      ),
+    );
+  },);
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
     bg.BackgroundGeolocation.ready(bg.Config(
             desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
             distanceFilter: 10.0,
@@ -23,14 +39,7 @@ class MyApp extends StatelessWidget {
       }
     });
 
-
-
-
     return MaterialApp(
-        title: 'OrientX',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: LoginPage());
+        title: 'ThinQR', theme: themeNotifier.getTheme(), home: LoginPage());
   }
 }

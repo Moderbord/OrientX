@@ -12,8 +12,6 @@ import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/fredrik_directory/track.dart';
 import 'package:orientx/spaken_directory/activitymanager.dart';
 
-import 'package:orientx/simon_directory/first_screen.dart';
-
 class MapView extends StatefulWidget {
   final Track track;
   final BuildContext context;
@@ -77,7 +75,7 @@ class MapViewState extends State<MapView>
         Marker(
           point: _lastKnown,
           builder: (BuildContext context) {
-            return Icon(Icons.flag, color: currentTheme.primaryColor);
+            return Icon(Icons.flag, color: Theme.of(context).primaryColor);
           },
         ),
       );
@@ -117,7 +115,7 @@ class MapViewState extends State<MapView>
         builder: (BuildContext context) {
           return Icon(
             Icons.location_on,
-            color: currentTheme.primaryColor,
+            color: Theme.of(context).primaryColor,
           );
         },
       ));
@@ -231,7 +229,7 @@ class MapViewState extends State<MapView>
     });
 
     // Add black
-    _geofences.add(GeofenceMarker(marker.geofence, true));
+    _geofences.add(GeofenceMarker(context, marker.geofence, true));
 
     // Set last known position
     _lastKnown = marker.point;
@@ -254,7 +252,7 @@ class MapViewState extends State<MapView>
     });
 
     event.on.forEach((bg.Geofence geofence) {
-      _geofences.add(GeofenceMarker(geofence));
+      _geofences.add(GeofenceMarker(context, geofence));
     });
 
     if (event.off.isEmpty && event.on.isEmpty) {
@@ -327,7 +325,7 @@ class MapViewState extends State<MapView>
               points: _trackHistory,
               isDotted: true,
               strokeWidth: 5.0,
-              color: currentTheme.primaryColor,
+              color: Theme.of(context).primaryColor,
             ),
           ],
         ),
@@ -427,13 +425,13 @@ class MapViewState extends State<MapView>
 class GeofenceMarker extends CircleMarker {
   bg.Geofence geofence;
 
-  GeofenceMarker(bg.Geofence geofence, [bool triggered = false])
+  GeofenceMarker(BuildContext context, bg.Geofence geofence, [bool triggered = false])
       : super(
             useRadiusInMeter: true,
             radius: geofence.radius,
             color: (triggered)
                 ? Colors.black54.withOpacity(0.1)
-                : currentTheme.primaryColor.withOpacity(0.1),
+                : Theme.of(context).primaryColor.withOpacity(0.1),
             point: LatLng(geofence.latitude, geofence.longitude)) {
     this.geofence = geofence;
   }
