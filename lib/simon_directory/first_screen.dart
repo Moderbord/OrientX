@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'profile_page.dart';
 import 'start_screen.dart';
 import 'settings_page.dart';
-import 'dashboard.dart';
 
 class FirstScreen extends StatefulWidget
 {
@@ -44,7 +43,7 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-
+    Color
     return Scaffold(
       appBar: AppBar(
         title: Text("OrientX"),
@@ -70,8 +69,6 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
 
 Drawer _drawerList(BuildContext context)
 {
-  Color icon = Colors.red;
-
   return Drawer(
     child: ListView(
       padding: EdgeInsets.zero,

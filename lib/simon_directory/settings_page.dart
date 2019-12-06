@@ -28,7 +28,6 @@ class _SettingsPageState extends State<SettingsPage> {
     final selectedTheme = themeGetEnum(currentTheme);
 
     return Container(
-        decoration: BoxDecoration(color: currentTheme.backgroundColor),
         child: Center(
             child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
