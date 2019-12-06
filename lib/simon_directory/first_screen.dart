@@ -1,26 +1,8 @@
 import 'package:flutter/material.dart';
-import 'sign_in.dart';
 import 'profile_page.dart';
 import 'start_screen.dart';
 import 'settings_page.dart';
 import 'dashboard.dart';
-
-ThemeData original = ThemeData(
-  primaryColor: Colors.orange,
-  backgroundColor: Colors.white,
-                        );
-
-ThemeData dark = ThemeData(
-    primaryColor: Colors.black,
-    backgroundColor: Colors.grey,
-);
-
-ThemeData wacky = ThemeData(
-    primaryColor: Colors.pink,
-    backgroundColor: Colors.purple,
-);
-
-ThemeData currentTheme = original;
 
 class FirstScreen extends StatefulWidget
 {
@@ -33,6 +15,8 @@ class FirstScreen extends StatefulWidget
 
 class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStateMixin
 {
+
+  List<Widget> _children;
   TabController controller;
 
   @override
@@ -40,6 +24,11 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
   {
     super.initState();
     controller = TabController(vsync: this,length: 3);
+    _children = [
+      ProfilePage(),
+      StartRun(),
+      SettingsPage(notifyParent: refresh,)
+    ];
   }
 
   @override
@@ -55,36 +44,34 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("OrientX",style: TextStyle(color: currentTheme.backgroundColor),),
-        backgroundColor: currentTheme.primaryColor,
+        title: Text("OrientX"),
       ),
       bottomNavigationBar: Material(
-      color: currentTheme.primaryColor,
       child: TabBar( ///WHEN ADDING NEW TABS REMEMBER TO CHANGE THE LENGHT IN THE CONTROLLER
         controller: controller,
         tabs: <Widget>[
-          Tab(icon: Icon(Icons.account_box, color: currentTheme.backgroundColor,),child: Text("Profile")),
-          Tab(icon: Icon(Icons.play_circle_outline, color: currentTheme.backgroundColor),child: Text("Start")),
-          Tab(icon: Icon(Icons.settings, color: currentTheme.backgroundColor,),child: Text("Settings"),)
+          Tab(icon: Icon(Icons.account_box), child: Text("Profile")),
+          Tab(icon: Icon(Icons.play_circle_outline), child: Text("Start")),
+          Tab(icon: Icon(Icons.settings), child: Text("Settings"),)
         ],
       )),
       body: TabBarView(
+        physics: NeverScrollableScrollPhysics(),
         controller: controller,
-        children: <Widget>[
-          ProfilePage(),
-          StartRun(),
-          SettingsPage(notifyParent: refresh,)
-        ],
+        children: _children,
       ),
-      drawer:_drawerList(),
+      drawer:_drawerList(context),
       );
   }
 }
 
-Drawer _drawerList()
+Drawer _drawerList(BuildContext context)
 {
+  Color icon = Colors.red;
+
   return Drawer(
     child: ListView(
       padding: EdgeInsets.zero,
@@ -92,26 +79,25 @@ Drawer _drawerList()
        Container(
          height: 50,
          width: 100,
-         color: currentTheme.primaryColor,
-         child: Center(child:Text("Menu",style: TextStyle(fontSize: 16,color: currentTheme.backgroundColor),)),
+         child: Center(child:Text("Menu",style: TextStyle(fontSize: 16),)),
        ),
-        _createDrawerItem(icon: Icons.home,text: "Home", color: currentTheme.primaryColor), //TODO add onTap
-        _createDrawerItem(icon: Icons.account_box,text: "Profile", color: currentTheme.primaryColor), //TODO add onTap
-        _createDrawerItem(icon: Icons.settings,text: "Settings", color:currentTheme.primaryColor), //TODO add onTap
+        _createDrawerItem(icon: Icons.home,text: "Home"), //TODO add onTap
+        _createDrawerItem(icon: Icons.account_box,text: "Profile"), //TODO add onTap
+        _createDrawerItem(icon: Icons.settings,text: "Settings"), //TODO add onTap
       ],
     ),
   );
 }
 
-Widget _createDrawerItem({IconData icon, String text, GestureTapCallback onTap, Color color})
+Widget _createDrawerItem({IconData icon, String text, GestureTapCallback onTap})
 {
   return ListTile(
     title: Row(
       children: <Widget>[
-        Icon(icon, color: color,),
+        Icon(icon),
         Padding(
           padding: EdgeInsets.only(left:8.0),
-          child:Text(text,style: TextStyle(color: color),)
+          child:Text(text)
         )
       ],
     ),

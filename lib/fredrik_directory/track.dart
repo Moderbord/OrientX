@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'dart:math';
+
 import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/spaken_directory/activitypackage.dart';
 
@@ -7,14 +8,11 @@ enum circuitType{
   random,
 }
 
-
 class Track {
   final String name;
   final List<Station> stations;
   final List<ActivityPackage> activities;
   List<int> circuit = [];
-
-
 
   Track({this.name, this.stations, this.activities, circuitType type = circuitType.standard})
   {
@@ -31,7 +29,7 @@ class Track {
         {
           circuit.add(i);
         }
-        circuit.shuffle();
+        circuit.shuffle(Random(DateTime.now().millisecondsSinceEpoch));
         break;
       default:
         break;
@@ -39,6 +37,5 @@ class Track {
   }
 
   Track.fromCircuit({this.name, this.stations, this.activities, this.circuit});
-
 
 }
