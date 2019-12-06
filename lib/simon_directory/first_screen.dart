@@ -3,6 +3,7 @@ import 'sign_in.dart';
 import 'profile_page.dart';
 import 'start_screen.dart';
 import 'settings_page.dart';
+import 'dashboard.dart';
 
 ThemeData original = ThemeData(
   primaryColor: Colors.orange,
