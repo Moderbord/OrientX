@@ -31,23 +31,18 @@ class _StartRunState extends State<StartRun>
               children: <Widget>[
                 Text(
                   "Banans ID: ",
-                  style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15.0),
-                      border: Border.all(width: 5.0)),
+                      border: Border.all(width: 5.0, color: Theme.of(context).accentColor)),
                   child: TextFormField(
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 40.0,
-                        fontWeight: FontWeight.bold),
-                    decoration: InputDecoration(border: InputBorder.none),
+                    style:
+                        TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
+                    decoration: InputDecoration(border: InputBorder.none, focusedBorder: InputBorder.none),
                     onChanged: (String text) {
                       setState(() {
                         _input = text;

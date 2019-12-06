@@ -43,6 +43,7 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text("OrientX"),
@@ -51,9 +52,9 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
       child: TabBar( ///WHEN ADDING NEW TABS REMEMBER TO CHANGE THE LENGHT IN THE CONTROLLER
         controller: controller,
         tabs: <Widget>[
-          Tab(icon: Icon(Icons.account_box),child: Text("Profile")),
-          Tab(icon: Icon(Icons.play_circle_outline),child: Text("Start")),
-          Tab(icon: Icon(Icons.settings),child: Text("Settings"),)
+          Tab(icon: Icon(Icons.account_box), child: Text("Profile")),
+          Tab(icon: Icon(Icons.play_circle_outline), child: Text("Start")),
+          Tab(icon: Icon(Icons.settings), child: Text("Settings"),)
         ],
       )),
       body: TabBarView(
@@ -61,13 +62,15 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
         controller: controller,
         children: _children,
       ),
-      drawer:_drawerList(),
+      drawer:_drawerList(context),
       );
   }
 }
 
-Drawer _drawerList()
+Drawer _drawerList(BuildContext context)
 {
+  Color icon = Colors.red;
+
   return Drawer(
     child: ListView(
       padding: EdgeInsets.zero,

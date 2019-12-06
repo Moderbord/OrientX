@@ -75,7 +75,7 @@ class MapViewState extends State<MapView>
         Marker(
           point: _lastKnown,
           builder: (BuildContext context) {
-            return Icon(Icons.flag, color: Theme.of(context).primaryColor);
+            return Icon(Icons.flag, color: Theme.of(context).accentColor);
           },
         ),
       );
@@ -115,7 +115,7 @@ class MapViewState extends State<MapView>
         builder: (BuildContext context) {
           return Icon(
             Icons.location_on,
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).accentColor,
           );
         },
       ));
@@ -325,7 +325,7 @@ class MapViewState extends State<MapView>
               points: _trackHistory,
               isDotted: true,
               strokeWidth: 5.0,
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).accentColor,
             ),
           ],
         ),
@@ -391,7 +391,7 @@ class MapViewState extends State<MapView>
           child: Container(
             margin: EdgeInsets.all(0),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).primaryColor,
               borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0)),
             ),
             child: Padding(
