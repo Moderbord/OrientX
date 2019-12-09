@@ -44,11 +44,11 @@ class ServerPackage
    );
 
    final List<Station> stationList = [
-      Station(name: "Lakeside Shrubbery", point: LatLng(64.745597, 20.950119)),
+      Station(name: "Lakeside Shrubbery", point: LatLng(64.745597, 20.950119), resourceUrl: 'https://www.orientering.se/media/images/DSC_2800.width-800.jpg'),
       Station(
-          name: "Shrekway Bus Station", point: LatLng(64.745124, 20.957779)),
+          name: "Rock by the lake", point: LatLng(64.745124, 20.957779), resourceUrl: 'http://www.nationalstadsparken.se/Sve/Bilder/orienteringskontroll-mostphotos-544px.jpg'),
       Station(
-          name: "3 boys in a sleeping bag", point: LatLng(64.752627, 20.952363))
+          name: "The wishing tree", point: LatLng(64.752627, 20.952363), resourceUrl: 'https://www.fjardhundraland.se/wp-content/uploads/2019/08/oringen-uppsala-fjacc88rdhundraland-orienteringskontroll.jpg')
    ];
 
    Track fromID(int id)

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import "package:flutter/material.dart";
@@ -37,7 +39,20 @@ Future<String> signInWithGoogle() async
 
 void signOutGoogle() async
 {
-  await googleSignIn.signOut();
+  try{
+    await _auth.signOut();
+    await googleSignIn.signOut();
+    print(_auth.currentUser());
+    print(googleSignIn.currentUser);
+    print("User signed out");
+  } catch(e)
+  {
+    print("Error signing out");
+  }
+}
 
-  print("User Signed Out");
+void changeUserGoogle()
+{
+  signOutGoogle();
+  signInWithGoogle();
 }
