@@ -2,6 +2,7 @@ import 'package:orientx/spaken_directory/activitypackage.dart';
 import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/fredrik_directory/track.dart';
 import 'package:latlong/latlong.dart';
+import 'package:orientx/luddw_dir/db.dart';
 
 class ServerPackage
 {
@@ -53,12 +54,23 @@ class ServerPackage
 
    Track fromID(int id)
    {
-      return Track(
-          name: "Mysslinga",
-          stations: stationList,
-          activities: [rndImagePkg, videoPkg, enTill],
-          type: circuitType.random,
+      Track temp =  Track(
+         name: "Mysslinga",
+         stations: stationList,
+         activities: [getPackage().then((List<ActivityPackage> packageList) {
+      }), videoPkg, enTill],
+         type: circuitType.random,
       );
+      return temp;
+   }
+
+   Future<ActivityPackage> getPackage() async
+   {
+      ActivityPackage activity;
+      await Database.getInstance().getData().then((List<ActivityPackage> packageList) {
+         activity = packageList[0];
+      });
+      return activity;
    }
 
    bool checkID(int id)
@@ -73,6 +85,7 @@ class ServerPackage
             return false;
       }
    }
+
 
 }
 

@@ -13,10 +13,10 @@ class ProfilePage extends StatelessWidget
           StaggeredGridView.count(
           crossAxisCount: 4,
             staggeredTiles: const <StaggeredTile>[
-              const StaggeredTile.count(2, 2.5),
-              const StaggeredTile.count(2, 2.5),
-              const StaggeredTile.count(2, 2.5),
-              const StaggeredTile.count(2, 2.5),
+              const StaggeredTile.count(2, 3),
+              const StaggeredTile.count(2, 3),
+              const StaggeredTile.count(2, 3),
+              const StaggeredTile.count(2, 3),
             ],
             children: <Widget> [
               _createTile(icon: Icon(Icons.flag),headerText: "Laps complete",stat: "17", color: Theme.of(context).accentColor),

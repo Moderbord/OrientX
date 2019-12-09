@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:orientx/luddw_dir/db.dart';
+import 'package:orientx/spaken_directory/activitypackage.dart';
 import 'first_screen.dart';
 import 'package:orientx/fredrik_directory/map_view.dart';
 import 'package:orientx/spaken_directory/serverpackage.dart';
@@ -12,7 +14,7 @@ class StartRun extends StatefulWidget {
 
 class _StartRunState extends State<StartRun>
     with AutomaticKeepAliveClientMixin<StartRun> {
-  String _input = "";
+  String _input = "123";
   String _result = "";
   bool runTrack = false;
 

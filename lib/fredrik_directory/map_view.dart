@@ -237,7 +237,7 @@ class MapViewState extends State<MapView>
 
     //Event
     ActivityManager().newActivity(
-        context: widget.context, package: widget.track.activities[i]);
+        context: widget.context, package: widget.track.activities[0]);
   }
 
   void _onGeofencesChange(bg.GeofencesChangeEvent event) {
