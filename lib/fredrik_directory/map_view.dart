@@ -257,6 +257,7 @@ class MapViewState extends State<MapView>
     }
   }
 
+  ///
   void _onLocation(bg.Location location) {
     LatLng ll = LatLng(location.coords.latitude, location.coords.longitude);
 
@@ -292,8 +293,116 @@ class MapViewState extends State<MapView>
     _mapOptions.crs.scale(_mapController.zoom);
   }
 
+  Widget _topInfoBar()
+  {
+    return Container(
+      decoration:
+      BoxDecoration(color: Colors.black54.withOpacity(0.6)),
+      padding: EdgeInsets.all(5.0),
+      child: Row(
+        children: <Widget>[
+          Icon(
+            Icons.directions_walk,
+            color: Colors.white,
+          ),
+          Text(
+            "$_steps steps",
+            style: TextStyle(color: Colors.white),
+          ),
+          SizedBox(width: 15.0),
+          Icon(
+            Icons.flag,
+            color: Colors.white,
+          ),
+          Text(
+            "$_completed/${_trackStations.length}",
+            style: TextStyle(color: Colors.white),
+          ),
+          SizedBox(width: 15.0),
+          Icon(
+            Icons.access_time,
+            color: Colors.white,
+          ),
+          Text(
+            "${_formatTimer(_timerSeconds)}",
+            style: TextStyle(color: Colors.white),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _mapMenu()
+  {
+    return Container(
+      margin: EdgeInsets.all(0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).bottomAppBarColor,
+        borderRadius:
+        BorderRadius.only(bottomLeft: Radius.circular(15.0)),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.gps_fixed),
+              onPressed: () {
+                _mapController.move(_lastKnown, 16);
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.local_activity),
+            ),
+            IconButton(
+              icon: Icon(Icons.cancel),
+              onPressed: _showOnMap ? null : _onForfeitDialog,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _attributionBox()
+  {
+    return RotatedBox(
+      quarterTurns: 3,
+      child: Text(
+        " © OpenTopoMap (CC-BY-SA) ",
+        style: TextStyle(
+            backgroundColor: Colors.black54.withOpacity(0.5),
+            color: Colors.white),
+      ),
+    );
+  }
+
+  Widget _resultButton()
+  {
+    return Container(
+      margin: EdgeInsets.only(bottom: 200.0),
+      child: RaisedButton(
+          onPressed: () {},
+          shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.all(Radius.circular(360.0))),
+          color: Theme.of(context).accentColor,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text("Gå till resultat", style: TextStyle(fontSize: 15.0),),
+              Icon(Icons.arrow_forward)
+            ],
+          )),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    super.build(context);
+
     List<LayerOptions> mapLayers = [
       TileLayerOptions(
         urlTemplate: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
@@ -332,96 +441,37 @@ class MapViewState extends State<MapView>
 
     return Stack(
       children: <Widget>[
-        FlutterMap(
-          mapController: _mapController,
-          options: _mapOptions,
-          layers: mapLayers,
-        ),
-        Align(
-          alignment: Alignment.topCenter,
-          child: Container(
-            decoration: BoxDecoration(color: Colors.black54.withOpacity(0.6)),
-            padding: EdgeInsets.all(5.0),
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.directions_walk,
-                  color: Colors.white,
-                ),
-                Text(
-                  "$_steps steps",
-                  style: TextStyle(color: Colors.white),
-                ),
-                SizedBox(width: 15.0),
-                Icon(
-                  Icons.flag,
-                  color: Colors.white,
-                ),
-                Text(
-                  "$_completed/${_trackStations.length}",
-                  style: TextStyle(color: Colors.white),
-                ),
-                SizedBox(width: 15.0),
-                Icon(
-                  Icons.access_time,
-                  color: Colors.white,
-                ),
-                Text(
-                  "${_formatTimer(_timerSeconds)}",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ],
+            FlutterMap(
+              mapController: _mapController,
+              options: _mapOptions,
+              layers: mapLayers,
             ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.topRight,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.all(0),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).bottomAppBarColor,
-                  borderRadius:
-                      BorderRadius.only(bottomLeft: Radius.circular(15.0)),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.gps_fixed),
-                        onPressed: () {
-                          _mapController.move(_lastKnown, 16);
-                        },
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.local_activity),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.cancel),
-                        onPressed: _showOnMap ? null : _onForfeitDialog,
-                      )
-                    ],
-                  ),
-                ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: _topInfoBar(),
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  _mapMenu(),
+                  _attributionBox()
+                ],
               ),
-              RotatedBox(
-                quarterTurns: 3,
-                child: Text(
-                  " © OpenTopoMap (CC-BY-SA) ",
-                  style: TextStyle(
-                      backgroundColor: Colors.black54.withOpacity(0.5),
-                      color: Colors.white),
-                ),
-              )
-            ],
+            ),
+          ] +
+          // Må gud vare min själ nådig för detta
+          (_showOnMap
+              ? [
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: _resultButton(),
+                  )
+                ]
+              : []
           ),
-        ),
-      ],
     );
   }
 }
