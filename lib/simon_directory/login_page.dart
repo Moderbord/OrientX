@@ -33,11 +33,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _signInButton() {
-
+  Widget _signInButton()
+  {
+    return OutlineButton(
       onPressed: () {
-        signInWithGoogle().whenComplete(
-          () {
+        signInWithGoogle().whenComplete(() {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
