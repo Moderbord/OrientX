@@ -31,7 +31,7 @@ class TrackPageState extends State<TrackPage> {
         child: ListView.builder(
           itemCount: widget.track.stations.length,
           itemBuilder: (BuildContext context, int i) {
-            Station station = widget.track.stations[i];
+            Station station = widget.track.getStationFromIndex(i);
 
             return Container(
               height: 250.0,
@@ -49,12 +49,41 @@ class TrackPageState extends State<TrackPage> {
                         alignment: Alignment.topLeft,
                         child: Container(
                           color: Theme.of(context).backgroundColor,
-                          child: Row(children: <Widget>[
-                            Icon(Icons.location_on),
-                            Text(station.name, style: TextStyle(fontSize: 15.0),),
-                          ],),
+                          child: Row(
+                            children: <Widget>[
+                              Icon(Icons.location_on),
+                              Text(
+                                station.name,
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                            ],
+                          ),
                         ),
-                      )
+                      ),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(16.0)),
+                              color: Theme.of(context).bottomAppBarColor),
+                          padding: EdgeInsets.all(5.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                "1/1",
+                                style: TextStyle(color: Colors.lightGreen),
+                              ),
+                              Icon(
+                                Icons.check_circle,
+                                size: 25.0,
+                                color: Colors.lightGreen,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
