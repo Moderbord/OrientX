@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
@@ -31,7 +30,6 @@ class MapViewState extends State<MapView>
 
   Timer _timer;
   int _timerSeconds = 3600;
-  final df = DateFormat('hh:mm');
 
   List<CircleMarker> _currentPosition = [];
   List<LatLng> _trackHistory = [];

@@ -43,13 +43,13 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    Color
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("OrientX"),
+        title: Text("ThinQRight"),
       ),
       bottomNavigationBar: Material(
-      child: TabBar( ///WHEN ADDING NEW TABS REMEMBER TO CHANGE THE LENGHT IN THE CONTROLLER
+      child: TabBar( ///WHEN ADDING NEW TABS REMEMBER TO CHANGE THE LENGTH IN THE CONTROLLER
         controller: controller,
         tabs: <Widget>[
           Tab(icon: Icon(Icons.account_box), child: Text("Profile")),

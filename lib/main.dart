@@ -40,6 +40,6 @@ class MyApp extends StatelessWidget {
     });
 
     return MaterialApp(
-        title: 'ThinQR', theme: themeNotifier.getTheme(), home: LoginPage());
+        title: 'ThinQRight', theme: themeNotifier.getTheme(), home: LoginPage());
   }
 }
