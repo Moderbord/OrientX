@@ -15,7 +15,7 @@ class ActivityManager {
   List<String> answers;
   int duration;
 
-  void newActivity(
+  Future newActivity(
       {@required BuildContext context,
       @required ActivityPackage package})
   {
@@ -29,10 +29,10 @@ class ActivityManager {
     answers       = package.answers;
     duration      = package.duration;
 
-    _startActivity(context);
+    return _startActivity(context);
   }
 
-  _startActivity(BuildContext context) async {
+  Future _startActivity(BuildContext context) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(

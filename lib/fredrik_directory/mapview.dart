@@ -7,6 +7,7 @@ import 'package:latlong/latlong.dart';
 import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/fredrik_directory/track.dart';
 import 'package:orientx/spaken_directory/activitymanager.dart';
+import 'package:orientx/spaken_directory/resultscreen.dart';
 
 
 class MapView extends StatefulWidget {
@@ -34,6 +35,8 @@ class MapViewState extends State<MapView>
   LatLng _center = LatLng(0, 0);
   MapController _mapController;
   MapOptions _mapOptions;
+
+  ResultScreen resultScreen;
 
   @override
   void initState() {
@@ -80,6 +83,8 @@ class MapViewState extends State<MapView>
         print('[addGeofence] ERROR: $error');
       });
     }
+
+    resultScreen = ResultScreen();
   }
 
   void _onCenterCurrent(LatLng position) {
@@ -139,9 +144,7 @@ class MapViewState extends State<MapView>
     /*GeofenceMarker eventMarker = _geofenceEvents.firstWhere((GeofenceMarker marker) => marker.geofence.identifier == event.identifier, orElse: () => null);
     if (eventMarker == null) _geofenceEvents.add(GeofenceMarker(geofence, true));*/
 
-    int i = widget.track.circuit[0];
-    //Event
-    ActivityManager().newActivity(context: widget.context, package: widget.track.activities[i]);
+    resultScreen.orderActivity(widget.context, widget.track);
   }
 
   void _onGeofencesChange(bg.GeofencesChangeEvent event) {
