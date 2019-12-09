@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'first_screen.dart';
-import 'package:orientx/fredrik_directory/map_view.dart';
+import 'package:orientx/fredrik_directory/track_page.dart';
 import 'package:orientx/spaken_directory/serverpackage.dart';
 
 class StartRun extends StatefulWidget {
@@ -37,12 +36,15 @@ class _StartRunState extends State<StartRun>
                   margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15.0),
-                      border: Border.all(width: 5.0, color: Theme.of(context).accentColor)),
+                      border: Border.all(
+                          width: 5.0, color: Theme.of(context).accentColor)),
                   child: TextFormField(
                     textAlign: TextAlign.center,
                     style:
                         TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
-                    decoration: InputDecoration(border: InputBorder.none, focusedBorder: InputBorder.none),
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none),
                     onChanged: (String text) {
                       setState(() {
                         _input = text;
@@ -83,10 +85,8 @@ class _StartRunState extends State<StartRun>
           )
         : Container(
             child: Center(
-                child: MapView(
-              track: ServerPackage().fromID(int.parse(_input)),
-              context: context,
-            )),
+                child: TrackPage(
+                    track: ServerPackage().fromID(int.parse(_input)))),
           );
   }
 

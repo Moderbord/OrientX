@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
@@ -14,9 +13,8 @@ import 'package:orientx/spaken_directory/activitymanager.dart';
 
 class MapView extends StatefulWidget {
   final Track track;
-  final BuildContext context;
 
-  MapView({@required this.track, this.context});
+  MapView({@required this.track});
 
   @override
   State createState() => MapViewState();
@@ -31,7 +29,6 @@ class MapViewState extends State<MapView>
 
   Timer _timer;
   int _timerSeconds = 3600;
-  final df = DateFormat('hh:mm');
 
   List<CircleMarker> _currentPosition = [];
   List<LatLng> _trackHistory = [];
@@ -238,8 +235,8 @@ class MapViewState extends State<MapView>
     int i = widget.track.circuit[0];
 
     //Event
-    ActivityManager().newActivity(
-        context: widget.context, package: widget.track.activities[i]);
+    ActivityManager()
+        .newActivity(context: context, package: widget.track.activities[i]);
   }
 
   void _onGeofencesChange(bg.GeofencesChangeEvent event) {
@@ -378,43 +375,50 @@ class MapViewState extends State<MapView>
           ),
         ),
         Align(
-          alignment: Alignment.bottomLeft,
-          child: Text(
-            " © OpenTopoMap (CC-BY-SA) ",
-            style: TextStyle(
-                backgroundColor: Colors.black54.withOpacity(0.5),
-                color: Colors.white),
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Container(
-            margin: EdgeInsets.all(0),
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0)),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.gps_fixed),
-                    onPressed: () {
-                      _mapController.move(_lastKnown, 16);
-                    },
+          alignment: Alignment.topRight,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.all(0),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).bottomAppBarColor,
+                  borderRadius:
+                      BorderRadius.only(bottomLeft: Radius.circular(15.0)),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.gps_fixed),
+                        onPressed: () {
+                          _mapController.move(_lastKnown, 16);
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.local_activity),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.cancel),
+                        onPressed: _showOnMap ? null : _onForfeitDialog,
+                      )
+                    ],
                   ),
-                  IconButton(
-                    icon: Icon(Icons.local_activity),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.cancel),
-                    onPressed: _showOnMap ? null : _onForfeitDialog,
-                  )
-                ],
+                ),
               ),
-            ),
+              RotatedBox(
+                quarterTurns: 3,
+                child: Text(
+                  " © OpenTopoMap (CC-BY-SA) ",
+                  style: TextStyle(
+                      backgroundColor: Colors.black54.withOpacity(0.5),
+                      color: Colors.white),
+                ),
+              )
+            ],
           ),
         ),
       ],
@@ -425,7 +429,8 @@ class MapViewState extends State<MapView>
 class GeofenceMarker extends CircleMarker {
   bg.Geofence geofence;
 
-  GeofenceMarker(BuildContext context, bg.Geofence geofence, [bool triggered = false])
+  GeofenceMarker(BuildContext context, bg.Geofence geofence,
+      [bool triggered = false])
       : super(
             useRadiusInMeter: true,
             radius: geofence.radius,

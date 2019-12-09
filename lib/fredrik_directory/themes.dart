@@ -31,13 +31,6 @@ String getThemeName(Themes theme) {
 
 Themes themeGetEnum(ThemeData themeData) {
 
-  print("${themeData == themeImport.orangeDark}\n"
-      "${themeData == themeImport.blueLight}\n"
-      "${themeData == themeImport.blueDark}\n"
-      "${themeData == themeImport.purpleLight}\n"
-      "${themeData == themeImport.purpleDark}\n");
-
-
   if (themeData == themeImport.orangeDark) return Themes.orangeDark;
   if (themeData == themeImport.blueLight) return Themes.blueLight;
   if (themeData == themeImport.blueDark) return Themes.blueDark;

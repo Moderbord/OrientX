@@ -38,4 +38,9 @@ class Track {
 
   Track.fromCircuit({this.name, this.stations, this.activities, this.circuit});
 
+  getStationFromIndex(int index)
+  {
+    return stations[circuit[index]];
+  }
+
 }

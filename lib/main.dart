@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
     });
 
     return MaterialApp(
-        title: 'ThinQR',
+        title: 'ThinQRight',
         theme: themeNotifier.getTheme(),
         home: LoginPage(),
       onGenerateRoute: (RouteSettings settings){

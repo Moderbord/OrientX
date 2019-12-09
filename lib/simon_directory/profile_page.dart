@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'sign_in.dart';
-import 'first_screen.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class ProfilePage extends StatelessWidget

@@ -7,8 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:orientx/fredrik_directory/theme_notifier.dart';
 import 'package:orientx/fredrik_directory/themes.dart';
 
-import "first_screen.dart";
-
 class SettingsPage extends StatefulWidget {
   final Function() notifyParent;
 
