@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:orientx/simon_directory/sign_in.dart';
+import 'package:orientx/simon_directory/sign_in.dart' as prefix0;
 import 'profile_page.dart';
 import 'start_screen.dart';
 import 'settings_page.dart';
+import 'sign_in.dart';
 
 class FirstScreen extends StatefulWidget
 {
@@ -43,7 +46,6 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    Color
     return Scaffold(
       appBar: AppBar(
         title: Text("OrientX"),
@@ -57,72 +59,84 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
           Tab(icon: Icon(Icons.settings), child: Text("Settings"),)
         ],
       )),
-      body: TabBarView(
+      body: WillPopScope(
+        onWillPop: () async{
+          return Future.value(false);
+        },
+        child: TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: controller,
         children: _children,
       ),
-      drawer:_drawerList(context),
-      );
-  }
-}
-
-Drawer _drawerList(BuildContext context)
-{
-  return Drawer(
-    child: ListView(
-      padding: EdgeInsets.zero,
-      children: <Widget>[
-       Container(
-         height: 50,
-         width: 100,
-         child: Center(child:Text("Menu",style: TextStyle(fontSize: 16),)),
-       ),
-        _createDrawerItem(icon: Icons.home,text: "Home"), //TODO add onTap
-        _createDrawerItem(icon: Icons.account_box,text: "Profile"), //TODO add onTap
-        _createDrawerItem(icon: Icons.settings,text: "Settings"), //TODO add onTap
-      ],
-    ),
-  );
-}
-
-Widget _createDrawerItem({IconData icon, String text, GestureTapCallback onTap})
-{
-  return ListTile(
-    title: Row(
-      children: <Widget>[
-        Icon(icon),
-        Padding(
-          padding: EdgeInsets.only(left:8.0),
-          child:Text(text)
-        )
-      ],
-    ),
-    onTap: (){
-      onTap();
-    },
-  );
-}
-
-Widget _createDrawerHeader({String image,String text, Color color})
-{
-  return DrawerHeader(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(text,
-          style: TextStyle(
-            fontSize: 20,
-            color: color,
-          ),
-        ),
-      ],
-    ),
-    decoration: BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage(image),
-        fit: BoxFit.cover
       ),
-    ),
-  );
+      drawer:_drawerList(context),
+    );
+  }
+
+  void signOut()
+  {
+    signOutGoogle();
+    Navigator.pushNamed(context, "/");
+  }
+
+  Drawer _drawerList(BuildContext context)
+  {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          Container(
+            height: 50,
+            width: 100,
+            child: Center(child:Text("Menu",style: TextStyle(fontSize: 16),)),
+          ),
+          _createDrawerItem(icon: Icons.arrow_forward,text: "Logga ut",onTap: () => signOut()),
+        ],
+      ),
+    );
+  }
+
+  Widget _createDrawerItem({IconData icon, String text, GestureTapCallback onTap})
+  {
+    return ListTile(
+      title: Row(
+        children: <Widget>[
+          Icon(icon),
+          Padding(
+              padding: EdgeInsets.only(left:8.0),
+              child:Text(text)
+          )
+        ],
+      ),
+      onTap: (){
+        onTap();
+      },
+    );
+  }
+
+  Widget _createDrawerHeader({String image,String text, Color color})
+  {
+    return DrawerHeader(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(text,
+            style: TextStyle(
+              fontSize: 20,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage(image),
+            fit: BoxFit.cover
+        ),
+      ),
+    );
+  }
+
 }
+
+
