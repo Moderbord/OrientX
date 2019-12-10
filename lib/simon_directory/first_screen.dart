@@ -1,87 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:orientx/simon_directory/sign_in.dart';
-import 'package:orientx/simon_directory/sign_in.dart' as prefix0;
+import 'package:orientx/fredrik_directory/destination.dart';
 import 'profile_page.dart';
 import 'start_screen.dart';
 import 'settings_page.dart';
 import 'sign_in.dart';
 
-class FirstScreen extends StatefulWidget
-{
+class FirstScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _FirstScreenState();
   }
 }
 
+class _FirstScreenState extends State<FirstScreen>
+    with SingleTickerProviderStateMixin {
+  
+  List<Destination> _destinations;
 
-class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStateMixin
-{
-
-  List<Widget> _children;
-  TabController controller;
+  int _currentIndex = 0;
 
   @override
-  void initState()
-  {
+  void initState() {
     super.initState();
-    controller = TabController(vsync: this,length: 3);
-    _children = [
-      ProfilePage(),
-      StartRun(),
-      SettingsPage(notifyParent: refresh,)
+
+    _destinations = <Destination>[
+      Destination('Hem', Icons.home, ProfilePage()),
+      Destination('Banor', Icons.flag, StartRun()),
+      Destination('Stationer', Icons.camera, SettingsPage()),
     ];
   }
 
   @override
-  void dispose()
-  {
-    controller.dispose();
-    super.dispose();
-  }
-
-  refresh() {
-    setState(() {});
-  }
-
-  @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("ThinQRight"),
       ),
-      bottomNavigationBar: Material(
-      child: TabBar( ///WHEN ADDING NEW TABS REMEMBER TO CHANGE THE LENGTH IN THE CONTROLLER
-        controller: controller,
-        tabs: <Widget>[
-          Tab(icon: Icon(Icons.account_box), child: Text("Profile")),
-          Tab(icon: Icon(Icons.play_circle_outline), child: Text("Start")),
-          Tab(icon: Icon(Icons.settings), child: Text("Settings"),)
-        ],
-      )),
       body: WillPopScope(
-        onWillPop: () async{
+        onWillPop: () async {
           return Future.value(false);
         },
-        child: TabBarView(
-        physics: NeverScrollableScrollPhysics(),
-        controller: controller,
-        children: _children,
+        child: SafeArea(
+          top: false,
+          child: IndexedStack(
+            index: _currentIndex,
+            children: _destinations.map<Widget>((Destination destination) {
+              return destination.screen;
+            }).toList(),
+          ),
+        ),
       ),
-      ),
-      drawer:_drawerList(context),
+      bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (int index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          items: _destinations.map((Destination destination) {
+            return BottomNavigationBarItem(
+              icon: Icon(destination.icon),
+              title: Text(destination.title),
+            );
+          }).toList()),
+      drawer: _drawerList(context),
     );
   }
 
-  void signOut()
-  {
+  void signOut() {
     signOutGoogle();
     Navigator.pushNamed(context, "/");
   }
 
-  Drawer _drawerList(BuildContext context)
-  {
+  Drawer _drawerList(BuildContext context) {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -89,55 +81,33 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
           Container(
             height: 50,
             width: 100,
-            child: Center(child:Text("Menu",style: TextStyle(fontSize: 16),)),
+            child: Center(
+                child: Text(
+              "Menu",
+              style: TextStyle(fontSize: 16),
+            )),
           ),
-          _createDrawerItem(icon: Icons.arrow_forward,text: "Logga ut",onTap: () => signOut()),
+          _createDrawerItem(
+              icon: Icons.arrow_forward,
+              text: "Logga ut",
+              onTap: () => signOut()),
         ],
       ),
     );
   }
 
-  Widget _createDrawerItem({IconData icon, String text, GestureTapCallback onTap})
-  {
+  Widget _createDrawerItem(
+      {IconData icon, String text, GestureTapCallback onTap}) {
     return ListTile(
       title: Row(
         children: <Widget>[
           Icon(icon),
-          Padding(
-              padding: EdgeInsets.only(left:8.0),
-              child:Text(text)
-          )
+          Padding(padding: EdgeInsets.only(left: 8.0), child: Text(text))
         ],
       ),
-      onTap: (){
+      onTap: () {
         onTap();
       },
     );
   }
-
-  Widget _createDrawerHeader({String image,String text, Color color})
-  {
-    return DrawerHeader(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(text,
-            style: TextStyle(
-              fontSize: 20,
-              color: color,
-            ),
-          ),
-        ],
-      ),
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage(image),
-            fit: BoxFit.cover
-        ),
-      ),
-    );
-  }
-
 }
-
-
