@@ -133,7 +133,7 @@ class MapViewState extends State<MapView>
         () {
           if (_timerSeconds < 1) {
             timer.cancel();
-          } else {
+          } else if (!_showOnMap) {
             _timerSeconds = _timerSeconds - 1;
           }
         },
@@ -193,12 +193,18 @@ class MapViewState extends State<MapView>
     });
   }
 
+  void _onResults() {
+
+  }
+
   void _onEnabledChange(bool enabled) {
     if (!enabled) {
       _trackHistory.clear();
     }
   }
 
+  /// Fires whenever the player is detected to have changed his movement in some manner
+  /// Eg. walk -> run, run -> bicycle
   void _onMotionChange(bg.Location location) async {
     LatLng ll = LatLng(location.coords.latitude, location.coords.longitude);
 
@@ -207,6 +213,7 @@ class MapViewState extends State<MapView>
     if (_showOnMap) _mapController.move(ll, _mapController.zoom);
   }
 
+  /// Fires whenever the player interacts with a geofence
   void _onGeofence(bg.GeofenceEvent event) {
     print(event.identifier);
     GeofenceMarker marker = _geofences.firstWhere(
@@ -239,6 +246,7 @@ class MapViewState extends State<MapView>
         .newActivity(context: context, package: widget.track.activities[i]);
   }
 
+  /// Fires whenever the list of geofences is somehow modified
   void _onGeofencesChange(bg.GeofencesChangeEvent event) {
     print('[${bg.Event.GEOFENCESCHANGE}] - $event');
 
@@ -257,7 +265,8 @@ class MapViewState extends State<MapView>
     }
   }
 
-  ///
+  /// Fires when Background Geolocation detects a location change
+  /// The new location is sent as a parameter
   void _onLocation(bg.Location location) {
     LatLng ll = LatLng(location.coords.latitude, location.coords.longitude);
 
