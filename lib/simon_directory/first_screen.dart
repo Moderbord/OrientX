@@ -29,7 +29,7 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
     _children = [
       ProfilePage(),
       StartRun(),
-      SettingsPage(notifyParent: refresh,)
+      SettingsPage()
     ];
   }
 
@@ -38,10 +38,6 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
   {
     controller.dispose();
     super.dispose();
-  }
-
-  refresh() {
-    setState(() {});
   }
 
   @override
@@ -61,10 +57,8 @@ class _FirstScreenState extends State<FirstScreen> with SingleTickerProviderStat
         ],
       )),
       body: WillPopScope(
-        onWillPop: () async{
-          return Future.value(false);
-        },
-        child: TabBarView(
+        onWillPop: () async => false,
+        child:TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: controller,
         children: _children,

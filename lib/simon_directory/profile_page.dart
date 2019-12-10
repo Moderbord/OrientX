@@ -1,11 +1,26 @@
 import 'package:flutter/material.dart';
 import 'sign_in.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatelessWidget
 {
+
+
+  _getStats() async
+  {
+    String lapAmount;
+    String runTime;
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    lapAmount = prefs.getInt("laps").toString();
+    runTime = prefs.getInt("runtime").toString();
+    
+  }
+
   @override
     Widget build(BuildContext context) {
+    _getStats();
     return Container(
         child: Stack(children: <Widget>[
 
@@ -18,7 +33,7 @@ class ProfilePage extends StatelessWidget
               const StaggeredTile.count(2, 2.5),
             ],
             children: <Widget> [
-              _createTile(icon: Icon(Icons.flag),headerText: "Laps complete",stat: "17", color: Theme.of(context).accentColor),
+              _createTile(icon: Icon(Icons.flag),headerText: "Laps complete",stat: "11", color: Theme.of(context).accentColor),
               _createTile(icon: Icon(Icons.access_time),headerText: "Total running time",stat: "47 h",color: Theme.of(context).backgroundColor),
               _createReverseTile(icon: Icon(Icons.help),headerText: "Questions answered",stat: "374", color: Theme.of(context).backgroundColor),
               _createReverseTile(icon: Icon(Icons.directions_run),headerText: "Meters",stat: "120563", color: Theme.of(context).accentColor),

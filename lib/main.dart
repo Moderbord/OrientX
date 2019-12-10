@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import "simon_directory/login_page.dart";
 import 'package:provider/provider.dart';
@@ -5,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:orientx/fredrik_directory/theme_notifier.dart';
 import 'package:orientx/fredrik_directory/themes.dart';
 import 'simon_directory/first_screen.dart';
+import 'simon_directory/sign_in.dart';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
@@ -23,7 +25,15 @@ void main() {
   },);
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget
+{
+  @override
+  State<StatefulWidget> createState() {
+    return _MyAppState();
+  }
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
@@ -44,7 +54,7 @@ class MyApp extends StatelessWidget {
         title: 'ThinQRight',
         theme: themeNotifier.getTheme(),
         home: LoginPage(),
-      onGenerateRoute: (RouteSettings settings){
+        onGenerateRoute: (RouteSettings settings){
           switch(settings.name)
           {
             case "/":
@@ -55,10 +65,9 @@ class MyApp extends StatelessWidget {
               break;
           }
           return null;
-      },
+        },
     );
   }
-  
 }
 
 class SlideRightRoute extends PageRouteBuilder {

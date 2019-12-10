@@ -8,9 +8,6 @@ import 'package:orientx/fredrik_directory/theme_notifier.dart';
 import 'package:orientx/fredrik_directory/themes.dart';
 
 class SettingsPage extends StatefulWidget {
-  final Function() notifyParent;
-
-  SettingsPage({Key key, @required this.notifyParent}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
