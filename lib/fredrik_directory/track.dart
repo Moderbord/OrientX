@@ -51,4 +51,9 @@ class Track {
      return this.circuit.length == 0;
   }
 
+  getStationFromIndex(int index)
+  {
+    return stations[circuit[index]];
+  }
+
 }
