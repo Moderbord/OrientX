@@ -14,10 +14,11 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen>
-    with SingleTickerProviderStateMixin {
-  
+    with TickerProviderStateMixin {
   List<Destination> _destinations;
 
+  List<AnimationController> _faders;
+  List<Key> _destinationKeys;
   int _currentIndex = 0;
 
   @override
@@ -25,10 +26,25 @@ class _FirstScreenState extends State<FirstScreen>
     super.initState();
 
     _destinations = <Destination>[
-      Destination('Hem', Icons.home, ProfilePage()),
-      Destination('Banor', Icons.flag, StartRun()),
-      Destination('Stationer', Icons.camera, SettingsPage()),
+      Destination(0, 'Hem', Icons.home, ProfilePage()),
+      Destination(1, 'Lopp', Icons.flag, StartRun()),
+      Destination(2, 'Stationer', Icons.camera, SettingsPage()),
     ];
+
+    _faders = _destinations.map<AnimationController>((Destination destination) {
+      return AnimationController(
+          vsync: this, duration: Duration(milliseconds: 200));
+    }).toList();
+    _faders[_currentIndex].value = 1.0;
+    _destinationKeys =
+        List<Key>.generate(_destinations.length, (int index) => GlobalKey())
+            .toList();
+  }
+
+  @override
+  void dispose() {
+    for (AnimationController controller in _faders) controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -38,19 +54,31 @@ class _FirstScreenState extends State<FirstScreen>
         title: Text("ThinQRight"),
       ),
       body: WillPopScope(
-        onWillPop: () async {
-          return Future.value(false);
-        },
-        child: SafeArea(
-          top: false,
-          child: IndexedStack(
-            index: _currentIndex,
-            children: _destinations.map<Widget>((Destination destination) {
-              return destination.screen;
+          onWillPop: () async {
+            return Future.value(false);
+          },
+          child: Stack(
+            fit: StackFit.expand,
+            children: _destinations.map((Destination destination) {
+              final Widget view = FadeTransition(
+                opacity: _faders[destination.index]
+                    .drive(CurveTween(curve: Curves.fastOutSlowIn)),
+                child: KeyedSubtree(
+                    key: _destinationKeys[destination.index],
+                    child: destination.screen),
+              );
+              if (destination.index == _currentIndex) {
+                _faders[destination.index].forward();
+                return view;
+              } else {
+                _faders[destination.index].reverse();
+                if (_faders[destination.index].isAnimating) {
+                  return IgnorePointer(child: view);
+                }
+                return Offstage(child: view);
+              }
             }).toList(),
-          ),
-        ),
-      ),
+          )),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (int index) {
@@ -75,23 +103,26 @@ class _FirstScreenState extends State<FirstScreen>
 
   Drawer _drawerList(BuildContext context) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          Container(
-            height: 50,
-            width: 100,
-            child: Center(
-                child: Text(
-              "Menu",
-              style: TextStyle(fontSize: 16),
-            )),
-          ),
-          _createDrawerItem(
-              icon: Icons.arrow_forward,
-              text: "Logga ut",
-              onTap: () => signOut()),
-        ],
+      child: SafeArea(
+        top: true,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            Container(
+              height: 50,
+              width: 100,
+              child: Center(
+                  child: Text(
+                "Menu",
+                style: TextStyle(fontSize: 16),
+              )),
+            ),
+            _createDrawerItem(
+                icon: Icons.arrow_forward,
+                text: "Logga ut",
+                onTap: () => signOut()),
+          ],
+        ),
       ),
     );
   }
