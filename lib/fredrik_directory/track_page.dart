@@ -92,7 +92,7 @@ class TrackPageState extends State<TrackPage> {
           },
         ),
       ),
-      body: MapView(track: widget.track),
+      body: MapView(/*track: widget.track*/),
       color: Theme.of(context).bottomAppBarColor,
       parallaxEnabled: true,
       backdropEnabled: true,

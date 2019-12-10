@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:orientx/fredrik_directory/track_page.dart';
+import 'package:orientx/spaken_directory/activesession.dart';
 import 'package:orientx/spaken_directory/serverpackage.dart';
 
 class StartRun extends StatefulWidget {
@@ -65,7 +66,8 @@ class _StartRunState extends State<StartRun>
                       ),
                       onPressed: () {
                         setState(() {
-                          if (checkID(int.parse(_input))) {
+                          if (checkID(_input)) {
+                            ActiveSession.getInstance().setTrack(_input);
                             runTrack = true;
                           } else {
                             _result = "Banan kunde inte hittas!";
@@ -86,11 +88,11 @@ class _StartRunState extends State<StartRun>
         : Container(
             child: Center(
                 child: TrackPage(
-                    track: ServerPackage().fromID(int.parse(_input)))),
+                    track: ActiveSession.getInstance().getTrack())),
           );
   }
 
-  bool checkID(int id) {
+  bool checkID(String id) {
     return ServerPackage().checkID(id);
   }
 }
