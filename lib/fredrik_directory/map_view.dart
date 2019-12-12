@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
+
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong/latlong.dart';
@@ -22,6 +23,7 @@ class MapView extends StatefulWidget {
 
 class MapViewState extends State<MapView>
     with AutomaticKeepAliveClientMixin<MapView> {
+
   @override
   bool get wantKeepAlive {
     return true;
