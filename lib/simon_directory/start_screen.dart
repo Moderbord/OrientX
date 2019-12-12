@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:orientx/spaken_directory/activesession.dart';
 import 'package:orientx/spaken_directory/serverpackage.dart';
 
 class StartRun extends StatefulWidget {
@@ -64,7 +65,8 @@ class _StartRunState extends State<StartRun>
                 ),
                 onPressed: () {
                   setState(() {
-                    if (checkID(int.parse(_input))) {
+                          if (checkID(_input)) {
+                            ActiveSession.getInstance().setTrack(_input);
                       runTrack = true;
                     } else {
                       _result = "Banan kunde inte hittas!";
@@ -81,10 +83,11 @@ class _StartRunState extends State<StartRun>
           )
         ],
       ),
+                    track: ActiveSession.getInstance().getTrack())),
     );
   }
 
-  bool checkID(int id) {
+  bool checkID(String id) {
     return ServerPackage().checkID(id);
   }
 }

@@ -9,15 +9,10 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong/latlong.dart';
 import 'package:orientx/fredrik_directory/station.dart';
-import 'package:orientx/fredrik_directory/track.dart';
-import 'package:orientx/spaken_directory/activitymanager.dart';
+import 'package:orientx/spaken_directory/activesession.dart';
 
 class MapView extends StatefulWidget {
-  final Track track;
-
-  MapView({@required this.track});
-
-  @override
+ @override
   State createState() => MapViewState();
 }
 
@@ -99,7 +94,7 @@ class MapViewState extends State<MapView>
   }
 
   void _setupTrack() {
-    for (Station station in widget.track.stations) {
+    for (Station station in ActiveSession.getInstance().getTrack().stations) {
       bg.Geofence fence = bg.Geofence(
         identifier: station.name,
         radius: 15.0,
@@ -241,11 +236,8 @@ class MapViewState extends State<MapView>
     _lastKnown = marker.point;
     _completed++;
 
-    int i = widget.track.circuit[0];
-
     //Event
-    ActivityManager()
-        .newActivity(context: context, package: widget.track.activities[i]);
+    ActiveSession.getInstance().promptNextActivity(context);
   }
 
   /// Fires whenever the list of geofences is somehow modified

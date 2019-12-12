@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/spaken_directory/activitypackage.dart';
 
@@ -37,6 +38,18 @@ class Track {
   }
 
   Track.fromCircuit({this.name, this.stations, this.activities, this.circuit});
+
+  int popNext()
+  {
+     int i = this.circuit[0] ?? 0;
+     this.circuit.removeAt(0);
+     return i;
+  }
+
+  bool wasLast()
+  {
+     return this.circuit.length == 0;
+  }
 
   getStationFromIndex(int index)
   {
