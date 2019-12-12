@@ -21,7 +21,6 @@ class _StartRunState extends State<StartRun>
 
   @override
   Widget build(BuildContext context) {
-
     super.build(context);
 
     return Container(
@@ -65,8 +64,8 @@ class _StartRunState extends State<StartRun>
                 ),
                 onPressed: () {
                   setState(() {
-                          if (checkID(_input)) {
-                            ActiveSession.getInstance().setTrack(_input);
+                    if (checkID(_input)) {
+                      ActiveSession.getInstance().setTrack(_input);
                       runTrack = true;
                     } else {
                       _result = "Banan kunde inte hittas!";
@@ -83,7 +82,6 @@ class _StartRunState extends State<StartRun>
           )
         ],
       ),
-                    track: ActiveSession.getInstance().getTrack())),
     );
   }
 

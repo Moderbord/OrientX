@@ -94,7 +94,7 @@ class MapScreenState extends State<MapScreen> {
           },
         ),
       ),
-      body: MapView(track: widget.track),
+      body: MapView(),
       color: Theme.of(context).bottomAppBarColor,
       parallaxEnabled: true,
       backdropEnabled: true,
