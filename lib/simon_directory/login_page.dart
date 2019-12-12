@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' as prefix0;
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix1;
 import "sign_in.dart";
 import "first_screen.dart";
 
 class LoginPage extends StatefulWidget {
+
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -33,11 +37,14 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+
+
   Widget _signInButton()
   {
     return OutlineButton(
       onPressed: () {
         signInWithGoogle().whenComplete(() {
+          setState(() {});
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
