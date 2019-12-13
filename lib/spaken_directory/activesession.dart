@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:orientx/fredrik_directory/track.dart';
 import 'package:orientx/spaken_directory/activitymanager.dart';
 import 'package:orientx/spaken_directory/serverpackage.dart';
+import 'package:orientx/fredrik_directory/station.dart';
+import 'package:latlong/latlong.dart';
 
 enum SessionState
 {
@@ -28,25 +30,48 @@ class ActiveSession
       _activeState = SessionState.Start;
    }
 
-   Track _activeTrack;
    SessionState _activeState;
+   Track _activeTrack;
+
    List<Function(SessionState state)> _stateListeners = [];
+   List<Function(Station station)> _onVisitedListeners = [];
+   List<Station> _visitedStations = [];
+   List<LatLng> _trackHistory = [];
+
+   int _visitingIndex = 0;
 
    void setTrack(String id)
    {
       // TODO fetch track from FireBase
       _activeTrack = ServerPackage().fromID(id);
    }
+
    Track getTrack() => _activeTrack;
 
    void promptNextActivity(BuildContext context)
    {
-      ActivityManager().newActivity(context: context, package: _activeTrack.activities[0]); // TODO dynamic course
+      int activityIndex = _activeTrack.activityIndex[_visitingIndex]; // Collects the correct index for the next activity
+      _onVisited(_activeTrack.stations[_visitingIndex]);
+
+      ActivityManager().newActivity(context: context, package: _activeTrack.activities[activityIndex]);
+      _visitingIndex++;
+
+      if (_visitingIndex >= _activeTrack.stations.length)
+         {
+            print("Track finished");
+            _newSessionState(SessionState.Result);
+         }
+
    }
 
    void addStateListener(Function(SessionState state) function)
    {
       _stateListeners.add(function);
+   }
+
+   void addOnVisitedListeners(Function(Station station) function)
+   {
+      _onVisitedListeners.add(function);
    }
 
    void _newSessionState(SessionState state)
@@ -55,6 +80,7 @@ class ActiveSession
       onStateChange();
    }
 
+   // make private
    void onStateChange()
    {
       for (Function  f in _stateListeners)
@@ -63,9 +89,31 @@ class ActiveSession
          }
    }
 
+   void _onVisited(Station station)
+   {
+      _visitedStations.add(station);
+      for (Function  f in _onVisitedListeners)
+      {
+         f(station);
+      }
+   }
+
+   void addTrackHistory(LatLng latLng)
+   {
+      _trackHistory.add(latLng);
+   }
+
+   void setSessionState(SessionState state)
+   {
+      _activeState = state;
+      onStateChange();
+   }
+
+   // remove
    int i = 1;
 
-   void setState()
+   // remove
+   void nextSessionState()
    {
       _activeState = SessionState.values[i];
       i++;
@@ -73,8 +121,10 @@ class ActiveSession
       {
          i = 0;
       }
+      onStateChange();
    }
 
+   // remove
    String getCurrentState()
    {
       return _activeState.toString();
@@ -91,4 +141,16 @@ class ActiveSession
    // TODO add callback to SlidingPanel -OnAnswered?
    // TODO make call when track is over
    // TODO fetch data for result screen
+
+   void flush()
+   {
+      _activeState = null;
+      _activeTrack = null;
+      _stateListeners = [];
+      _onVisitedListeners = [];
+      _visitedStations = [];
+      _trackHistory = [];
+      _visitingIndex = 0;
+   }
+
 }

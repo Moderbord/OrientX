@@ -83,35 +83,27 @@ class _StartRunState extends State<StartRun>
                   ],
                 ),
                 RaisedButton(
-                  onPressed: ()
-                  {
-                    print("current state: " + ActiveSession().getCurrentState());
+                  onPressed: () {
+                    print(
+                        "current state: " + ActiveSession().getCurrentState());
                   },
                   child: Text("Cur State"),
                 ),
                 RaisedButton(
-                  onPressed: ()
-                  {
+                  onPressed: () {
                     print("listener added");
-                    ActiveSession().addStateListener((SessionState state){
+                    ActiveSession().addStateListener((SessionState state) {
                       print("CALLBACK with state: " + state.toString());
+                      _result = state.toString();
+                      setState(() {}); // tell receiver to update itself
                     });
                   },
                   child: Text("Add listener"),
                 ),
                 RaisedButton(
-                  onPressed: ()
-                  {
-                    print("state change triggered");
-                    ActiveSession().onStateChange();
-                  },
-                  child: Text("On change"),
-                ),
-                RaisedButton(
-                  onPressed: ()
-                  {
+                  onPressed: () {
                     print("State changed manually");
-                    ActiveSession().setState();
+                    ActiveSession().nextSessionState();
                   },
                   child: Text("Next state"),
                 )
@@ -119,9 +111,7 @@ class _StartRunState extends State<StartRun>
             ),
           )
         : Container(
-            child: Center(
-                child: TrackPage(
-                    track: ActiveSession().getTrack())),
+            child: Center(child: TrackPage(track: ActiveSession().getTrack())),
           );
   }
 
