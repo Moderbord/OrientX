@@ -47,6 +47,7 @@ class _MyAppState extends State<MyApp> {
             logLevel: bg.Config.LOG_LEVEL_WARNING))
         .then((bg.State state) {
       bg.BackgroundGeolocation.destroyLocations();
+      bg.BackgroundGeolocation.removeGeofences();
     });
 
     return MaterialApp(

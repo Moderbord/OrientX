@@ -12,7 +12,8 @@ enum SessionState
 {
    Start,
    Run,
-   Result
+   Result,
+   Finished
 }
 
 // Singleton
@@ -53,11 +54,11 @@ class ActiveSession
    ];
 
 
-   Future<void> _getPackages() async
+   _getPackages()
    {
       List<ActivityPackage> localActivities = [];
 
-      await Database.getInstance().getData().then((List<ActivityPackage> serverActivities)
+      Database.getInstance().getData().then((List<ActivityPackage> serverActivities)
       {
          print("fetched");
          for (ActivityPackage pkg in serverActivities)
@@ -65,22 +66,23 @@ class ActiveSession
             print(pkg.activityName);
          }
          localActivities = serverActivities;
+
+         _activeTrack = Track(
+            name: "Mysslinga",
+            stations: stationList,
+            activities: localActivities,
+            type: courseType.random,
+         );
+
+         setSessionState(SessionState.Run);
       });
-
-      _activeTrack = Track(
-         name: "Mysslinga",
-         stations: stationList,
-         activities: localActivities,
-         type: courseType.random,
-      );
-
    }
 
    void setTrack(String id)
    {
       // TODO fetch track from FireBase
-      //_getPackages();
-      _activeTrack = ServerPackage().fromID(id);
+      _getPackages();
+      //_activeTrack = ServerPackage().fromID(id);
    }
 
    Track getTrack() => _activeTrack;
@@ -98,7 +100,7 @@ class ActiveSession
       if (_visitingIndex >= _activeTrack.stations.length)
          {
             print("Track finished");
-            setSessionState(SessionState.Result);
+            setSessionState(SessionState.Finished);
          }
    }
 
@@ -146,8 +148,6 @@ class ActiveSession
    }
 
 
-
-   // TODO close session (set inactive? reset?)
    // TODO create buffers for packages and Track data
    // TODO download track packages and activity packages on init/set active into buffers
    // TODO receive geoCache prompt with station ID and initiate activityManager

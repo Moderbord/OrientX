@@ -68,7 +68,6 @@ class _StartRunState extends State<StartRun>
                     if (checkID(_input)) {
                       _result = "Ok!";
                       ActiveSession().setTrack(_input);
-                      ActiveSession().setSessionState(SessionState.Run);
                     } else {
                       _result = "Banan kunde inte hittas!";
                     }
