@@ -1,10 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong/latlong.dart';
+
 import 'package:orientx/fredrik_directory/track.dart';
+import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/spaken_directory/activitymanager.dart';
 import 'package:orientx/spaken_directory/serverpackage.dart';
-import 'package:orientx/fredrik_directory/station.dart';
-import 'package:latlong/latlong.dart';
+import 'package:orientx/spaken_directory/activitypackage.dart';
+import 'package:orientx/luddw_dir/db.dart';
 
 enum SessionState
 {
@@ -39,9 +41,45 @@ class ActiveSession
 
    int _visitingIndex = 0;
 
+
+
+   // TODO make this server
+   final List<Station> stationList = [
+      Station(name: "Lakeside Shrubbery", point: LatLng(64.745597, 20.950119), resourceUrl: 'https://www.orientering.se/media/images/DSC_2800.width-800.jpg'),
+      /*Station(
+          name: "Rock by the lake", point: LatLng(64.745124, 20.957779), resourceUrl: 'http://www.nationalstadsparken.se/Sve/Bilder/orienteringskontroll-mostphotos-544px.jpg'),
+      Station(
+          name: "The wishing tree", point: LatLng(64.752627, 20.952363), resourceUrl: 'https://www.fjardhundraland.se/wp-content/uploads/2019/08/oringen-uppsala-fjacc88rdhundraland-orienteringskontroll.jpg')*/
+   ];
+
+
+   Future<void> _getPackages() async
+   {
+      List<ActivityPackage> localActivities = [];
+
+      await Database.getInstance().getData().then((List<ActivityPackage> serverActivities)
+      {
+         print("fetched");
+         for (ActivityPackage pkg in serverActivities)
+         {
+            print(pkg.activityName);
+         }
+         localActivities = serverActivities;
+      });
+
+      _activeTrack = Track(
+         name: "Mysslinga",
+         stations: stationList,
+         activities: localActivities,
+         type: courseType.random,
+      );
+
+   }
+
    void setTrack(String id)
    {
       // TODO fetch track from FireBase
+      //_getPackages();
       _activeTrack = ServerPackage().fromID(id);
    }
 
@@ -114,6 +152,7 @@ class ActiveSession
    // TODO download track packages and activity packages on init/set active into buffers
    // TODO receive geoCache prompt with station ID and initiate activityManager
    // TODO launch activity from station ID
+   // TODO getter for num answered questions, num visited stations, num steps walked, num completed courses
 
    void flush()
    {
