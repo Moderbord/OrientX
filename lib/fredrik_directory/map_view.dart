@@ -18,7 +18,7 @@ class MapView extends StatefulWidget {
 
 class MapViewState extends State<MapView>
     with AutomaticKeepAliveClientMixin<MapView> {
-  
+
   @override
   bool get wantKeepAlive {
     return true;
@@ -382,7 +382,7 @@ class MapViewState extends State<MapView>
     return Container(
       margin: EdgeInsets.only(bottom: 200.0),
       child: RaisedButton(
-          onPressed: () {},
+          onPressed: () { ActiveSession().setState(SessionState.Result); },
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(360.0))),
           color: Theme.of(context).accentColor,
