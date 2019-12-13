@@ -55,11 +55,14 @@ class MapViewState extends State<MapView>
     ActiveSession().addStateListener(
       (SessionState state) {
         if (state == SessionState.Run) {
-          bg.BackgroundGeolocation.start();
-          setState(
-            () {
-              _setupTrack();
-              _startTimer();
+          bg.BackgroundGeolocation.start().then(
+            (bg.State state) {
+              setState(
+                () {
+                  _setupTrack();
+                  _startTimer();
+                },
+              );
             },
           );
         } else {
