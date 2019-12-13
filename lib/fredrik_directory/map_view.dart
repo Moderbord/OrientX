@@ -388,7 +388,7 @@ class MapViewState extends State<MapView>
     return Container(
       margin: EdgeInsets.only(bottom: 200.0),
       child: RaisedButton(
-          onPressed: () { ActiveSession().setState(SessionState.Result); },
+          onPressed: () { ActiveSession().setSessionState(SessionState.Result); },
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(360.0))),
           color: Theme.of(context).accentColor,
@@ -407,6 +407,7 @@ class MapViewState extends State<MapView>
 
   @override
   Widget build(BuildContext context) {
+
     super.build(context);
 
     List<LayerOptions> mapLayers = [
@@ -414,9 +415,6 @@ class MapViewState extends State<MapView>
         urlTemplate: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
         subdomains: ['a', 'b', 'c'],
         maxZoom: 17,
-        additionalOptions: {
-          'id': 'opentopomap',
-        },
       ),
       PolylineLayerOptions(polylines: [
         Polyline(

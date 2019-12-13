@@ -121,6 +121,10 @@ class _FirstScreenState extends State<FirstScreen>
                 icon: Icons.arrow_forward,
                 text: "Logga ut",
                 onTap: () => signOut()),
+            _createDrawerItem(
+              icon: Icons.settings,
+              text: "Inställningar",
+            )
           ],
         ),
       ),
