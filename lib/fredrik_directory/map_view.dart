@@ -18,7 +18,6 @@ class MapView extends StatefulWidget {
 
 class MapViewState extends State<MapView>
     with AutomaticKeepAliveClientMixin<MapView> {
-
   @override
   bool get wantKeepAlive {
     return true;
@@ -45,7 +44,6 @@ class MapViewState extends State<MapView>
 
   @override
   void initState() {
-
     super.initState();
 
     bg.BackgroundGeolocation.onLocation(_onLocation);
@@ -54,12 +52,21 @@ class MapViewState extends State<MapView>
     bg.BackgroundGeolocation.onGeofencesChange(_onGeofencesChange);
     bg.BackgroundGeolocation.onEnabledChange(_onEnabledChange);
 
-    ActiveSession().addStateListener((SessionState state) {
-      setState((){
-        _setupTrack();
-        _startTimer();
-      });
-    });
+    ActiveSession().addStateListener(
+      (SessionState state) {
+        if (state == SessionState.Run) {
+          bg.BackgroundGeolocation.start();
+          setState(
+            () {
+              _setupTrack();
+              _startTimer();
+            },
+          );
+        } else {
+          bg.BackgroundGeolocation.stop();
+        }
+      },
+    );
 
     _mapOptions = MapOptions(
         onPositionChanged: _onPositionChanged, center: _center, zoom: 16.0);
@@ -73,7 +80,6 @@ class MapViewState extends State<MapView>
   }
 
   void _setupTrack() {
-
     bg.BackgroundGeolocation.setOdometer(0);
 
     bg.BackgroundGeolocation.getCurrentPosition(
@@ -83,7 +89,6 @@ class MapViewState extends State<MapView>
       timeout: 30,
       samples: 3,
     ).then((bg.Location location) {
-
       _lastKnown = LatLng(location.coords.latitude, location.coords.longitude);
       _mapOptions.center = _lastKnown;
 
@@ -97,7 +102,6 @@ class MapViewState extends State<MapView>
       );
 
       _mapController.move(_lastKnown, 16);
-
     }).catchError((error) {
       print('[getCurrentPosition] ERROR: $error');
     });
@@ -216,7 +220,6 @@ class MapViewState extends State<MapView>
 
   /// Fires whenever the player interacts with a geofence
   void _onGeofence(bg.GeofenceEvent event) {
-
     print("Entered geofence: ${event.identifier}");
 
     GeofenceMarker marker = _geofences.firstWhere(
@@ -388,7 +391,9 @@ class MapViewState extends State<MapView>
     return Container(
       margin: EdgeInsets.only(bottom: 200.0),
       child: RaisedButton(
-          onPressed: () { ActiveSession().setSessionState(SessionState.Result); },
+          onPressed: () {
+            ActiveSession().setSessionState(SessionState.Result);
+          },
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(360.0))),
           color: Theme.of(context).accentColor,
@@ -407,7 +412,6 @@ class MapViewState extends State<MapView>
 
   @override
   Widget build(BuildContext context) {
-
     super.build(context);
 
     List<LayerOptions> mapLayers = [
