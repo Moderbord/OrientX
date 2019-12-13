@@ -14,7 +14,6 @@ class _StartRunState extends State<StartRun>
     with AutomaticKeepAliveClientMixin<StartRun> {
   String _input = "";
   String _result = "";
-  bool runTrack = false;
 
   @override
   bool get wantKeepAlive => true;
@@ -65,8 +64,9 @@ class _StartRunState extends State<StartRun>
                 onPressed: () {
                   setState(() {
                     if (checkID(_input)) {
-                      ActiveSession.getInstance().setTrack(_input);
-                      runTrack = true;
+                      _result = "Ok!";
+                      ActiveSession().setTrack(_input);
+                      ActiveSession().setState(SessionState.Run);
                     } else {
                       _result = "Banan kunde inte hittas!";
                     }

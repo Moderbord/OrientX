@@ -14,6 +14,7 @@ class TrackPage extends StatefulWidget {
 }
 
 class _TrackPageState extends State<TrackPage> with TickerProviderStateMixin {
+
   List<Destination> _destinations;
   List<AnimationController> _faders;
   List<Key> _destinationKeys;
@@ -24,16 +25,16 @@ class _TrackPageState extends State<TrackPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    /*ActiveSession.getInstance().onStateChanged((int index) {
-      setState(() {
-        _currentIndex = index;
-      });
-    });*/
+    ActiveSession().addStateListener((SessionState state) {
+      _currentIndex = state.index;
+      print("Index: $_currentIndex");
+      setState(() { });
+    });
 
     _destinations = <Destination>[
-      Destination(0, 'Resultat', Icons.check_circle, ResultScreen()),
-      Destination(1, 'Start', Icons.flag, StartRun()),
-      Destination(2, 'Orientering', Icons.location_on, MapScreen()),
+      Destination(0, 'Start', Icons.flag, StartRun()),
+      Destination(1, 'Orientering', Icons.location_on, MapScreen()),
+      Destination(2, 'Resultat', Icons.check_circle, ResultScreen()),
     ];
 
     _faders = _destinations.map<AnimationController>((Destination destination) {

@@ -1,17 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:orientx/spaken_directory/activesession.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import 'track.dart';
 import 'station.dart';
+import 'track.dart';
 
 import 'map_view.dart';
 
 class MapScreen extends StatefulWidget {
-
-  final Track track;
-
-  MapScreen({@required this.track});
 
   @override
   State createState() => MapScreenState();
@@ -26,14 +23,18 @@ class MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    Track track = ActiveSession().getTrack();
+    int stationCount = (track == null) ? 0 : track.circuit.length;
+
     return SlidingUpPanel(
       panel: Container(
         margin: EdgeInsets.only(top: 25.0),
         padding: EdgeInsets.all(10.0),
         child: ListView.builder(
-          itemCount: widget.track.stations.length,
+          itemCount: stationCount,
           itemBuilder: (BuildContext context, int i) {
-            Station station = widget.track.getStationFromIndex(i);
+            Station station = track.getStationFromIndex(i);
 
             return Container(
               height: 250.0,
@@ -95,7 +96,6 @@ class MapScreenState extends State<MapScreen> {
         ),
       ),
       body: MapView(),
-      color: Theme.of(context).bottomAppBarColor,
       parallaxEnabled: true,
       backdropEnabled: true,
       minHeight: 30.0,

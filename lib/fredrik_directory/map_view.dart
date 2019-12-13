@@ -12,13 +12,13 @@ import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/spaken_directory/activesession.dart';
 
 class MapView extends StatefulWidget {
- @override
+  @override
   State createState() => MapViewState();
 }
 
 class MapViewState extends State<MapView>
     with AutomaticKeepAliveClientMixin<MapView> {
-
+  
   @override
   bool get wantKeepAlive {
     return true;
@@ -45,6 +45,7 @@ class MapViewState extends State<MapView>
 
   @override
   void initState() {
+
     super.initState();
 
     bg.BackgroundGeolocation.onLocation(_onLocation);
@@ -52,6 +53,26 @@ class MapViewState extends State<MapView>
     bg.BackgroundGeolocation.onGeofence(_onGeofence);
     bg.BackgroundGeolocation.onGeofencesChange(_onGeofencesChange);
     bg.BackgroundGeolocation.onEnabledChange(_onEnabledChange);
+
+    ActiveSession().addStateListener((SessionState state) {
+      setState((){
+        _setupTrack();
+        _startTimer();
+      });
+    });
+
+    _mapOptions = MapOptions(
+        onPositionChanged: _onPositionChanged, center: _center, zoom: 16.0);
+    _mapController = MapController();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void _setupTrack() {
 
     bg.BackgroundGeolocation.setOdometer(0);
 
@@ -79,21 +100,6 @@ class MapViewState extends State<MapView>
       print('[getCurrentPosition] ERROR: $error');
     });
 
-    _mapOptions = MapOptions(
-        onPositionChanged: _onPositionChanged, center: _center, zoom: 16.0);
-    _mapController = MapController();
-
-    _setupTrack();
-    _startTimer();
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
-  void _setupTrack() {
     for (Station station in ActiveSession().getTrack().stations) {
       bg.Geofence fence = bg.Geofence(
         identifier: station.name,
@@ -188,10 +194,6 @@ class MapViewState extends State<MapView>
     setState(() {
       _showOnMap = true;
     });
-  }
-
-  void _onResults() {
-
   }
 
   void _onEnabledChange(bool enabled) {
@@ -296,11 +298,9 @@ class MapViewState extends State<MapView>
     _mapOptions.crs.scale(_mapController.zoom);
   }
 
-  Widget _topInfoBar()
-  {
+  Widget _topInfoBar() {
     return Container(
-      decoration:
-      BoxDecoration(color: Colors.black54.withOpacity(0.6)),
+      decoration: BoxDecoration(color: Colors.black54.withOpacity(0.6)),
       padding: EdgeInsets.all(5.0),
       child: Row(
         children: <Widget>[
@@ -335,14 +335,12 @@ class MapViewState extends State<MapView>
     );
   }
 
-  Widget _mapMenu()
-  {
+  Widget _mapMenu() {
     return Container(
       margin: EdgeInsets.all(0),
       decoration: BoxDecoration(
         color: Theme.of(context).bottomAppBarColor,
-        borderRadius:
-        BorderRadius.only(bottomLeft: Radius.circular(15.0)),
+        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15.0)),
       ),
       child: Padding(
         padding: EdgeInsets.all(10.0),
@@ -368,8 +366,7 @@ class MapViewState extends State<MapView>
     );
   }
 
-  Widget _attributionBox()
-  {
+  Widget _attributionBox() {
     return RotatedBox(
       quarterTurns: 3,
       child: Text(
@@ -381,20 +378,21 @@ class MapViewState extends State<MapView>
     );
   }
 
-  Widget _resultButton()
-  {
+  Widget _resultButton() {
     return Container(
       margin: EdgeInsets.only(bottom: 200.0),
       child: RaisedButton(
           onPressed: () {},
           shape: RoundedRectangleBorder(
-              borderRadius:
-              BorderRadius.all(Radius.circular(360.0))),
+              borderRadius: BorderRadius.all(Radius.circular(360.0))),
           color: Theme.of(context).accentColor,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text("Gå till resultat", style: TextStyle(fontSize: 15.0),),
+              Text(
+                "Gå till resultat",
+                style: TextStyle(fontSize: 15.0),
+              ),
               Icon(Icons.arrow_forward)
             ],
           )),
@@ -403,7 +401,6 @@ class MapViewState extends State<MapView>
 
   @override
   Widget build(BuildContext context) {
-
     super.build(context);
 
     List<LayerOptions> mapLayers = [
@@ -458,10 +455,7 @@ class MapViewState extends State<MapView>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  _mapMenu(),
-                  _attributionBox()
-                ],
+                children: <Widget>[_mapMenu(), _attributionBox()],
               ),
             ),
           ] +
@@ -473,8 +467,7 @@ class MapViewState extends State<MapView>
                     child: _resultButton(),
                   )
                 ]
-              : []
-          ),
+              : []),
     );
   }
 }

@@ -65,14 +65,10 @@ class ActiveSession
 
    int i = 1;
 
-   void setState()
+   void setState(SessionState state)
    {
-      _activeState = SessionState.values[i];
-      i++;
-      if(i >= SessionState.values.length)
-      {
-         i = 0;
-      }
+      _activeState = state;
+      onStateChange();
    }
 
    String getCurrentState()
