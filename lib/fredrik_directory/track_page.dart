@@ -4,6 +4,7 @@ import 'package:orientx/fredrik_directory/destination.dart';
 import 'package:orientx/simon_directory/start_screen.dart';
 import 'package:orientx/fredrik_directory/map_screen.dart';
 import 'package:orientx/fredrik_directory/result_screen.dart';
+import 'package:orientx/spaken_directory/activesession.dart';
 
 class TrackPage extends StatefulWidget {
   @override
@@ -12,9 +13,7 @@ class TrackPage extends StatefulWidget {
   }
 }
 
-class _TrackPageState extends State<TrackPage>
-    with TickerProviderStateMixin {
-
+class _TrackPageState extends State<TrackPage> with TickerProviderStateMixin {
   List<Destination> _destinations;
   List<AnimationController> _faders;
   List<Key> _destinationKeys;
@@ -24,6 +23,12 @@ class _TrackPageState extends State<TrackPage>
   @override
   void initState() {
     super.initState();
+
+    /*ActiveSession.getInstance().onStateChanged((int index) {
+      setState(() {
+        _currentIndex = index;
+      });
+    });*/
 
     _destinations = <Destination>[
       Destination(0, 'Resultat', Icons.check_circle, ResultScreen()),

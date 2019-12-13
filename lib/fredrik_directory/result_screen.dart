@@ -18,8 +18,14 @@ class ResultScreenState extends State<ResultScreen> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(16.0))
             ),
-            child: MapView(),
           ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              CircularProgressIndicator(value: 0.5,
+              backgroundColor: Colors.transparent,)
+            ],
+          )
         ],
       )
     );
