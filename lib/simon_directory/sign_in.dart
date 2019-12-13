@@ -7,7 +7,8 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
 
 
-String name,email,imageUrl;
+String name,email,imageURL;
+Image profileImage;
 
 Future<String> signInWithGoogle() async
 {
@@ -24,7 +25,8 @@ Future<String> signInWithGoogle() async
 
   name = user.displayName;
   email = user.email;
-  imageUrl = user.photoUrl;
+  imageURL = user.photoUrl;
+  profileImage = Image.network(imageURL);
 
   if (name.contains(" ")) {name = name.substring(0, name.indexOf(" "));}
 
