@@ -57,7 +57,7 @@ class ServerPackage
           name: "Mysslinga",
           stations: stationList,
           activities: [rndImagePkg, videoPkg, enTill],
-          type: circuitType.random,
+          type: courseType.random,
       );
    }
 

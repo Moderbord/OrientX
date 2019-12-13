@@ -25,7 +25,7 @@ class MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
 
     Track track = ActiveSession().getTrack();
-    int stationCount = (track == null) ? 0 : track.circuit.length;
+    int stationCount = (track == null) ? 0 : track.activityIndex.length;
 
     return SlidingUpPanel(
       panel: Container(
