@@ -92,7 +92,7 @@ class MapViewState extends State<MapView>
   }
 
   void _setupTrack() {
-    for (Station station in ActiveSession.getInstance().getTrack().stations) {
+    for (Station station in ActiveSession().getTrack().stations) {
       bg.Geofence fence = bg.Geofence(
         identifier: station.name,
         radius: 15.0,
@@ -235,7 +235,7 @@ class MapViewState extends State<MapView>
     _completed++;
 
     //Event
-    ActiveSession.getInstance().promptNextActivity(context);
+    ActiveSession().promptNextActivity(context);
   }
 
   /// Fires whenever the list of geofences is somehow modified

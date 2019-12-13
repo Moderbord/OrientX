@@ -1,18 +1,36 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:orientx/fredrik_directory/track.dart';
 import 'package:orientx/spaken_directory/activitymanager.dart';
 import 'package:orientx/spaken_directory/serverpackage.dart';
 
+enum SessionState
+{
+   Start,
+   Run,
+   Result
+}
+
+
+
 // Singleton
 class ActiveSession
 {
-   static final ActiveSession _instance = new ActiveSession();
+   static final ActiveSession _activeSession = ActiveSession._internal();
 
-   static ActiveSession getInstance() { return _instance;}
+   factory ActiveSession()
+   {
+      return _activeSession;
+   }
 
-   _ActiveSession() {}
+   ActiveSession._internal()
+   {
+      _activeState = SessionState.Start;
+   }
 
    Track _activeTrack;
+   SessionState _activeState;
+   List<Function(SessionState state)> _stateListeners = [];
 
    void setTrack(String id)
    {
@@ -26,6 +44,42 @@ class ActiveSession
       ActivityManager().newActivity(context: context, package: _activeTrack.activities[0]); // TODO dynamic course
    }
 
+   void addStateListener(Function(SessionState state) function)
+   {
+      _stateListeners.add(function);
+   }
+
+   void _newSessionState(SessionState state)
+   {
+      _activeState = state;
+      onStateChange();
+   }
+
+   void onStateChange()
+   {
+      for (Function  f in _stateListeners)
+         {
+            f(_activeState);
+         }
+   }
+
+   int i = 1;
+
+   void setState()
+   {
+      _activeState = SessionState.values[i];
+      i++;
+      if(i >= SessionState.values.length)
+      {
+         i = 0;
+      }
+   }
+
+   String getCurrentState()
+   {
+      return _activeState.toString();
+   }
+
 
    // TODO close session (set inactive? reset?)
    // TODO create buffers for packages and Track data
@@ -37,9 +91,4 @@ class ActiveSession
    // TODO add callback to SlidingPanel -OnAnswered?
    // TODO make call when track is over
    // TODO fetch data for result screen
-   // TODO enum for state change
-   // TODO listeners for onStateChange
-
-
-
 }

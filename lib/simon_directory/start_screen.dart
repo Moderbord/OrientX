@@ -67,7 +67,7 @@ class _StartRunState extends State<StartRun>
                       onPressed: () {
                         setState(() {
                           if (checkID(_input)) {
-                            ActiveSession.getInstance().setTrack(_input);
+                            ActiveSession().setTrack(_input);
                             runTrack = true;
                           } else {
                             _result = "Banan kunde inte hittas!";
@@ -81,6 +81,39 @@ class _StartRunState extends State<StartRun>
                       style: TextStyle(color: Colors.black54, fontSize: 10.0),
                     )
                   ],
+                ),
+                RaisedButton(
+                  onPressed: ()
+                  {
+                    print("current state: " + ActiveSession().getCurrentState());
+                  },
+                  child: Text("Cur State"),
+                ),
+                RaisedButton(
+                  onPressed: ()
+                  {
+                    print("listener added");
+                    ActiveSession().addStateListener((SessionState state){
+                      print("CALLBACK with state: " + state.toString());
+                    });
+                  },
+                  child: Text("Add listener"),
+                ),
+                RaisedButton(
+                  onPressed: ()
+                  {
+                    print("state change triggered");
+                    ActiveSession().onStateChange();
+                  },
+                  child: Text("On change"),
+                ),
+                RaisedButton(
+                  onPressed: ()
+                  {
+                    print("State changed manually");
+                    ActiveSession().setState();
+                  },
+                  child: Text("Next state"),
                 )
               ],
             ),
@@ -88,7 +121,7 @@ class _StartRunState extends State<StartRun>
         : Container(
             child: Center(
                 child: TrackPage(
-                    track: ActiveSession.getInstance().getTrack())),
+                    track: ActiveSession().getTrack())),
           );
   }
 
