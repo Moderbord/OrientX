@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/spaken_directory/activitypackage.dart';
 
-enum circuitType{
+enum courseType{
   standard,
   random,
 }
@@ -13,47 +13,47 @@ class Track {
   final String name;
   final List<Station> stations;
   final List<ActivityPackage> activities;
-  List<int> circuit = [];
+  List<int> activityIndex = [];
 
-  Track({this.name, this.stations, this.activities, circuitType type = circuitType.standard})
+  Track({this.name, this.stations, this.activities, courseType type = courseType.standard})
   {
     switch (type)
     {
-      case circuitType.standard:
+      case courseType.standard:
         for (int i = 0; i < stations.length; i++)
         {
-          circuit.add(i);
+          activityIndex.add(i);
         }
         break;
-      case circuitType.random:
+      case courseType.random:
         for (int i = 0; i < activities.length; i++)
         {
-          circuit.add(i);
+          activityIndex.add(i);
         }
-        circuit.shuffle(Random(DateTime.now().millisecondsSinceEpoch));
+        activityIndex.shuffle(Random(DateTime.now().millisecondsSinceEpoch));
         break;
       default:
         break;
     }
   }
 
-  Track.fromCircuit({this.name, this.stations, this.activities, this.circuit});
+  Track.fromCircuit({this.name, this.stations, this.activities, this.activityIndex});
 
-  int popNext()
+  /*int popNext()
   {
-     int i = this.circuit[0] ?? 0;
-     this.circuit.removeAt(0);
+     int i = this.activityIndex[0] ?? 0;
+     this.activityIndex.removeAt(0);
      return i;
   }
 
   bool wasLast()
   {
-     return this.circuit.length == 0;
-  }
+     return this.activityIndex.length == 0;
+  }*/
 
   getStationFromIndex(int index)
   {
-    return stations[circuit[index]];
+    return stations[activityIndex[index]];
   }
 
 }

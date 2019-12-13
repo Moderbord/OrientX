@@ -280,6 +280,7 @@ class MapViewState extends State<MapView>
 
     // Add a point to the tracking polyline.
     _trackHistory.add(ll);
+    ActiveSession().addTrackHistory(ll);
   }
 
   /// Update Big Blue current position dot.
