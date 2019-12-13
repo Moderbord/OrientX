@@ -51,23 +51,21 @@ class ServerPackage
           name: "The wishing tree", point: LatLng(64.752627, 20.952363), resourceUrl: 'https://www.fjardhundraland.se/wp-content/uploads/2019/08/oringen-uppsala-fjacc88rdhundraland-orienteringskontroll.jpg')
    ];
 
-   Track fromID(int id)
+   Track fromID(String id)
    {
       return Track(
           name: "Mysslinga",
           stations: stationList,
           activities: [rndImagePkg, videoPkg, enTill],
-          type: circuitType.random,
+          type: courseType.random,
       );
    }
 
-   bool checkID(int id)
+   bool checkID(String id)
    {
       switch (id)
       {
-         case 0:
-            return false;
-         case 123:
+         case "123":
             return true;
          default:
             return false;

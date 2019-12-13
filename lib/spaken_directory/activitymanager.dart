@@ -15,7 +15,7 @@ class ActivityManager {
   List<String> answers;
   int duration;
 
-  void newActivity(
+  Future<bool> newActivity(
       {@required BuildContext context,
       @required ActivityPackage package})
   {
@@ -29,10 +29,10 @@ class ActivityManager {
     answers       = package.answers;
     duration      = package.duration;
 
-    _startActivity(context);
+    return _startActivity(context);
   }
 
-  _startActivity(BuildContext context) async {
+  Future<bool> _startActivity(BuildContext context) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -50,13 +50,14 @@ class ActivityManager {
       ),
     );
 
-    Function deepEq = const DeepCollectionEquality.unordered().equals;
+    //Function deepEq = const DeepCollectionEquality.unordered().equals;
 
-    bool hej = deepEq(result, answers);
+    bool hej = DeepCollectionEquality.unordered().equals(result, answers);
 
     // Display short Snackbar
     Scaffold.of(context)
       ..removeCurrentSnackBar()
       ..showSnackBar(SnackBar(content: Text('$hej')));
+    return hej;
   }
 }
