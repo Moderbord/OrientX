@@ -83,6 +83,7 @@ class MapViewState extends State<MapView>
       timeout: 30,
       samples: 3,
     ).then((bg.Location location) {
+
       _lastKnown = LatLng(location.coords.latitude, location.coords.longitude);
       _mapOptions.center = _lastKnown;
 
@@ -96,6 +97,7 @@ class MapViewState extends State<MapView>
       );
 
       _mapController.move(_lastKnown, 16);
+
     }).catchError((error) {
       print('[getCurrentPosition] ERROR: $error');
     });
@@ -214,7 +216,9 @@ class MapViewState extends State<MapView>
 
   /// Fires whenever the player interacts with a geofence
   void _onGeofence(bg.GeofenceEvent event) {
-    print(event.identifier);
+
+    print("Entered geofence: ${event.identifier}");
+
     GeofenceMarker marker = _geofences.firstWhere(
         (GeofenceMarker marker) =>
             marker.geofence.identifier == event.identifier,
@@ -239,6 +243,7 @@ class MapViewState extends State<MapView>
     _completed++;
 
     //Event
+    print("LAUNCHING EVENT BICH");
     ActiveSession().promptNextActivity(context);
   }
 
