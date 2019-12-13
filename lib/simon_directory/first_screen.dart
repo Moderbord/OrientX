@@ -15,7 +15,6 @@ class FirstScreen extends StatefulWidget {
 
 class _FirstScreenState extends State<FirstScreen>
     with TickerProviderStateMixin {
-
   List<Destination> _destinations;
   List<AnimationController> _faders;
   List<Key> _destinationKeys;
@@ -118,13 +117,15 @@ class _FirstScreenState extends State<FirstScreen>
               )),
             ),
             _createDrawerItem(
+                icon: Icons.settings,
+                text: "Inställningar",
+                onTap: () {
+                  Navigator.pushNamed(context, "/Settings");
+                }),
+            _createDrawerItem(
                 icon: Icons.arrow_forward,
                 text: "Logga ut",
                 onTap: () => signOut()),
-            _createDrawerItem(
-              icon: Icons.settings,
-              text: "Inställningar",
-            )
           ],
         ),
       ),

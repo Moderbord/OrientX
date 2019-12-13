@@ -98,6 +98,7 @@ class MapScreenState extends State<MapScreen> {
       body: MapView(),
       parallaxEnabled: true,
       backdropEnabled: true,
+      backdropColor: Theme.of(context).bottomAppBarColor,
       minHeight: 30.0,
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0)),

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:orientx/simon_directory/settings_page.dart';
 import "simon_directory/login_page.dart";
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,10 +60,10 @@ class _MyAppState extends State<MyApp> {
           {
             case "/":
               return SlideRightRoute(widget: LoginPage());
-              break;
             case "/First":
               return SlideRightRoute(widget: FirstScreen());
-              break;
+            case "/Settings":
+              return SlideRightRoute(widget: SettingsPage());
           }
           return null;
         },
