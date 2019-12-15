@@ -6,7 +6,7 @@ import 'activity.dart';
 class ActivityManager {
 
   String activityName;
-  int id;
+  String id;
   String dataSource;
   DataType dataType;
   String description;
@@ -20,7 +20,7 @@ class ActivityManager {
       @required ActivityPackage package})
   {
     activityName  = package.activityName  ?? "Väääääs! Måste ha TITEL!";
-    id            = package.id            ?? 0;
+    id            = package.id            ?? "0";
     dataSource    = package.dataSource;
     dataType      = package.dataType      ?? DataType.Undefined;
     description   = package.description   ?? "VÄÄÄÄÄÄÄS!! Måste ha TEXT!";

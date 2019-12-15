@@ -41,6 +41,7 @@ class ActiveSession
    List<bool> _answerHistory = [];
 
    int _visitingIndex = 0;
+   int _numSteps = 0;
 
 
 
@@ -52,6 +53,19 @@ class ActiveSession
       Station(
           name: "The wishing tree", point: LatLng(64.752627, 20.952363), resourceUrl: 'https://www.fjardhundraland.se/wp-content/uploads/2019/08/oringen-uppsala-fjacc88rdhundraland-orienteringskontroll.jpg')*/
    ];
+
+
+
+   _getTrack(String trackID)
+   {
+      Database.getInstance().getTrack(trackID).then((Track track) // TODO exception handling on track ID
+      {
+         print("track fetched");
+         _activeTrack = track;
+
+         setSessionState(SessionState.Run);
+      });
+   }
 
 
    _getPackages()
@@ -78,11 +92,16 @@ class ActiveSession
       });
    }
 
-   void setTrack(String id)
+   _manualPackage(String id)
    {
-      // TODO fetch track from FireBase
-      _getPackages();
-      //_activeTrack = ServerPackage().fromID(id);
+      _activeTrack = ServerPackage().fromID(id);
+      setSessionState(SessionState.Run);
+   }
+
+   void setTrack(String trackID)
+   {
+      _getTrack(trackID);
+     //_manualPackage(trackID);
    }
 
    Track getTrack() => _activeTrack;
@@ -130,6 +149,27 @@ class ActiveSession
       return _answerHistory[i] ?? false;
    }
 
+   int getNumAnsweredQuestion()
+   {
+      return _answerHistory.length;
+   }
+
+   int getNumVisitedStations()
+   {
+      return _visitedStations.length;
+   }
+
+   void setNumSteps(int steps)
+   {
+      _numSteps = steps;
+   }
+
+   int getNumSteps()
+   {
+      return _numSteps;
+   }
+
+
    void _onStateChange()
    {
       for (Function  f in _stateListeners)
@@ -164,6 +204,7 @@ class ActiveSession
       _trackHistory = [];
       _answerHistory = [];
       _visitingIndex = 0;
+      _numSteps = 0;
 
 
    }

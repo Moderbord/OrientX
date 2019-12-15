@@ -7,7 +7,7 @@ class ServerPackage
 {
    final ActivityPackage rndImagePkg = ActivityPackage(
       activityName: "Mycket stiligt",
-      id: 123,
+      id: "123",
       dataSource: "https://source.unsplash.com/random/800x600",
       dataType: DataType.Image,
       description: "Vad är detta för gudomlighet?",
@@ -19,7 +19,7 @@ class ServerPackage
 
    final ActivityPackage videoPkg = ActivityPackage(
       activityName: "Vad ser du på Kalle?",
-      id: 123,
+      id: "123",
       dataSource:
       "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
       dataType: DataType.Video,
@@ -32,7 +32,7 @@ class ServerPackage
 
    final ActivityPackage enTill = ActivityPackage(
       activityName: "Oh Mhürer",
-      id: 123,
+      id: "123",
       dataSource:
       "https://a9p9n2x2.stackpathcdn.com/wp-content/blogs.dir/1/files/2011/01/raised-eyebrow.jpg",
       dataType: DataType.Image,

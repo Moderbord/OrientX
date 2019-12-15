@@ -69,6 +69,7 @@ class MapViewState extends State<MapView>
             break;
           case SessionState.Finished:
             _showOnMap = true;
+            ActiveSession().setNumSteps(_steps);
             break;
           default:
             bg.BackgroundGeolocation.stop();
