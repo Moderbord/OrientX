@@ -1,73 +1,92 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'sign_in.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends StatefulWidget
+{
   @override
   State<StatefulWidget> createState() {
     return _ProfilePageState();
   }
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  String lapAmount = "0", runTime = "0", questionsAnswered = "0", steps = "0";
 
-  _ifNull() async //checks if the values are not set and sets them to zero if so
+
+
+
+class _ProfilePageState extends State<ProfilePage>
+{
+  String lapAmount = "0",runTime = "0",questionsAnswered = "0",steps = "0";
+
+  updateStatsDB()
+  {
+    return false;
+  }
+
+  _ifNull()async  //checks if the values are not set and sets them to zero if so
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getInt("steps") == null || prefs.getInt("g_steps") == null) {
-      if (prefs.getBool("isguest")) {
-        prefs.setInt("g_laps", 0);
-        prefs.setInt("g_runtime", 0);
-        prefs.setInt("g_qa", 0);
-        prefs.setInt("g_steps", 0);
-      } else if (updateStatsDB()) {
-        //get database data if there is any
-      } else {
-        prefs.setInt("laps", 0);
-        prefs.setInt("runtime", 0);
-        prefs.setInt("qa", 0);
-        prefs.setInt("steps", 0);
+
+
+
+
+      if(prefs.getBool("isguest") && prefs.getInt("g_steps") == null)
+      {
+        prefs.setInt("g_laps",0);
+        prefs.setInt("g_runtime",0);
+        prefs.setInt("g_qa",0);
+        prefs.setInt("g_steps",0);
       }
-    }
+      else if(updateStatsDB())
+      {
+        //get database data if there is any
+      }
+      else if (prefs.getInt("steps") == null)
+      {
+        prefs.setInt("laps",0);
+        prefs.setInt("runtime",0);
+        prefs.setInt("qa",0);
+        prefs.setInt("steps",0);
+      }
+
   }
 
   _getStats() async //updates the stats of the profile page
   {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _ifNull();
-    setState(() {
-      if (prefs.getBool("isguest")) {
-        lapAmount = prefs.getInt("g_laps").toString();
-        runTime = prefs.getInt("g_runtime").toString();
-        questionsAnswered = prefs.getInt("g_qa").toString();
-        steps = prefs.getInt("g_steps").toString();
-      } else {
-        lapAmount = prefs.getInt("laps").toString();
-        runTime = prefs.getInt("runtime").toString();
-        questionsAnswered = prefs.getInt("qa").toString();
-        steps = prefs.getInt("steps").toString();
-      }
-    });
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await _ifNull();
+      setState(() {
+        if (prefs.getBool("isguest")) {
+          lapAmount = prefs.getInt("g_laps").toString();
+          runTime = prefs.getInt("g_runtime").toString();
+          questionsAnswered = prefs.getInt("g_qa").toString();
+          steps = prefs.getInt("g_steps").toString();
+        }
+        else {
+          lapAmount = prefs.getInt("laps").toString();
+          runTime = prefs.getInt("runtime").toString();
+          questionsAnswered = prefs.getInt("qa").toString();
+          steps = prefs.getInt("steps").toString();
+        }
+      });
+
   }
 
   @override
   void initState() {
     super.initState();
-    setter();
-    _getStats();
   }
 
   @override
-  Widget build(BuildContext context) {
+    Widget build(BuildContext context) {
+    _getStats();
     return Container(
-      child: Stack(
-        children: <Widget>[
+        child: Stack(children: <Widget>[
           StaggeredGridView.count(
-            crossAxisCount: 4,
+            crossAxisCount:4,
             crossAxisSpacing: 4,
             mainAxisSpacing: 4,
             staggeredTiles: <StaggeredTile>[
@@ -77,30 +96,15 @@ class _ProfilePageState extends State<ProfilePage> {
               const StaggeredTile.fit(2),
             ],
             children: <Widget>[
-              _createTile(
-                  icon: Icon(Icons.flag),
-                  headerText: "Laps complete",
-                  stat: lapAmount,
-                  color: Theme.of(context).primaryColor),
-              _createTile(
-                  icon: Icon(Icons.access_time),
-                  headerText: "Total running time",
-                  stat: runTime,
-                  color: Theme.of(context).canvasColor),
-              _createReverseTile(
-                  icon: Icon(Icons.help),
-                  headerText: "Questions answered",
-                  stat: questionsAnswered,
-                  color: Theme.of(context).canvasColor),
-              _createReverseTile(
-                  icon: Icon(Icons.directions_run),
-                  headerText: "Meters",
-                  stat: steps,
-                  color: Theme.of(context).primaryColor),
+              _createTile(icon: Icon(Icons.flag),headerText: "Laps complete",stat: lapAmount, color: Theme.of(context).primaryColor),
+              _createTile(icon: Icon(Icons.access_time),headerText: "Total running time",stat: runTime,color: Theme.of(context).canvasColor),
+              _createReverseTile(icon: Icon(Icons.help),headerText: "Questions answered",stat: questionsAnswered, color: Theme.of(context).canvasColor),
+              _createReverseTile(icon: Icon(Icons.directions_run),headerText: "Meters",stat: steps, color: Theme.of(context).primaryColor),
             ],
           ),
-          Center(
+        Center(
             child: Column(
+
               children: <Widget>[
                 SizedBox(
                   height: 200,
@@ -108,33 +112,58 @@ class _ProfilePageState extends State<ProfilePage> {
                 CircleAvatar(
                   radius: 70,
                   backgroundColor: Theme.of(context).canvasColor,
-                  child: CircleAvatar(
-                    backgroundImage: profileImage.image,
-                    radius: 60,
-                    backgroundColor: Colors.transparent,
-                  ),
-                ),
+                  child:
+                    CircleAvatar(
+                      backgroundImage: profileImage.image,
+                      radius: 60,
+                      backgroundColor: Colors.transparent,
+                    ))
               ],
-            ),
-          ),
-          Align(alignment: Alignment.bottomCenter,
-            child: SvgPicture.asset(
-              "assets/svg/grass_rocks.svg",
-              fit: BoxFit.fitWidth,
-              alignment: Alignment.bottomCenter,
-              color: Theme.of(context).backgroundColor,
+            ))
+        ]
+        )
+    );
+  }
+
+
+
+  Container _createTile({String headerText, Color color,String stat, Icon icon})
+  {
+    return
+    Container(
+      height: 270,
+    child:
+      Card(
+          color: color,
+          child: Center(
+            child:
+            Padding(
+              padding: EdgeInsets.all(4.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      icon,
+                      Text(headerText,style:  TextStyle(fontSize: 20),),
+                    ],
+                  ),
+                  Text(stat,style:  TextStyle(fontSize: 40),)
+                ],
+              ),
             ),
           )
-        ],
-      ),
+      )
     );
   }
 
-  Container _createTile(
-      {String headerText, Color color, String stat, Icon icon}) {
-    return Container(
+  static Container _createReverseTile({String headerText, Color color,String stat, Icon icon})
+  {
+    return
+    Container(
       height: 270,
-      child: Card(
+    child:
+      Card(
         color: color,
         child: Center(
           child: Padding(
@@ -142,84 +171,20 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
+                Text(stat,style:  TextStyle(fontSize: 40),),
                 Column(
                   children: <Widget>[
                     icon,
-                    Text(
-                      headerText,
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-                Text(
-                  stat,
-                  style: TextStyle(fontSize: 40),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  static Container _createReverseTile(
-      {String headerText, Color color, String stat, Icon icon}) {
-    return Container(
-      height: 270,
-      child: Card(
-        color: color,
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.all(4.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Text(
-                  stat,
-                  style: TextStyle(fontSize: 40),
-                ),
-                Column(
-                  children: <Widget>[
-                    icon,
-                    Text(
-                      headerText,
-                      style: TextStyle(fontSize: 20),
-                    ),
+                    Text(headerText,style:  TextStyle(fontSize: 20),),
                   ],
                 ),
               ],
             ),
           ),
-        ),
-      ),
+        )
+    )
     );
   }
+
 }
 
-bool updateStatsDB() {
-  return false;
-}
-
-void setter() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  int newValueLaps = 0;
-  int newValueRuntime = 0;
-  int newValueQA = 0;
-  int newValueSteps = 0;
-
-  if (prefs.getBool("isguest")) {
-    prefs.setInt("g_laps", prefs.getInt("g_laps") + newValueLaps);
-    prefs.setInt("g_runtime", prefs.getInt("g_runtime") + newValueRuntime);
-    prefs.setInt("g_qa", prefs.getInt("g_qa") + newValueQA);
-    prefs.setInt("g_steps", newValueSteps + prefs.getInt("g_steps"));
-  } else if (updateStatsDB()) {
-    //get database data if there is any
-  } else {
-    prefs.setInt("laps", prefs.getInt("laps") + newValueLaps);
-    prefs.setInt("runtime", prefs.getInt("runtime") + newValueRuntime);
-    prefs.setInt("qa", prefs.getInt("qa") + newValueQA);
-    prefs.setInt("steps", prefs.getInt("steps") + newValueSteps);
-  }
-}
