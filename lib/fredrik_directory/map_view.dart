@@ -151,6 +151,7 @@ class MapViewState extends State<MapView>
         () {
           if (_timerSeconds < 1) {
             timer.cancel();
+            ActiveSession().setSessionState(SessionState.Finished);
           } else if (!_showOnMap) {
             _timerSeconds = _timerSeconds - 1;
           }

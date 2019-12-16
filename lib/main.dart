@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:orientx/simon_directory/settings_page.dart';
 import "simon_directory/login_page.dart";
@@ -7,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:orientx/fredrik_directory/theme_notifier.dart';
 import 'package:orientx/fredrik_directory/themes.dart';
 import 'simon_directory/first_screen.dart';
-import 'simon_directory/sign_in.dart';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
