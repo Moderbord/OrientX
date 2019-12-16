@@ -65,7 +65,7 @@ class ServerPackage
    {
       switch (id)
       {
-         case "123":
+         case "ABC":
             return true;
          default:
             return false;

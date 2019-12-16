@@ -65,7 +65,7 @@ class _StartRunState extends State<StartRun>
                 ),
                 onPressed: () {
                   setState(() {
-                    if (checkID(_input)) {
+                    if (ServerPackage().checkID(_input)) {
                       _result = "Ok!";
                       ActiveSession().setTrack(_input);
                     } else {
@@ -84,9 +84,5 @@ class _StartRunState extends State<StartRun>
         ],
       ),
     );
-  }
-
-  bool checkID(String id) {
-    return ServerPackage().checkID(id);
   }
 }
