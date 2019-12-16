@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:orientx/simon_directory/sign_in.dart';
 import 'package:orientx/fredrik_directory/destination.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'profile_page.dart';
 import 'package:orientx/fredrik_directory/track_page.dart';
 import 'settings_page.dart';
@@ -95,8 +96,17 @@ class _FirstScreenState extends State<FirstScreen>
     );
   }
 
-  void signOut() {
-    signOutGoogle();
+  void signOut() async
+  {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(prefs.getBool("isguest"))
+      {
+        prefs.setBool("isguest", false);
+      }
+    else
+      {
+        signOutGoogle();
+      }
     Navigator.pushNamed(context, "/");
   }
 

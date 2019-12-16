@@ -4,6 +4,7 @@ import 'package:latlong/latlong.dart';
 import 'package:orientx/fredrik_directory/track.dart';
 import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/spaken_directory/activitymanager.dart';
+import 'package:orientx/spaken_directory/answerpackage.dart';
 import 'package:orientx/spaken_directory/serverpackage.dart';
 import 'package:orientx/spaken_directory/activitypackage.dart';
 import 'package:orientx/luddw_dir/db.dart';
@@ -38,8 +39,9 @@ class ActiveSession
    List<Function(Station station)> _onVisitedListeners = [];
    List<Station> _visitedStations = [];
    List<LatLng> _trackHistory = [];
-   List<bool> _answerHistory = [];
+   List<AnswerPackage> _answerHistory = [];
 
+   bool _lapCompleted = false;
    int _visitingIndex = 0;
    int _numSteps = 0;
 
@@ -111,14 +113,15 @@ class ActiveSession
       int activityIndex = _activeTrack.activityIndex[_visitingIndex]; // Collects the correct index for the next activity
       _onVisited(_activeTrack.stations[_visitingIndex]);
 
-      ActivityManager().newActivity(context: context, package: _activeTrack.activities[activityIndex]).then((bool answer){ // Launch activity from id instead of index?
-         _answerHistory.add(answer);
+      ActivityManager().newActivity(context: context, package: _activeTrack.activities[activityIndex]).then((AnswerPackage answerPackage){ // Launch activity from id instead of index?
+         _answerHistory.add(answerPackage);
       });
       _visitingIndex++;
 
       if (_visitingIndex >= _activeTrack.stations.length)
          {
             print("Track finished");
+            _lapCompleted = true;   // Used to increment lap count statistic
             setSessionState(SessionState.Finished);
          }
    }
@@ -169,6 +172,10 @@ class ActiveSession
       return _numSteps;
    }
 
+   bool didCompleteLap()
+   {
+      return _lapCompleted;
+   }
 
    void _onStateChange()
    {
@@ -187,26 +194,22 @@ class ActiveSession
       }
    }
 
-
-   // TODO create buffers for packages and Track data
-   // TODO download track packages and activity packages on init/set active into buffers
    // TODO receive geoCache prompt with station ID and initiate activityManager
    // TODO launch activity from station ID
-   // TODO getter for num answered questions, num visited stations, num steps walked, num completed courses
 
    void flush()
    {
-      _activeState = null;
+      setSessionState(SessionState.Start);
+      //_activeState = null;
       _activeTrack = null;
       _stateListeners = [];
       _onVisitedListeners = [];
       _visitedStations = [];
       _trackHistory = [];
       _answerHistory = [];
+      _lapCompleted = false;
       _visitingIndex = 0;
       _numSteps = 0;
-
-
    }
 
 }
