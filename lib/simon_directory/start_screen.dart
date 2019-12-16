@@ -21,6 +21,7 @@ class _StartRunState extends State<StartRun>
 
   @override
   Widget build(BuildContext context) {
+
     super.build(context);
 
     return Stack(
@@ -30,7 +31,7 @@ class _StartRunState extends State<StartRun>
           semanticsLabel: "A decorative bottom vignette",
           fit: BoxFit.fitHeight,
           alignment: Alignment.bottomRight,
-          color: Theme.of(context).accentColor,
+          color: Theme.of(context).backgroundColor,
         ),
         Container(
           padding: EdgeInsets.all(20.0),
@@ -45,7 +46,7 @@ class _StartRunState extends State<StartRun>
               Container(
                 margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).canvasColor,
+                    color: Theme.of(context).canvasColor,
                     borderRadius: BorderRadius.circular(15.0),
                     border: Border.all(
                         width: 5.0, color: Theme.of(context).accentColor)),
@@ -64,8 +65,9 @@ class _StartRunState extends State<StartRun>
               ),
               Row(
                 children: <Widget>[
-                  RaisedButton(
+                  FlatButton(
                     textColor: Colors.white,
+                    color: Theme.of(context).accentColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -76,7 +78,7 @@ class _StartRunState extends State<StartRun>
                     onPressed: () {
                       setState(() {
                         if (ServerPackage().checkID(_input)) {
-                          _result = "Ok!";
+                          _result = "Hämtar data...";
                           ActiveSession().setTrack(_input);
                         } else {
                           _result = "Banan kunde inte hittas!";
@@ -87,7 +89,7 @@ class _StartRunState extends State<StartRun>
                   SizedBox(width: 10.0),
                   Text(
                     _result,
-                    style: TextStyle(color: Colors.black54, fontSize: 10.0),
+                    style: TextStyle(color: Colors.black54, fontSize: 15.0),
                   ),
                 ],
               ),

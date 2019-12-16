@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'station.dart';
 import 'track.dart';
 
 import 'package:orientx/spaken_directory/activesession.dart';
+import 'package:orientx/spaken_directory/answerpackage.dart';
 
 class ResultScreen extends StatefulWidget {
   @override
@@ -12,7 +14,6 @@ class ResultScreen extends StatefulWidget {
 
 class ResultScreenState extends State<ResultScreen> {
   @override
-
   void initState() {
     super.initState();
   }
@@ -22,73 +23,137 @@ class ResultScreenState extends State<ResultScreen> {
     Track track = ActiveSession().getTrack();
     int stations = (track == null) ? 0 : track.activities.length;
 
-    return Container(
-      child: Column(
-        children: <Widget>[
-          SizedBox(height: 20.0),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Icon(Icons.flag, size: 40.0,),
-              SizedBox(width: 10),
-              Text(
-                "Du är i mål!",
-                style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
+    return Stack(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: SvgPicture.asset(
+            "assets/svg/car.svg",
+            color: Theme.of(context).backgroundColor,
+            alignment: Alignment.bottomCenter,
+            fit: BoxFit.fitWidth,
+          ),
+        ),
+        IconButton(
+          icon: Icon(Icons.arrow_back),
+          iconSize: 40.0,
+          alignment: Alignment.topLeft,
+          padding: EdgeInsets.all(20.0),
+          onPressed: () {
+            ActiveSession().flush();
+          },
+        ),
+        Column(
+          children: <Widget>[
+            SizedBox(height: 20.0),
+            Text(
+              "Du är i mål!",
+              style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10.0),
+            Card(
+              color: Theme.of(context).accentColor,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Image.asset("assets/images/qr.png"),
               ),
-            ],
-          ),
-          Text("3/3 rätta svar!",
-          style: TextStyle(fontSize: 25.0, color: Colors.green),),
-          SizedBox(height: 20.0),
-          Card(
-            color: Theme.of(context).accentColor,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20))),
-            child: Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Image.asset("assets/images/qr.png"),
             ),
-          ),
-          Text("Visa QR-koden för din lärare"),
-          SizedBox(height: 20.0),
-          Divider(),
-          Expanded(
-            child: ListView.builder(
-              itemCount: stations,
-              itemBuilder: (BuildContext context, int index) {
-                bool correct = true;
+            Text(
+              "Visa QR-koden för din lärare",
+              style: TextStyle(color: Theme.of(context).dividerColor),
+            ),
+            SizedBox(height: 20.0),
+            Divider(),
+            Expanded(
+              child: ListView.builder(
+                itemCount: stations,
+                itemBuilder: (BuildContext context, int index) {
+                  AnswerPackage answer = ActiveSession().getAnswer(index);
 
-                return Row(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Icon(
-                        correct ? Icons.check_circle : Icons.cancel,
-                        color: correct ? Colors.green : Colors.red,
+                  Icon answerIcon;
+
+                  switch (answer.result) {
+                    case Result.Correct:
+                      answerIcon = Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
                         size: 30.0,
+                      );
+                      break;
+                    case Result.Incorrect:
+                      answerIcon = Icon(
+                        Icons.cancel,
+                        color: Colors.red,
+                        size: 30.0,
+                      );
+                      break;
+                    case Result.TimedOut:
+                      answerIcon = Icon(
+                        Icons.remove_circle,
+                        color: Colors.grey,
+                        size: 30.0,
+                      );
+                      break;
+                  }
+
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: answerIcon,
                       ),
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          track.getStationFromIndex(index).name,
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                        Text(
-                          "Du svarade N/A, men rätt svar var N/A!",
-                          style: TextStyle(fontSize: 15.0, color: Colors.grey),
-                        )
-                      ],
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                    )
-                  ],
-                );
-              },
-            ),
-          )
-        ],
-      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                              Text(
+                                track.getStationFromIndex(index).name,
+                                style: TextStyle(fontSize: 20.0),
+                              )
+                            ] +
+                            [_getResultSubtext(answer)],
+                      ),
+                    ],
+                  );
+                },
+              ),
+            )
+          ],
+        ),
+      ],
     );
+  }
+
+  Widget _getResultSubtext(AnswerPackage package) {
+    TextStyle style = TextStyle(fontSize: 15.0, color: Colors.grey);
+
+    switch (package.result) {
+      case Result.Correct:
+        return Text(
+          "Snyggt, full pott!",
+          style: style,
+        );
+      case Result.Incorrect:
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              "Dina svar: " + package.selectedAnswers.join(", "),
+              style: style,
+            ),
+            Text(
+              "Rätt svar: " + package.correctAnswers.join(", "),
+              style: style,
+            )
+          ],
+        );
+      case Result.TimedOut:
+        return Text(
+          "Inget svar!",
+          style: style,
+        );
+    }
   }
 }

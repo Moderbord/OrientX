@@ -147,9 +147,10 @@ class ActiveSession
       _trackHistory.add(latLng);
    }
 
-   bool getAnswer(int i)
+   AnswerPackage getAnswer(int i)
    {
-      return _answerHistory[i] ?? false;
+      return _answerHistory.length > i
+          ? _answerHistory[i] : AnswerPackage(result: Result.TimedOut);
    }
 
    int getNumAnsweredQuestion()
@@ -202,8 +203,6 @@ class ActiveSession
       setSessionState(SessionState.Start);
       //_activeState = null;
       _activeTrack = null;
-      _stateListeners = [];
-      _onVisitedListeners = [];
       _visitedStations = [];
       _trackHistory = [];
       _answerHistory = [];
