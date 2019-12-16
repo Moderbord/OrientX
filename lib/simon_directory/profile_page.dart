@@ -18,35 +18,60 @@ class ProfilePage extends StatefulWidget
 
 class _ProfilePageState extends State<ProfilePage>
 {
-  String lapAmount = "",runTime = "",questionsAnswered = "",meters = "";
+  String lapAmount = "0",runTime = "0",questionsAnswered = "0",steps = "0";
 
-  _getStats() async
+  _ifNull()async  //checks if the values are not set and sets them to zero if so
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    setState(() {
-      print(prefs.getBool("isguest"));
+    if (prefs.getInt("steps") == null || prefs.getInt("g_steps") == null)
+    {
       if(prefs.getBool("isguest"))
-        {
+      {
+        prefs.setInt("g_laps",0);
+        prefs.setInt("g_runtime",0);
+        prefs.setInt("g_qa",0);
+        prefs.setInt("g_steps",0);
+      }
+      else if(updateStatsDB())
+      {
+        //get database data if there is any
+      }
+      else
+      {
+        prefs.setInt("laps",0);
+        prefs.setInt("runtime",0);
+        prefs.setInt("qa",0);
+        prefs.setInt("steps",0);
+      }
+    }
+  }
+
+  _getStats() async //updates the stats of the profile page
+  {
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      _ifNull();
+      setState(() {
+        if (prefs.getBool("isguest")) {
           lapAmount = prefs.getInt("g_laps").toString();
           runTime = prefs.getInt("g_runtime").toString();
           questionsAnswered = prefs.getInt("g_qa").toString();
-          meters = prefs.getInt("g_meters").toString();
-          prefs.setBool("isguest", false);
+          steps = prefs.getInt("g_steps").toString();
         }
-      else {
-        lapAmount = prefs.getInt("laps").toString();
-        runTime = prefs.getInt("runtime").toString();
-        questionsAnswered = prefs.getInt("qa").toString();
-        meters = prefs.getInt("meters").toString();
-      }
+        else {
+          lapAmount = prefs.getInt("laps").toString();
+          runTime = prefs.getInt("runtime").toString();
+          questionsAnswered = prefs.getInt("qa").toString();
+          steps = prefs.getInt("steps").toString();
+        }
+      });
 
-    });
   }
 
   @override
   void initState() {
     super.initState();
+    setter();
     _getStats();
   }
 
@@ -68,7 +93,7 @@ class _ProfilePageState extends State<ProfilePage>
               _createTile(icon: Icon(Icons.flag),headerText: "Laps complete",stat: lapAmount, color: Theme.of(context).primaryColor),
               _createTile(icon: Icon(Icons.access_time),headerText: "Total running time",stat: runTime,color: Theme.of(context).canvasColor),
               _createReverseTile(icon: Icon(Icons.help),headerText: "Questions answered",stat: questionsAnswered, color: Theme.of(context).canvasColor),
-              _createReverseTile(icon: Icon(Icons.directions_run),headerText: "Meters",stat: meters, color: Theme.of(context).primaryColor),
+              _createReverseTile(icon: Icon(Icons.directions_run),headerText: "Meters",stat: steps, color: Theme.of(context).primaryColor),
             ],
           ),
         Center(
@@ -158,3 +183,38 @@ class _ProfilePageState extends State<ProfilePage>
 }
 
 
+
+bool updateStatsDB()
+{
+  return false;
+}
+
+void setter() async
+{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  int newValueLaps = 0;
+  int newValueRuntime = 0;
+  int newValueQA = 0;
+  int newValueSteps = 0;
+
+  if(prefs.getBool("isguest"))
+  {
+    prefs.setInt("g_laps",prefs.getInt("g_laps")+newValueLaps);
+    prefs.setInt("g_runtime",prefs.getInt("g_runtime")+newValueRuntime);
+    prefs.setInt("g_qa",prefs.getInt("g_qa")+newValueQA);
+    prefs.setInt("g_steps",newValueSteps + prefs.getInt("g_steps"));
+  }
+  else if(updateStatsDB())
+  {
+    //get database data if there is any
+  }
+  else
+  {
+    prefs.setInt("laps",prefs.getInt("laps")+newValueLaps);
+    prefs.setInt("runtime",prefs.getInt("runtime")+newValueRuntime);
+    prefs.setInt("qa",prefs.getInt("qa")+newValueQA);
+    prefs.setInt("steps",prefs.getInt("steps")+newValueSteps);
+  }
+
+}
