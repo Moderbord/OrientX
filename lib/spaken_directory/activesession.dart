@@ -139,16 +139,14 @@ class ActiveSession {
     _trackHistory.add(latLng);
   }
 
-  bool getAnswer(int i) {
-    return _answerHistory[i] ?? false;
-  }
-
   int getNumAnsweredQuestion() {
     return _answerHistory.length;
   }
 
-  int getNumVisitedStations() {
-    return _visitedStations.length;
+  AnswerPackage getAnswer(int i) {
+    return _answerHistory.length > i
+        ? _answerHistory[i]
+        : AnswerPackage(result: Result.TimedOut);
   }
 
   void setNumSteps(int steps) {
@@ -183,8 +181,6 @@ class ActiveSession {
     setSessionState(SessionState.Start);
     //_activeState = null;
     _activeTrack = null;
-    _stateListeners = [];
-    _onVisitedListeners = [];
     _visitedStations = [];
     _trackHistory = [];
     _answerHistory = [];
