@@ -148,7 +148,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Column(
                   children: <Widget>[
                     icon,
-                    Text(
+                      Text(headerText,style:  TextStyle(fontSize: 20,),textAlign: TextAlign.center,),
                       headerText,
                       style: TextStyle(fontSize: 20),
                     ),
@@ -185,7 +185,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Column(
                   children: <Widget>[
                     icon,
-                    Text(
+                    Text(headerText,style:  TextStyle(fontSize: 20),textAlign: TextAlign.center,),
                       headerText,
                       style: TextStyle(fontSize: 20),
                     ),
