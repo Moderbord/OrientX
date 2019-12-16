@@ -15,7 +15,7 @@ String getThemeName(Themes theme) {
     case Themes.orangeLight:
       return "Orientering (standard)";
     case Themes.orangeDark:
-      return "Nattorientering";
+      return "Nattorientering (AMOLED)";
     case Themes.blueLight:
       return "Marina";
     case Themes.blueDark:

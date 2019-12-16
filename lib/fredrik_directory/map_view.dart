@@ -80,15 +80,13 @@ class MapViewState extends State<MapView>
     );
 
     _mapOptions = MapOptions(
-        onPositionChanged: _onPositionChanged,
-        center: _center,
-        zoom: 16.0,
-        onLongPress: (LatLng point) {
-          ActiveSession().promptNextActivity(context);
-        },
-        onTap: (LatLng point) {
-          _onLocation(bg.Location(point));
-        });
+      onPositionChanged: _onPositionChanged,
+      center: _center,
+      zoom: 16.0,
+      onLongPress: (LatLng point) {
+        ActiveSession().promptNextActivity(context);
+      },
+    );
     _mapController = MapController();
   }
 
@@ -105,6 +103,8 @@ class MapViewState extends State<MapView>
     _geofences.clear();
     _markers.clear();
     _steps = 0;
+    _timer.cancel();
+    _timerSeconds = 3600;
   }
 
   void _setupTrack() {
