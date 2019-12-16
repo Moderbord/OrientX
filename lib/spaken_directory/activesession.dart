@@ -137,15 +137,16 @@ class ActiveSession {
           .then((
           AnswerPackage answerPackage) { // Launch activity from id instead of index?
          _answerHistory.add(answerPackage);
-      });
-      _visitingIndex++;
 
-      if (_visitingIndex >= _activeTrack.stations.length) {
-         print("Track finished");
-         _lapCompleted = true; // Used to increment lap count statistic
-         setSessionState(SessionState.Finished);
-         statSetter();
-      }
+         _visitingIndex++;
+
+         if (_visitingIndex >= _activeTrack.stations.length) {
+            print("Track finished");
+            _lapCompleted = true; // Used to increment lap count statistic
+            setSessionState(SessionState.Finished);
+            statSetter();
+         }
+      });
    }
 
    void addStateListener(Function(SessionState state) function) {

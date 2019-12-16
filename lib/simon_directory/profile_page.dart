@@ -28,9 +28,11 @@ class _ProfilePageState extends State<ProfilePage>
   _ifNull()async  //checks if the values are not set and sets them to zero if so
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getInt("steps") == null || prefs.getInt("g_steps") == null)
-    {
-      if(prefs.getBool("isguest"))
+
+
+
+
+      if(prefs.getBool("isguest") && prefs.getInt("g_steps") == null)
       {
         prefs.setInt("g_laps",0);
         prefs.setInt("g_runtime",0);
@@ -41,21 +43,21 @@ class _ProfilePageState extends State<ProfilePage>
       {
         //get database data if there is any
       }
-      else
+      else if (prefs.getInt("steps") == null)
       {
         prefs.setInt("laps",0);
         prefs.setInt("runtime",0);
         prefs.setInt("qa",0);
         prefs.setInt("steps",0);
       }
-    }
+
   }
 
   _getStats() async //updates the stats of the profile page
   {
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      _ifNull();
+      await _ifNull();
       setState(() {
         if (prefs.getBool("isguest")) {
           lapAmount = prefs.getInt("g_laps").toString();
@@ -76,11 +78,11 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void initState() {
     super.initState();
-    _getStats();
   }
 
   @override
     Widget build(BuildContext context) {
+    _getStats();
     return Container(
         child: Stack(children: <Widget>[
           StaggeredGridView.count(
