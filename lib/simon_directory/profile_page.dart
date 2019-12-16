@@ -20,6 +20,11 @@ class _ProfilePageState extends State<ProfilePage>
 {
   String lapAmount = "0",runTime = "0",questionsAnswered = "0",steps = "0";
 
+  updateStatsDB()
+  {
+    return false;
+  }
+
   _ifNull()async  //checks if the values are not set and sets them to zero if so
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -71,7 +76,6 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void initState() {
     super.initState();
-    setter();
     _getStats();
   }
 
@@ -182,39 +186,3 @@ class _ProfilePageState extends State<ProfilePage>
 
 }
 
-
-
-bool updateStatsDB()
-{
-  return false;
-}
-
-void setter() async
-{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  int newValueLaps = 0;
-  int newValueRuntime = 0;
-  int newValueQA = 0;
-  int newValueSteps = 0;
-
-  if(prefs.getBool("isguest"))
-  {
-    prefs.setInt("g_laps",prefs.getInt("g_laps")+newValueLaps);
-    prefs.setInt("g_runtime",prefs.getInt("g_runtime")+newValueRuntime);
-    prefs.setInt("g_qa",prefs.getInt("g_qa")+newValueQA);
-    prefs.setInt("g_steps",newValueSteps + prefs.getInt("g_steps"));
-  }
-  else if(updateStatsDB())
-  {
-    //get database data if there is any
-  }
-  else
-  {
-    prefs.setInt("laps",prefs.getInt("laps")+newValueLaps);
-    prefs.setInt("runtime",prefs.getInt("runtime")+newValueRuntime);
-    prefs.setInt("qa",prefs.getInt("qa")+newValueQA);
-    prefs.setInt("steps",prefs.getInt("steps")+newValueSteps);
-  }
-
-}
