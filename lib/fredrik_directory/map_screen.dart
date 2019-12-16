@@ -9,16 +9,23 @@ import 'track.dart';
 import 'map_view.dart';
 
 class MapScreen extends StatefulWidget {
-
   @override
   State createState() => MapScreenState();
 }
 
 class MapScreenState extends State<MapScreen> {
-  @override
 
+  List<Station> _visited = [];
+
+  @override
   void initState() {
     super.initState();
+
+    ActiveSession().addOnVisitedListeners((Station station) {
+      setState(() {
+        _visited.add(station);
+      });
+    });
   }
 
   @override
@@ -34,7 +41,10 @@ class MapScreenState extends State<MapScreen> {
         child: ListView.builder(
           itemCount: stationCount,
           itemBuilder: (BuildContext context, int i) {
+
             Station station = track.getStationFromIndex(i);
+
+            bool isVisited = _visited.contains(station);
 
             return Container(
               height: 250.0,
@@ -71,19 +81,10 @@ class MapScreenState extends State<MapScreen> {
                                   topLeft: Radius.circular(16.0)),
                               color: Theme.of(context).bottomAppBarColor),
                           padding: EdgeInsets.all(5.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Text(
-                                "1/1",
-                                style: TextStyle(color: Colors.lightGreen),
-                              ),
-                              Icon(
-                                Icons.check_circle,
-                                size: 25.0,
-                                color: Colors.lightGreen,
-                              ),
-                            ],
+                          child: Icon(
+                            isVisited ? Icons.check_circle : Icons.remove_circle,
+                            size: 25.0,
+                            color: isVisited ? Colors.lightGreen : Colors.yellow,
                           ),
                         ),
                       ),
@@ -98,6 +99,7 @@ class MapScreenState extends State<MapScreen> {
       body: MapView(),
       parallaxEnabled: true,
       backdropEnabled: true,
+      backdropColor: Theme.of(context).bottomAppBarColor,
       minHeight: 30.0,
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(16.0), topRight: Radius.circular(16.0)),

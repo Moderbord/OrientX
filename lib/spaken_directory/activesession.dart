@@ -1,19 +1,20 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong/latlong.dart';
+
 import 'package:orientx/fredrik_directory/track.dart';
+import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/spaken_directory/activitymanager.dart';
 import 'package:orientx/spaken_directory/serverpackage.dart';
-import 'package:orientx/fredrik_directory/station.dart';
-import 'package:latlong/latlong.dart';
+import 'package:orientx/spaken_directory/activitypackage.dart';
+import 'package:orientx/luddw_dir/db.dart';
 
 enum SessionState
 {
    Start,
    Run,
-   Result
+   Result,
+   Finished
 }
-
-
 
 // Singleton
 class ActiveSession
@@ -37,13 +38,70 @@ class ActiveSession
    List<Function(Station station)> _onVisitedListeners = [];
    List<Station> _visitedStations = [];
    List<LatLng> _trackHistory = [];
+   List<bool> _answerHistory = [];
 
    int _visitingIndex = 0;
+   int _numSteps = 0;
 
-   void setTrack(String id)
+
+
+   // TODO make this server
+   final List<Station> stationList = [
+      Station(name: "Lakeside Shrubbery", point: LatLng(64.745597, 20.950119), resourceUrl: 'https://www.orientering.se/media/images/DSC_2800.width-800.jpg'),
+      /*Station(
+          name: "Rock by the lake", point: LatLng(64.745124, 20.957779), resourceUrl: 'http://www.nationalstadsparken.se/Sve/Bilder/orienteringskontroll-mostphotos-544px.jpg'),
+      Station(
+          name: "The wishing tree", point: LatLng(64.752627, 20.952363), resourceUrl: 'https://www.fjardhundraland.se/wp-content/uploads/2019/08/oringen-uppsala-fjacc88rdhundraland-orienteringskontroll.jpg')*/
+   ];
+
+
+
+   _getTrack(String trackID)
    {
-      // TODO fetch track from FireBase
+      Database.getInstance().getTrack(trackID).then((Track track) // TODO exception handling on track ID
+      {
+         print("track fetched");
+         _activeTrack = track;
+
+         setSessionState(SessionState.Run);
+      });
+   }
+
+
+   _getPackages()
+   {
+      List<ActivityPackage> localActivities = [];
+
+      Database.getInstance().getData().then((List<ActivityPackage> serverActivities)
+      {
+         print("fetched");
+         for (ActivityPackage pkg in serverActivities)
+         {
+            print(pkg.activityName);
+         }
+         localActivities = serverActivities;
+
+         _activeTrack = Track(
+            name: "Mysslinga",
+            stations: stationList,
+            activities: localActivities,
+            type: courseType.random,
+         );
+
+         setSessionState(SessionState.Run);
+      });
+   }
+
+   _manualPackage(String id)
+   {
       _activeTrack = ServerPackage().fromID(id);
+      setSessionState(SessionState.Run);
+   }
+
+   void setTrack(String trackID)
+   {
+      _getTrack(trackID);
+     //_manualPackage(trackID);
    }
 
    Track getTrack() => _activeTrack;
@@ -53,15 +111,16 @@ class ActiveSession
       int activityIndex = _activeTrack.activityIndex[_visitingIndex]; // Collects the correct index for the next activity
       _onVisited(_activeTrack.stations[_visitingIndex]);
 
-      ActivityManager().newActivity(context: context, package: _activeTrack.activities[activityIndex]);
+      ActivityManager().newActivity(context: context, package: _activeTrack.activities[activityIndex]).then((bool answer){ // Launch activity from id instead of index?
+         _answerHistory.add(answer);
+      });
       _visitingIndex++;
 
       if (_visitingIndex >= _activeTrack.stations.length)
          {
             print("Track finished");
-            _newSessionState(SessionState.Result);
+            setSessionState(SessionState.Finished);
          }
-
    }
 
    void addStateListener(Function(SessionState state) function)
@@ -74,14 +133,44 @@ class ActiveSession
       _onVisitedListeners.add(function);
    }
 
-   void _newSessionState(SessionState state)
+   void setSessionState(SessionState state)
    {
       _activeState = state;
-      onStateChange();
+      _onStateChange();
    }
 
-   // make private
-   void onStateChange()
+   void addTrackHistory(LatLng latLng)
+   {
+      _trackHistory.add(latLng);
+   }
+
+   bool getAnswer(int i)
+   {
+      return _answerHistory[i] ?? false;
+   }
+
+   int getNumAnsweredQuestion()
+   {
+      return _answerHistory.length;
+   }
+
+   int getNumVisitedStations()
+   {
+      return _visitedStations.length;
+   }
+
+   void setNumSteps(int steps)
+   {
+      _numSteps = steps;
+   }
+
+   int getNumSteps()
+   {
+      return _numSteps;
+   }
+
+
+   void _onStateChange()
    {
       for (Function  f in _stateListeners)
          {
@@ -98,49 +187,12 @@ class ActiveSession
       }
    }
 
-   void addTrackHistory(LatLng latLng)
-   {
-      _trackHistory.add(latLng);
-   }
 
-   void setSessionState(SessionState state)
-   {
-      _activeState = state;
-      onStateChange();
-   }
-
-   // remove
-   int i = 1;
-
-   // remove
-   void nextSessionState()
-   {
-      _activeState = SessionState.values[i];
-      i++;
-      if(i >= SessionState.values.length)
-      {
-         i = 0;
-      }
-      onStateChange();
-   }
-
-   // remove
-   String getCurrentState()
-   {
-      return _activeState.toString();
-   }
-
-
-   // TODO close session (set inactive? reset?)
    // TODO create buffers for packages and Track data
    // TODO download track packages and activity packages on init/set active into buffers
    // TODO receive geoCache prompt with station ID and initiate activityManager
-   // TODO add station ID to visited list
    // TODO launch activity from station ID
-   // TODO receive result from activity and store it in buffer
-   // TODO add callback to SlidingPanel -OnAnswered?
-   // TODO make call when track is over
-   // TODO fetch data for result screen
+   // TODO getter for num answered questions, num visited stations, num steps walked, num completed courses
 
    void flush()
    {
@@ -150,7 +202,11 @@ class ActiveSession
       _onVisitedListeners = [];
       _visitedStations = [];
       _trackHistory = [];
+      _answerHistory = [];
       _visitingIndex = 0;
+      _numSteps = 0;
+
+
    }
 
 }

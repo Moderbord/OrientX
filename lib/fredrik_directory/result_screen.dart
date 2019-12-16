@@ -12,6 +12,7 @@ class ResultScreen extends StatefulWidget {
 
 class ResultScreenState extends State<ResultScreen> {
   @override
+
   void initState() {
     super.initState();
   }
@@ -49,7 +50,7 @@ class ResultScreenState extends State<ResultScreen> {
               child: Image.asset("assets/images/qr.png"),
             ),
           ),
-          Text("Visa QR-koden för din lärare", style: TextStyle(color: Colors.black54),),
+          Text("Visa QR-koden för din lärare"),
           SizedBox(height: 20.0),
           Divider(),
           Expanded(

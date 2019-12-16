@@ -16,7 +16,7 @@ enum QuestionType {
 
 class ActivityPackage {
   final String activityName;
-  final int id;
+  final String id;
   final String dataSource;
   final DataType dataType;
   final String description;

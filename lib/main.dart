@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:orientx/simon_directory/settings_page.dart';
 import "simon_directory/login_page.dart";
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,21 +13,21 @@ import 'package:flutter_background_geolocation/flutter_background_geolocation.da
     as bg;
 
 void main() {
-  SharedPreferences.getInstance().then((prefs) {
+  SharedPreferences.getInstance().then(
+    (prefs) {
+      int theme = prefs.getInt('theme') ?? 0;
 
-    int theme = prefs.getInt('theme') ?? 0;
-
-    runApp(
-      ChangeNotifierProvider<ThemeNotifier>(
-        create: (_) => ThemeNotifier(themeFromEnum(Themes.values[theme])),
-        child: MyApp(),
-      ),
-    );
-  },);
+      runApp(
+        ChangeNotifierProvider<ThemeNotifier>(
+          create: (_) => ThemeNotifier(themeFromEnum(Themes.values[theme])),
+          child: MyApp(),
+        ),
+      );
+    },
+  );
 }
 
-class MyApp extends StatefulWidget
-{
+class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _MyAppState();
@@ -45,50 +46,49 @@ class _MyAppState extends State<MyApp> {
             startOnBoot: true,
             logLevel: bg.Config.LOG_LEVEL_WARNING))
         .then((bg.State state) {
-      if (!state.enabled) {
-        bg.BackgroundGeolocation.start();
-      }
+      bg.BackgroundGeolocation.destroyLocations();
+      bg.BackgroundGeolocation.removeGeofences();
     });
 
     return MaterialApp(
-        title: 'ThinQRight',
-        theme: themeNotifier.getTheme(),
-        home: LoginPage(),
-        onGenerateRoute: (RouteSettings settings){
-          switch(settings.name)
-          {
-            case "/":
-              return SlideRightRoute(widget: LoginPage());
-              break;
-            case "/First":
-              return SlideRightRoute(widget: FirstScreen());
-              break;
-          }
-          return null;
-        },
+      title: 'ThinQRight',
+      theme: themeNotifier.getTheme(),
+      home: LoginPage(),
+      onGenerateRoute: (RouteSettings settings) {
+        switch (settings.name) {
+          case "/":
+            return SlideRightRoute(widget: LoginPage());
+          case "/First":
+            return SlideRightRoute(widget: FirstScreen());
+          case "/Settings":
+            return SlideRightRoute(widget: SettingsPage());
+        }
+        return null;
+      },
     );
   }
 }
 
 class SlideRightRoute extends PageRouteBuilder {
   final Widget widget;
+
   SlideRightRoute({this.widget})
       : super(
-    pageBuilder: (BuildContext context, Animation<double> animation,
-        Animation<double> secondaryAnimation) {
-      return widget;
-    },
-    transitionsBuilder: (BuildContext context,
-        Animation<double> animation,
-        Animation<double> secondaryAnimation,
-        Widget child) {
-      return new SlideTransition(
-        position: new Tween<Offset>(
-          begin: const Offset(1.0, 0.0),
-          end: Offset.zero,
-        ).animate(animation),
-        child: child,
-      );
-    },
-  );
+          pageBuilder: (BuildContext context, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return widget;
+          },
+          transitionsBuilder: (BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child) {
+            return new SlideTransition(
+              position: new Tween<Offset>(
+                begin: const Offset(1.0, 0.0),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            );
+          },
+        );
 }

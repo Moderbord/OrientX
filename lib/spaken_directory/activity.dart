@@ -7,7 +7,7 @@ import 'package:orientx/spaken_directory/activitypackage.dart';
 
 class Activity extends StatelessWidget {
    final String activityName;
-   final int id;
+   final String id;
    final String dataSource;
    final DataType dataType;
    final String description;

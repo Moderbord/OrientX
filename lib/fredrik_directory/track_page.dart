@@ -26,9 +26,10 @@ class _TrackPageState extends State<TrackPage> with TickerProviderStateMixin {
     super.initState();
 
     ActiveSession().addStateListener((SessionState state) {
-      _currentIndex = state.index;
-      print("Index: $_currentIndex");
-      setState(() { });
+      setState(() {
+        if (state != SessionState.Finished)
+          _currentIndex = state.index;
+      });
     });
 
     _destinations = <Destination>[
