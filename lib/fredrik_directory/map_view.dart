@@ -56,6 +56,7 @@ class MapViewState extends State<MapView>
       (SessionState state) {
         switch (state) {
           case SessionState.Run:
+            _showOnMap = false;
             bg.BackgroundGeolocation.start().then(
               (bg.State state) {
                 setState(
@@ -72,13 +73,22 @@ class MapViewState extends State<MapView>
             ActiveSession().setNumSteps(_steps);
             break;
           default:
+            flush();
             bg.BackgroundGeolocation.stop();
         }
       },
     );
 
     _mapOptions = MapOptions(
-        onPositionChanged: _onPositionChanged, center: _center, zoom: 16.0);
+        onPositionChanged: _onPositionChanged,
+        center: _center,
+        zoom: 16.0,
+        onLongPress: (LatLng point) {
+          ActiveSession().promptNextActivity(context);
+        },
+        onTap: (LatLng point) {
+          _onLocation(bg.Location(point));
+        });
     _mapController = MapController();
   }
 
@@ -86,6 +96,15 @@ class MapViewState extends State<MapView>
   void dispose() {
     _timer.cancel();
     super.dispose();
+  }
+
+  void flush() {
+    bg.BackgroundGeolocation.removeGeofences();
+    _showOnMap = false;
+    _trackStations.clear();
+    _geofences.clear();
+    _markers.clear();
+    _steps = 0;
   }
 
   void _setupTrack() {

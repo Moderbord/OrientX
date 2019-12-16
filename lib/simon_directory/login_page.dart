@@ -7,22 +7,16 @@ import "sign_in.dart";
 import "first_screen.dart";
 
 class LoginPage extends StatefulWidget {
-
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-
-  setGuest()async
-  {
-
+  setGuest(bool b) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      prefs.setBool("isguest", true);
+      prefs.setBool("isguest", b);
     });
-
   }
 
   @override
@@ -50,12 +44,14 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _signInButton()
-  {
+  Widget _signInButton() {
     return OutlineButton(
       onPressed: () {
-        signInWithGoogle().whenComplete(() {
-          setState(() {});
+        signInWithGoogle().whenComplete(
+          () {
+            setState(() {
+              setGuest(false);
+            });
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
@@ -86,23 +82,24 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _signInGuest()
-  {
+  Widget _signInGuest() {
     return OutlineButton(
       onPressed: () {
-          setState(() {
-            email = "Guest";
-            name = "Guest";
-            profileImage = Image(image: AssetImage("assets/images/guest.png"),);
-            setGuest();
-          });
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) {
-                return FirstScreen();
-              },
-            ),
+        setState(() {
+          email = "Guest";
+          name = "Guest";
+          profileImage = Image(
+            image: AssetImage("assets/images/guest.png"),
           );
+          setGuest(true);
+        });
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return FirstScreen();
+            },
+          ),
+        );
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       highlightElevation: 0,
@@ -112,12 +109,14 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(Icons.account_circle,color: Theme.of(context).accentColor),
+            Icon(Icons.account_circle, color: Theme.of(context).accentColor),
             Padding(
                 padding: EdgeInsets.only(left: 10),
                 child:
-                Text("Sign in as Guest", style: TextStyle(fontSize: 15))),
-            Padding(padding: EdgeInsets.only(left: 20),),
+                    Text("Sign in as Guest", style: TextStyle(fontSize: 15))),
+            Padding(
+              padding: EdgeInsets.only(left: 20),
+            ),
           ],
         ),
       ),
