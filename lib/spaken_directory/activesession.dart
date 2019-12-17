@@ -63,38 +63,14 @@ class ActiveSession {
       setSessionState(SessionState.Run);
     });
   }
-
-  _getPackages() {
-    List<ActivityPackage> localActivities = [];
-
-    Database.getInstance()
-        .getData()
-        .then((List<ActivityPackage> serverActivities) {
-      print("fetched");
-      for (ActivityPackage pkg in serverActivities) {
-        print(pkg.activityName);
-      }
-      localActivities = serverActivities;
-
-      _activeTrack = Track(
-        name: "Mysslinga",
-        stations: stationList,
-        activities: localActivities,
-        type: courseType.random,
-      );
-
-      setSessionState(SessionState.Run);
-    });
-  }
-
   _manualPackage(String id) {
     _activeTrack = ServerPackage().fromID(id);
     setSessionState(SessionState.Run);
   }
 
   void setTrack(String trackID) {
-    _getTrack(trackID);
-    //_manualPackage(trackID);
+    //_getTrack(trackID);
+    _manualPackage(trackID);
   }
 
   Track getTrack() => _activeTrack;

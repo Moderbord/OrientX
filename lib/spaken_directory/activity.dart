@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:orientx/spaken_directory/answerpackage.dart';
+import 'package:orientx/spaken_directory/audiowidget.dart';
 import 'package:video_player/video_player.dart';
 import 'package:orientx/spaken_directory/activitytimer.dart';
 import 'package:orientx/spaken_directory/extendedcheckboxgroup.dart';
@@ -48,26 +49,31 @@ class Activity extends StatelessWidget {
               alignment: Alignment.centerLeft,
             ),
             ActivityTimer(
-                time: duration,
-                onFinish: () => Navigator.pop(
-                    context,
-                    AnswerPackage(
-                      result: Result.TimedOut,
-                      selectedAnswers: List<String>(),
-                      correctAnswers: answers,
-                      answerTime: duration,
-                    ))),
+              time: duration,
+              onFinish: () => Navigator.pop(
+                context,
+                AnswerPackage(
+                  result: Result.TimedOut,
+                  selectedAnswers: List<String>(),
+                  correctAnswers: answers,
+                  answerTime: duration,
+                ),
+              ),
+            ),
             ExtendedCheckboxGroup(
               labels: questions,
               type: questionType,
               onClick: (List<String> userAnswers) => Navigator.pop(
-                  context,
-                  AnswerPackage(
-                    result: answerCheck(userAnswers, answers) ? Result.Correct : Result.Incorrect,
-                    selectedAnswers: userAnswers,
-                    correctAnswers: answers,
-                    answerTime: 3,
-                  )),
+                context,
+                AnswerPackage(
+                  result: answerCheck(userAnswers, answers)
+                      ? Result.Correct
+                      : Result.Incorrect,
+                  selectedAnswers: userAnswers,
+                  correctAnswers: answers,
+                  answerTime: 3,
+                ),
+              ),
             ),
           ],
         ),
@@ -78,7 +84,6 @@ class Activity extends StatelessWidget {
   bool answerCheck(List<String> userAnswer, List<String> correctAnswer) {
     return DeepCollectionEquality.unordered().equals(userAnswer, correctAnswer);
   }
-
 }
 
 Widget dataWidget(DataType type, String source) {
@@ -96,8 +101,8 @@ Widget dataWidget(DataType type, String source) {
       );
       break;
     case DataType.Sound:
-      return Container(
-        child: Text("Sound Data"),
+      return AudioWidget(
+        url: source,
       );
       break;
     case DataType.Game:
@@ -110,6 +115,4 @@ Widget dataWidget(DataType type, String source) {
         child: Text("Data switch default fallback"),
       );
   }
-
-
 }

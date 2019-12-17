@@ -38,6 +38,7 @@ dependencies:
   firebase_database:
   sliding_up_panel: ^0.3.6
   flutter_svg: ^0.15.0
+  audioplayers: ^0.13.5
 
   firebase_core:
   cloud_firestore:
