@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:orientx/fredrik_directory/add_station_page.dart';
 import 'package:orientx/simon_directory/sign_in.dart';
 import 'package:orientx/fredrik_directory/destination.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'profile_page.dart';
 import 'package:orientx/fredrik_directory/track_page.dart';
-import 'settings_page.dart';
 import 'sign_in.dart';
 
 class FirstScreen extends StatefulWidget {
@@ -28,7 +28,7 @@ class _FirstScreenState extends State<FirstScreen>
     _destinations = <Destination>[
       Destination(0, 'Hem', Icons.home, ProfilePage()),
       Destination(1, 'Lopp', Icons.flag, TrackPage()),
-      Destination(2, 'Stationer', Icons.camera, SettingsPage()),
+      Destination(2, 'Stationer', Icons.camera, AddStationPage()),
     ];
 
     _faders = _destinations.map<AnimationController>((Destination destination) {

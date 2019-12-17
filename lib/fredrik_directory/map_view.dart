@@ -55,26 +55,30 @@ class MapViewState extends State<MapView>
     ActiveSession().addStateListener(
       (SessionState state) {
         switch (state) {
-          case SessionState.Run:
-            _showOnMap = false;
-            bg.BackgroundGeolocation.start().then(
-              (bg.State state) {
-                setState(
-                  () {
-                    _setupTrack();
-                    _startTimer();
-                  },
-                );
-              },
-            );
+
+          case SessionState.Start:
             break;
+
+          case SessionState.Run:
+            bg.BackgroundGeolocation.start().then((bg.State state) {
+              print("Background geo tracking started: $state");
+              setState(() {
+                _setupTrack();
+                _startTimer();
+              });
+            });
+            break;
+
           case SessionState.Finished:
             _showOnMap = true;
             ActiveSession().setNumSteps(_steps);
             break;
-          default:
+
+          case SessionState.Result:
+            print("Background geo tracking stopped.");
             flush();
             bg.BackgroundGeolocation.stop();
+            break;
         }
       },
     );
@@ -164,7 +168,7 @@ class MapViewState extends State<MapView>
 
   void _startTimer() {
     const oneSec = const Duration(seconds: 1);
-    _timer = new Timer.periodic(
+    _timer = Timer.periodic(
       oneSec,
       (Timer timer) => setState(
         () {
@@ -227,7 +231,7 @@ class MapViewState extends State<MapView>
 
   void _onForfeit() {
     setState(() {
-      _showOnMap = true;
+      ActiveSession().setSessionState(SessionState.Finished);
     });
   }
 

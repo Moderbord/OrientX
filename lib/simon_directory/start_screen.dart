@@ -5,6 +5,7 @@ import 'package:orientx/spaken_directory/activesession.dart';
 import 'package:orientx/spaken_directory/serverpackage.dart';
 
 class StartRun extends StatefulWidget {
+
   @override
   State<StatefulWidget> createState() {
     return _StartRunState();
@@ -13,11 +14,26 @@ class StartRun extends StatefulWidget {
 
 class _StartRunState extends State<StartRun>
     with AutomaticKeepAliveClientMixin<StartRun> {
+
   String _input = "";
   String _result = "";
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void initState()
+  {
+    super.initState();
+
+    ActiveSession().addStateListener((SessionState state) {
+      if (state == SessionState.Start)
+        setState(() {
+          _input = "";
+          _result = "";
+        });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +57,7 @@ class _StartRunState extends State<StartRun>
             children: <Widget>[
               Text(
                 "Banans ID: ",
-                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.title,
               ),
               Container(
                 margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
@@ -89,7 +105,7 @@ class _StartRunState extends State<StartRun>
                   SizedBox(width: 10.0),
                   Text(
                     _result,
-                    style: TextStyle(color: Colors.black54, fontSize: 15.0),
+                    style: Theme.of(context).textTheme.button,
                   ),
                 ],
               ),

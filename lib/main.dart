@@ -33,9 +33,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   @override
-  Widget build(BuildContext context) {
-    final themeNotifier = Provider.of<ThemeNotifier>(context);
+  void initState() {
+
+    super.initState();
 
     bg.BackgroundGeolocation.ready(bg.Config(
             desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
@@ -43,11 +45,19 @@ class _MyAppState extends State<MyApp> {
             stopOnTerminate: true,
             startOnBoot: true,
             logLevel: bg.Config.LOG_LEVEL_WARNING))
-        .then((bg.State state) {
-      bg.BackgroundGeolocation.destroyLocations();
-      bg.BackgroundGeolocation.removeGeofences();
-    });
+        .then(
+      (bg.State state) {
+        bg.BackgroundGeolocation.destroyLocations();
+        bg.BackgroundGeolocation.removeGeofences();
+      },
+    );
+  }
 
+  @override
+  Widget build(BuildContext context) {
+
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    
     return MaterialApp(
       title: 'ThinQRight',
       theme: themeNotifier.getTheme(),
@@ -81,7 +91,7 @@ class SlideRightRoute extends PageRouteBuilder {
               Animation<double> secondaryAnimation,
               Widget child) {
             return new SlideTransition(
-              position: new Tween<Offset>(
+              position: Tween<Offset>(
                 begin: const Offset(1.0, 0.0),
                 end: Offset.zero,
               ).animate(animation),
