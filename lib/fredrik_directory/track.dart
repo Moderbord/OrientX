@@ -43,4 +43,9 @@ class Track {
     return stations[activityIndex[index]];
   }
 
+  getStationFromIdentifier(String identifier)
+  {
+    return stations.firstWhere((station) => station.name == identifier);
+  }
+
 }

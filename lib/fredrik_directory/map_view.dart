@@ -83,9 +83,9 @@ class MapViewState extends State<MapView>
       onPositionChanged: _onPositionChanged,
       center: _center,
       zoom: 16.0,
-      onLongPress: (LatLng point) {
+      /*onLongPress: (LatLng point) {
         ActiveSession().promptNextActivity(context);
-      },
+      },*/
     );
     _mapController = MapController();
   }
@@ -142,6 +142,7 @@ class MapViewState extends State<MapView>
         longitude: station.point.longitude,
         notifyOnEntry: true,
         loiteringDelay: 5,
+        //extras: {"id" : station.id},
       );
 
       _markers.add(Marker(
@@ -155,6 +156,8 @@ class MapViewState extends State<MapView>
       ));
 
       _trackStations.add(station.point);
+
+      _geofences.add(GeofenceMarker(context, fence));
 
       bg.BackgroundGeolocation.addGeofence(fence).catchError((error) {
         print('[addGeofence] ERROR: $error');
@@ -272,11 +275,14 @@ class MapViewState extends State<MapView>
 
     // Set last known position
     _lastKnown = marker.point;
-    _completed++;
+
 
     //Event
     print("LAUNCHING EVENT BICH");
-    ActiveSession().promptNextActivity(context);
+    if (ActiveSession().promptNextActivity(context, marker.geofence.identifier))
+      {
+        _completed++;
+      }
   }
 
   /// Fires whenever the list of geofences is somehow modified

@@ -75,27 +75,31 @@ class ActiveSession {
 
   Track getTrack() => _activeTrack;
 
-  void promptNextActivity(BuildContext context) {
+  bool promptNextActivity(BuildContext context, String stationID) {
     int activityIndex = _activeTrack.activityIndex[
         _visitingIndex]; // Collects the correct index for the next activity
-    _onVisited(_activeTrack.stations[_visitingIndex]);
 
-    ActivityManager()
-        .newActivity(
+    if (_onVisited(_activeTrack.getStationFromIdentifier(stationID))) // If station haven't been visited -> start activity
+      {
+        ActivityManager()
+            .newActivity(
             context: context, package: _activeTrack.activities[activityIndex])
-        .then((AnswerPackage answerPackage) {
-      // Launch activity from id instead of index?
-      _answerHistory.add(answerPackage);
+            .then((AnswerPackage answerPackage) {
+          // Launch activity from id instead of index?
+          _answerHistory.add(answerPackage);
 
-      _visitingIndex++;
+          _visitingIndex++;
 
-      if (_visitingIndex >= _activeTrack.stations.length) {
-        print("Track finished");
-        _lapCompleted = true; // Used to increment lap count statistic
-        setSessionState(SessionState.Finished);
-        statSetter();
+          if (_visitingIndex >= _activeTrack.stations.length) {
+            print("Track finished");
+            _lapCompleted = true; // Used to increment lap count statistic
+            setSessionState(SessionState.Finished);
+            statSetter();
+          }
+        });
+        return true;
       }
-    });
+    return false;
   }
 
   void addStateListener(Function(SessionState state) function) {
@@ -143,11 +147,17 @@ class ActiveSession {
     }
   }
 
-  void _onVisited(Station station) {
+  bool _onVisited(Station station) {
+    if (_visitedStations.contains(station))
+    {
+      print("${station.name} already visited");
+      return false;
+    }
     _visitedStations.add(station);
     for (Function f in _onVisitedListeners) {
       f(station);
     }
+    return true;
   }
 
   // TODO receive geoCache prompt with station ID and initiate activityManager

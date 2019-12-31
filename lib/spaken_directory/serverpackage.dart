@@ -95,18 +95,96 @@ class ServerPackage {
             'https://resfredag.se/wp-content/uploads/2018/09/ume%C3%A536-1200x800.png'),
   ];
 
+  final ActivityPackage fraga1 = ActivityPackage(
+    activityName: "Oh Mhürer",
+    id: "fråga1",
+    dataSource:
+    "assets/nyar/britta.jpg",
+    dataType: DataType.Image,
+    description: "Vad gömmer sig bakom blicken?",
+    questions: <String>["Mona Lisa", "Nivea", "Jesus"],
+    questionType: QuestionType.Single,
+    answers: <String>["Jesus"],
+    duration: 20,
+  );
+
+  final ActivityPackage fraga2 = ActivityPackage(
+    activityName: "Vad ser du på Kalle?",
+    id: "fråga2",
+    dataSource:
+    "assets/nyar/latelove.mp4",
+    dataType: DataType.Video,
+    description: "Vad är detta för gudomlighet?",
+    questions: <String>["Flygande", "Butterfree", "Spindel", "Majblomma"],
+    questionType: QuestionType.Multiple,
+    answers: <String>["Flygande", "Butterfree"],
+    duration: 20,
+  );
+
+  final ActivityPackage fraga3 = ActivityPackage(
+    activityName: "Mycket stiligt",
+    id: "fråga3",
+    dataSource: "assets/nyar/ljud",
+    dataType: DataType.Sound,
+    description: "Vad är detta för gudomlighet?",
+    questions: <String>["Hemligt", "Oklart", "Drake"],
+    questionType: QuestionType.Single,
+    answers: <String>["Oklart"],
+    duration: 20,
+  );
+
+  final List<Station> mimmis = [
+    Station(
+        name: "Station 1",
+        point: LatLng(63.824193, 20.325523),
+        resourceUrl:
+        'https://blogg.kriminalvarden.se/globalassets/hakte_anstalt/umea-bjorkarnas-stad.jpg'),
+    Station(
+        name: "Station 2",
+        point: LatLng(63.821188, 20.318918),
+        resourceUrl:
+        'https://upload.wikimedia.org/wikipedia/commons/8/8f/Umea_radhus_from_south.jpg'),
+    Station(
+        name: "Station 3",
+        point: LatLng(63.820729, 20.310668),
+        resourceUrl:
+        'https://falco-prod-facelift-cdnendpoint.azureedge.net/media/1741/umea-webpuff.jpg'),
+    Station(
+        name: "Station 4",
+        point: LatLng(63.819354, 20.298836),
+        resourceUrl:
+        'https://resfredag.se/wp-content/uploads/2018/09/ume%C3%A536-1200x800.png'),
+    Station(
+        name: "Station 5",
+        point: LatLng(63.819680, 20.290308),
+        resourceUrl:
+        'https://resfredag.se/wp-content/uploads/2018/09/ume%C3%A536-1200x800.png'),
+    Station(
+        name: "Station 6",
+        point: LatLng(63.822418, 20.284668),
+        resourceUrl:
+        'https://resfredag.se/wp-content/uploads/2018/09/ume%C3%A536-1200x800.png'),
+  ];
+
   Track fromID(String id) {
-    return Track(
-      name: "Mysslinga",
-      stations: umeStationList,
-      activities: [rndImagePkg, videoPkg, enTill, tvaTill],
-      type: courseType.standard,
-    );
+    switch (id) {
+      case "mimmis":
+        return Track(
+          name: "Mysslinga",
+          stations: mimmis,
+          activities: [fraga1, fraga2, fraga3, fraga1, fraga1, fraga1],
+          type: courseType.standard,
+        );
+      default:
+        return Track();
+    }
   }
 
   bool checkID(String id) {
     switch (id) {
       case "ABC":
+        return true;
+      case "mimmis":
         return true;
       default:
         return false;
