@@ -7,6 +7,11 @@ import 'profile_page.dart';
 import 'package:orientx/fredrik_directory/track_page.dart';
 import 'sign_in.dart';
 
+/*
+This page is the structure of the app, it contains means for getting around
+*/
+
+///First screen state creator
 class FirstScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -14,6 +19,7 @@ class FirstScreen extends StatefulWidget {
   }
 }
 
+///First screen class
 class _FirstScreenState extends State<FirstScreen>
     with TickerProviderStateMixin {
   List<Destination> _destinations;
@@ -24,7 +30,7 @@ class _FirstScreenState extends State<FirstScreen>
   @override
   void initState() {
     super.initState();
-
+    ///All the destinations in the bottom hot bar
     _destinations = <Destination>[
       Destination(0, 'Hem', Icons.home, ProfilePage()),
       Destination(1, 'Lopp', Icons.flag, TrackPage()),
@@ -79,6 +85,7 @@ class _FirstScreenState extends State<FirstScreen>
               }
             }).toList(),
           )),
+      ///Navigation bar for the navigations higher up in the code
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (int index) {
@@ -92,10 +99,11 @@ class _FirstScreenState extends State<FirstScreen>
               title: Text(destination.title),
             );
           }).toList()),
+      ///A drawer that you can swipe from the left to pop up with settings and log out options
       drawer: _drawerList(context),
     );
   }
-
+  ///sign out with google
   void signOut() async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -109,7 +117,7 @@ class _FirstScreenState extends State<FirstScreen>
       }
     Navigator.pushNamed(context, "/");
   }
-
+  ///List of drawers that contain settings and log out
   Drawer _drawerList(BuildContext context) {
     return Drawer(
       child: SafeArea(
@@ -122,7 +130,7 @@ class _FirstScreenState extends State<FirstScreen>
               width: 100,
               child: Center(
                   child: Text(
-                "Menu",
+                "Meny",
                 style: TextStyle(fontSize: 16),
               )),
             ),
@@ -136,12 +144,14 @@ class _FirstScreenState extends State<FirstScreen>
                 icon: Icons.arrow_forward,
                 text: "Logga ut",
                 onTap: () => signOut()),
+
           ],
         ),
       ),
     );
   }
 
+  ///Method for creating drawers
   Widget _createDrawerItem(
       {IconData icon, String text, GestureTapCallback onTap}) {
     return ListTile(

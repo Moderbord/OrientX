@@ -4,6 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/*
+The profile page is a page that displays your current statistics
+this uses the staggered grid view plugin to create a grid with stats
+ */
+
+///profile Page state creator
 class ProfilePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -11,14 +17,15 @@ class ProfilePage extends StatefulWidget {
   }
 }
 
+///profile page state
 class _ProfilePageState extends State<ProfilePage> {
   String lapAmount = "0", runTime = "0", questionsAnswered = "0", steps = "0";
-
+  ///Method for updating the stats from the database when that is complete
   updateStatsDB() {
     return false;
   }
 
-  _ifNull() async //checks if the values are not set and sets them to zero if so
+  _ifNull() async ///checks if the values are not set and sets them to zero if so
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -36,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
       prefs.setInt("steps", 0);
     }
   }
-
+  ///Method for getting the stats from shared preferences
   _getStats() async //updates the stats of the profile page
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -60,13 +67,22 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
   }
-
+  ///Build contains the staggered grid view widget that sets up a grid
   @override
   Widget build(BuildContext context) {
     _getStats();
     return Container(
       child: Stack(
         children: <Widget>[
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SvgPicture.asset(
+              "assets/svg/grass_rocks.svg",
+              fit: BoxFit.fitWidth,
+              alignment: Alignment.bottomCenter,
+              color: Theme.of(context).backgroundColor,
+            ),
+          ),
           StaggeredGridView.count(
             padding: EdgeInsets.all(10.0),
             crossAxisCount: 4,
@@ -119,20 +135,12 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SvgPicture.asset(
-              "assets/svg/grass_rocks.svg",
-              fit: BoxFit.fitWidth,
-              alignment: Alignment.bottomCenter,
-              color: Theme.of(context).backgroundColor,
-            ),
-          ),
         ],
       ),
     );
   }
 
+  ///method for creating a tile for the staggered grid view
   Container _createTile(
       {String headerText, Color color, String stat, Icon icon}) {
     return Container(
@@ -169,6 +177,8 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  ///method for creating a tile for the staggered grid view that has the widgets in reverse
+  ///so that you can flip th eimage and the text for a nicer look B)
   static Container _createReverseTile(
       {String headerText, Color color, String stat, Icon icon}) {
     return Container(

@@ -7,13 +7,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:orientx/fredrik_directory/theme_notifier.dart';
 import 'package:orientx/fredrik_directory/themes.dart';
 
+/*
+Page for settings, only used for color theme at the moment
+ */
+
+
 class SettingsPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _SettingsPageState();
   }
 }
-
+///Settings Page State
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {

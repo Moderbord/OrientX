@@ -4,6 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:orientx/spaken_directory/activesession.dart';
 import 'package:orientx/spaken_directory/serverpackage.dart';
 
+/*
+This page is the one you start the runs on
+this pretty much contains an input screen and a button
+ */
+
+///Start Tun state creator
 class StartRun extends StatefulWidget {
 
   @override
@@ -12,6 +18,8 @@ class StartRun extends StatefulWidget {
   }
 }
 
+///start run state with keep alive so that you can scroll through the
+///rest of the app while you are out doing a run
 class _StartRunState extends State<StartRun>
     with AutomaticKeepAliveClientMixin<StartRun> {
 
@@ -25,7 +33,7 @@ class _StartRunState extends State<StartRun>
   void initState()
   {
     super.initState();
-
+    ///creates a new active session
     ActiveSession().addStateListener((SessionState state) {
       if (state == SessionState.Start)
         setState(() {
@@ -42,6 +50,7 @@ class _StartRunState extends State<StartRun>
 
     return Stack(
       children: <Widget>[
+        ///Nice little tree
         SvgPicture.asset(
           "assets/svg/tree.svg",
           semanticsLabel: "A decorative bottom vignette",
@@ -49,6 +58,7 @@ class _StartRunState extends State<StartRun>
           alignment: Alignment.bottomRight,
           color: Theme.of(context).backgroundColor,
         ),
+        ///Input container for getting the run id
         Container(
           padding: EdgeInsets.all(20.0),
           child: Column(
@@ -79,6 +89,7 @@ class _StartRunState extends State<StartRun>
                   },
                 ),
               ),
+              ///Button for starting the run
               Row(
                 children: <Widget>[
                   FlatButton(

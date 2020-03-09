@@ -6,19 +6,27 @@ import 'package:shared_preferences/shared_preferences.dart';
 import "sign_in.dart";
 import "first_screen.dart";
 
+/*
+The Login Page contains the means to log into a google account or enter as a guest
+This is the first page that loads when you start the app
+ */
+
+///LoginPage class that just creates a state of the class below
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
+///LoginPage is used for the scaffold that is used for logging in
 class _LoginPageState extends State<LoginPage> {
+  ///Method that sets the guests previous stats with shared preferences
   setGuest(bool b) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       prefs.setBool("isguest", b);
     });
   }
-
+///Basic scaffold with two buttons anda alogo
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,10 +52,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  ///A sign in button that uses the google sign in firebase authorization
   Widget _signInButton() {
     return OutlineButton(
       onPressed: () {
-        signInWithGoogle().whenComplete(
+        signInWithGoogle().whenComplete( ///signInWithGoogle is a function in the file sign_in.dart for logging into a google account
           () {
             setState(() {
               setGuest(false);
@@ -55,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
-                  return FirstScreen();
+                  return FirstScreen(); ///When logged in go to first screen
                 },
               ),
             );
@@ -81,11 +90,12 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
+  ///A sign in button that is just a guest that sets the profile settings to the guest alternative
   Widget _signInGuest() {
     return OutlineButton(
       onPressed: () {
         setState(() {
+          ///set the profile
           email = "Guest";
           name = "Guest";
           profileImage = Image(
@@ -96,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) {
-              return FirstScreen();
+              return FirstScreen(); ///set guest and return first screen
             },
           ),
         );
