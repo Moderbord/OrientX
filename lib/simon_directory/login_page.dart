@@ -1,32 +1,29 @@
+/// The Login Page contains the means to log into a google account or enter as a guest
+/// This is the first page that loads when you start the app
+
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/cupertino.dart' as prefix0;
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix1;
 import 'package:shared_preferences/shared_preferences.dart';
 import "sign_in.dart";
 import "first_screen.dart";
 
-/*
-The Login Page contains the means to log into a google account or enter as a guest
-This is the first page that loads when you start the app
- */
-
-///LoginPage class that just creates a state of the class below
+/// LoginPage class that just creates a state of the class below
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
-///LoginPage is used for the scaffold that is used for logging in
+/// LoginPage is used for the scaffold that is used for logging in
 class _LoginPageState extends State<LoginPage> {
-  ///Method that sets the guests previous stats with shared preferences
+  /// Method that sets the guests previous stats with shared preferences
   setGuest(bool b) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       prefs.setBool("isguest", b);
     });
   }
-///Basic scaffold with two buttons anda alogo
+
+  /// Basic scaffold with two buttons and a logo
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,11 +49,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  ///A sign in button that uses the google sign in firebase authorization
+  /// A sign in button that uses the google sign in Firebase authentication.
   Widget _signInButton() {
     return OutlineButton(
       onPressed: () {
-        signInWithGoogle().whenComplete( ///signInWithGoogle is a function in the file sign_in.dart for logging into a google account
+        // A function in the file sign_in.dart for logging into a google account
+        signInWithGoogle().whenComplete(
           () {
             setState(() {
               setGuest(false);
@@ -64,7 +62,8 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) {
-                  return FirstScreen(); ///When logged in go to first screen
+                  // When logged in, go to first screen
+                  return FirstScreen();
                 },
               ),
             );
@@ -90,12 +89,15 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-  ///A sign in button that is just a guest that sets the profile settings to the guest alternative
+
+  /// A "sign in as guest" button.
+  ///
+  /// Sets all profile settings to the guest alternative.
   Widget _signInGuest() {
     return OutlineButton(
       onPressed: () {
         setState(() {
-          ///set the profile
+          // Set the profile
           email = "Guest";
           name = "Guest";
           profileImage = Image(

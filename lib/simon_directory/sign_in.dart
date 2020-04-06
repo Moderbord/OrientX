@@ -10,7 +10,7 @@ final GoogleSignIn googleSignIn = GoogleSignIn();
 String name,email,imageURL;
 Image profileImage;
 
-///function for signing in with google using firebase authorization
+/// Sign in with google using Firebase authentication.
 Future<String> signInWithGoogle() async
 {
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
@@ -40,7 +40,7 @@ Future<String> signInWithGoogle() async
   return "signInWithGoogle succeeded: $user";
 }
 
-///function for signing out the google account
+/// Signs out from the current Google account.
 void signOutGoogle() async
 {
   try{
@@ -55,7 +55,9 @@ void signOutGoogle() async
   }
 }
 
-///function for changing google user, however this is not implemented yet
+/// Changes the current Google user.
+///
+/// TODO: Not implemented.
 void changeUserGoogle()
 {
   signOutGoogle();

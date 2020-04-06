@@ -1,3 +1,6 @@
+/// Page for settings.
+/// Only used for color theme at the moment.
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -7,18 +10,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:orientx/fredrik_directory/theme_notifier.dart';
 import 'package:orientx/fredrik_directory/themes.dart';
 
-/*
-Page for settings, only used for color theme at the moment
- */
-
-
+/// Settings Page state creator.
 class SettingsPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _SettingsPageState();
   }
 }
-///Settings Page State
+/// Settings Page state.
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
@@ -83,6 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  /// Call the theme notifier to alert app that theme has changed.
   void onThemeChanged(Themes theme, ThemeNotifier themeNotifier) async {
     themeNotifier.setTheme(themeFromEnum(theme));
 
