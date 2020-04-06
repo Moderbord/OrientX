@@ -3,11 +3,17 @@ import 'dart:math';
 import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/spaken_directory/activitypackage.dart';
 
+/// Represents how stations are ordered on a track.
 enum courseType{
   standard,
   random,
 }
 
+/// Class for representing a track, with multiple stations.
+///
+/// Has name, stations, and activities.
+/// Can order stations in the way they're originally ordered when fetched from
+/// the server, or in a random fashion.
 class Track {
   final String name;
   final List<Station> stations;

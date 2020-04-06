@@ -16,6 +16,7 @@ class MapView extends StatefulWidget {
   State createState() => MapViewState();
 }
 
+/// Map view, to show current track and data on map.
 class MapViewState extends State<MapView>
     with AutomaticKeepAliveClientMixin<MapView> {
   @override
@@ -23,17 +24,34 @@ class MapViewState extends State<MapView>
     return true;
   }
 
+  // This timer should not run here - move to ActiveSession.
+  // Testing and demo purposes only.
   Timer _timer;
   int _timerSeconds = 3600;
 
+  // Contains the circle markers for the current player position.
+  // Two circles of different size to produce an outline for the marker.
   List<CircleMarker> _currentPosition = [];
+
+  // Contains coordinates for the player's movement over the track.
   List<LatLng> _trackHistory = [];
+
+  // Contains all station positions.
   List<LatLng> _trackStations = [];
+
+  // Contains geofence data.
   List<GeofenceMarker> _geofences = [];
+
+  // Contains various markers (icons) shown on map.
   List<Marker> _markers = [];
 
+  // If true, map is forfeit and player position is shown.
   bool _showOnMap = false;
+
+  // Number of visited stations.
   int _completed = 0;
+
+  // Pedometer count.
   int _steps = 0;
 
   LatLng _center = LatLng(0, 0);
@@ -52,6 +70,7 @@ class MapViewState extends State<MapView>
     bg.BackgroundGeolocation.onGeofencesChange(_onGeofencesChange);
     bg.BackgroundGeolocation.onEnabledChange(_onEnabledChange);
 
+    // Subscribe to session events (changes in play mode).
     ActiveSession().addStateListener(
       (SessionState state) {
         switch (state) {
@@ -88,6 +107,7 @@ class MapViewState extends State<MapView>
       center: _center,
       zoom: 16.0,
       onLongPress: (LatLng point) {
+        // TODO: Remove debug code!
         ActiveSession().promptNextActivity(context);
       },
     );
@@ -100,6 +120,8 @@ class MapViewState extends State<MapView>
     super.dispose();
   }
 
+  /// Reset the map and geolocation service.
+  /// TODO: Hardcoded timer duration.
   void flush() {
     bg.BackgroundGeolocation.removeGeofences();
     _showOnMap = false;
@@ -111,6 +133,7 @@ class MapViewState extends State<MapView>
     _timerSeconds = 3600;
   }
 
+  /// Setup the track anew. Flush first!
   void _setupTrack() {
     bg.BackgroundGeolocation.setOdometer(0);
 
@@ -166,6 +189,9 @@ class MapViewState extends State<MapView>
     }
   }
 
+  /// Start the track timer.
+  ///
+  /// Once timer reaches zero, set session state as finished.
   void _startTimer() {
     const oneSec = const Duration(seconds: 1);
     _timer = Timer.periodic(
@@ -183,6 +209,7 @@ class MapViewState extends State<MapView>
     );
   }
 
+  /// Method for formatting track timer in a human-readable manner.
   String _formatTimer(int seconds) {
     if (seconds <= 0) return "Tiden är ute!";
 
@@ -201,6 +228,9 @@ class MapViewState extends State<MapView>
     return "$hoursStr:$minutesStr:$secondsStr";
   }
 
+  /// Show dialog box asking if user wants to cancel the track.
+  ///
+  /// If yes; run _onForfeit method.
   void _onForfeitDialog() {
     showDialog(
       context: context,
@@ -229,12 +259,14 @@ class MapViewState extends State<MapView>
     );
   }
 
+  /// Set active session as finished.
   void _onForfeit() {
     setState(() {
       ActiveSession().setSessionState(SessionState.Finished);
     });
   }
 
+  /// Clear track history if map becomes inactive.
   void _onEnabledChange(bool enabled) {
     if (!enabled) {
       _trackHistory.clear();
@@ -279,7 +311,6 @@ class MapViewState extends State<MapView>
     _completed++;
 
     //Event
-    print("LAUNCHING EVENT BICH");
     ActiveSession().promptNextActivity(context);
   }
 
@@ -303,6 +334,7 @@ class MapViewState extends State<MapView>
   }
 
   /// Fires when Background Geolocation detects a location change
+  ///
   /// The new location is sent as a parameter
   void _onLocation(bg.Location location) {
     LatLng ll = LatLng(location.coords.latitude, location.coords.longitude);
@@ -340,6 +372,7 @@ class MapViewState extends State<MapView>
     _mapOptions.crs.scale(_mapController.zoom);
   }
 
+  /// Widget for displaying info panel with timer, pedometer, and station count.
   Widget _topInfoBar() {
     return Container(
       decoration: BoxDecoration(color: Colors.black54.withOpacity(0.6)),
@@ -377,6 +410,11 @@ class MapViewState extends State<MapView>
     );
   }
 
+  /// Widget for displaying map options.
+  ///
+  /// 1. Focus on last known location
+  /// 2. Unused
+  /// 3. Cancel and forfeit track
   Widget _mapMenu() {
     return Container(
       margin: EdgeInsets.all(0),
@@ -408,6 +446,7 @@ class MapViewState extends State<MapView>
     );
   }
 
+  /// Widget for map attribution - legally required!
   Widget _attributionBox() {
     return RotatedBox(
       quarterTurns: 3,
@@ -420,6 +459,9 @@ class MapViewState extends State<MapView>
     );
   }
 
+  /// Widget for displaying "to results"-button when map is finished.
+  ///
+  /// Could be done better.
   Widget _resultButton() {
     return Container(
       margin: EdgeInsets.only(bottom: 200.0),
@@ -513,6 +555,7 @@ class MapViewState extends State<MapView>
   }
 }
 
+/// Custom map marker for displaying a geofence.
 class GeofenceMarker extends CircleMarker {
   bg.Geofence geofence;
 

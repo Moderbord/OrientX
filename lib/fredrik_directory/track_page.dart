@@ -13,9 +13,18 @@ class TrackPage extends StatefulWidget {
   }
 }
 
+/// Animated stack that displays the appropriate page destination for the
+/// current state in ActiveSession.
+///
+/// 0. Start - lets the player enter a new track code and start running.
+/// 1. Track - shows the map screen, displaying the track and its info.
+/// 2. Result - shows the result of the player's last finished track.
 class _TrackPageState extends State<TrackPage> with TickerProviderStateMixin {
 
+  // All available page destinations in stack.
   List<Destination> _destinations;
+
+  // Animation controller for handling fading between pages.
   List<AnimationController> _faders;
   List<Key> _destinationKeys;
 

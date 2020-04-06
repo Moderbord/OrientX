@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../themes/theme_export.dart' as themeImport;
 
+/// Enumeration of available themes.
 enum Themes {
   orangeLight,
   orangeDark,
@@ -10,6 +11,9 @@ enum Themes {
   purpleDark
 }
 
+/// Returns the formatted name of a specific theme.
+///
+/// Takes an enumerated theme index.
 String getThemeName(Themes theme) {
   switch (theme) {
     case Themes.orangeLight:
@@ -29,6 +33,7 @@ String getThemeName(Themes theme) {
   return "No theme!";
 }
 
+/// Returns the enumerated them index corresponding to a theme data object.
 Themes themeGetEnum(ThemeData themeData) {
 
   if (themeData == themeImport.orangeDark) return Themes.orangeDark;
@@ -40,6 +45,7 @@ Themes themeGetEnum(ThemeData themeData) {
   return Themes.orangeLight;
 }
 
+/// Returns the theme data object corresponding to an enumerated theme index.
 ThemeData themeFromEnum(Themes theme) {
   switch (theme) {
     case Themes.orangeLight:

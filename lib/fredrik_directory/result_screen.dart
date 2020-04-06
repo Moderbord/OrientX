@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'station.dart';
 import 'track.dart';
 
 import 'package:orientx/spaken_directory/activesession.dart';
@@ -12,6 +11,10 @@ class ResultScreen extends StatefulWidget {
   State<StatefulWidget> createState() => ResultScreenState();
 }
 
+/// Displays the results of the last finished track session.
+///
+/// For instance, questions and answers, time,
+/// and a QR code representing this data.
 class ResultScreenState extends State<ResultScreen> {
   @override
   void initState() {
@@ -20,6 +23,7 @@ class ResultScreenState extends State<ResultScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     Track track = ActiveSession().getTrack();
     int stations = (track == null) ? 0 : track.activities.length;
 
@@ -126,6 +130,8 @@ class ResultScreenState extends State<ResultScreen> {
     );
   }
 
+  /// Returns a grey subtext detailing how well the player answered a
+  /// specific question.
   Widget _getResultSubtext(AnswerPackage package) {
     TextStyle style = TextStyle(fontSize: 15.0, color: Colors.grey);
 

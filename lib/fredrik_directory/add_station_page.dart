@@ -7,6 +7,7 @@ class AddStationPage extends StatefulWidget {
   }
 }
 
+/// Placeholder page for adding user-created stations to our database.
 class _AddStationPageState extends State<AddStationPage> {
   @override
   Widget build(BuildContext context) {

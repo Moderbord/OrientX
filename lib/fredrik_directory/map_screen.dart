@@ -13,13 +13,17 @@ class MapScreen extends StatefulWidget {
   State createState() => MapScreenState();
 }
 
+/// Compound map screen, containing stations overview and map view.
 class MapScreenState extends State<MapScreen> {
+
+  // Stations in this list get a green checkmark in the overview.
   List<Station> _visited = [];
 
   @override
   void initState() {
     super.initState();
 
+    // Ensure visited stations get added to "visited"-list.
     ActiveSession().addOnVisitedListeners((Station station) {
       setState(() {
         _visited.add(station);
@@ -29,6 +33,7 @@ class MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     Track track = ActiveSession().getTrack();
     int stationCount = (track == null) ? 0 : track.activityIndex.length;
 
@@ -44,8 +49,8 @@ class MapScreenState extends State<MapScreen> {
                 itemCount: stationCount,
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int i) {
-                  Station station = track.getStationFromIndex(i);
 
+                  Station station = track.getStationFromIndex(i);
                   bool isVisited = _visited.contains(station);
 
                   return Container(
