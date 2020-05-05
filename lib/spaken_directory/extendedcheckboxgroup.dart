@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:orientx/spaken_directory/activitypackage.dart';
 
+/// Widget that handles button functionality
 class ExtendedCheckboxGroup extends StatefulWidget {
   final List<String> labels;
   final QuestionType type;

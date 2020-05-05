@@ -12,7 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 enum SessionState { Start, Run, Result, Finished }
 
-// Singleton
+/// Singleton class which handles an active session (Track)
+///
 class ActiveSession {
   static final ActiveSession _activeSession = ActiveSession._internal();
 
@@ -26,11 +27,8 @@ class ActiveSession {
 
   SessionState _activeState;
   Track _activeTrack;
-
   List<Function(SessionState state)> _stateListeners = [];
-
   List<Function(Station station)> _onVisitedListeners = [];
-
   List<Station> _visitedStations = [];
   List<LatLng> _trackHistory = [];
   List<AnswerPackage> _answerHistory = [];
@@ -39,19 +37,7 @@ class ActiveSession {
   int _visitingIndex = 0;
   int _numSteps = 0;
 
-  // TODO make this server
-  final List<Station> stationList = [
-    Station(
-        name: "Lakeside Shrubbery",
-        point: LatLng(64.745597, 20.950119),
-        resourceUrl:
-            'https://www.orientering.se/media/images/DSC_2800.width-800.jpg'),
-    /*Station(
-          name: "Rock by the lake", point: LatLng(64.745124, 20.957779), resourceUrl: 'http://www.nationalstadsparken.se/Sve/Bilder/orienteringskontroll-mostphotos-544px.jpg'),
-      Station(
-          name: "The wishing tree", point: LatLng(64.752627, 20.952363), resourceUrl: 'https://www.fjardhundraland.se/wp-content/uploads/2019/08/oringen-uppsala-fjacc88rdhundraland-orienteringskontroll.jpg')*/
-  ];
-
+  /// Retrieves track from database and switches state
   _getTrack(String trackID) {
     Database.getInstance()
         .getTrack(trackID)
@@ -64,41 +50,22 @@ class ActiveSession {
     });
   }
 
-  _getPackages() {
-    List<ActivityPackage> localActivities = [];
-
-    Database.getInstance()
-        .getData()
-        .then((List<ActivityPackage> serverActivities) {
-      print("fetched");
-      for (ActivityPackage pkg in serverActivities) {
-        print(pkg.activityName);
-      }
-      localActivities = serverActivities;
-
-      _activeTrack = Track(
-        name: "Mysslinga",
-        stations: stationList,
-        activities: localActivities,
-        type: courseType.random,
-      );
-
-      setSessionState(SessionState.Run);
-    });
-  }
-
+  /// Manual package defined in serverpackage.dart
   _manualPackage(String id) {
     _activeTrack = ServerPackage().fromID(id);
     setSessionState(SessionState.Run);
   }
 
+  /// Sets which track that should be used
   void setTrack(String trackID) {
-    _getTrack(trackID);
-    //_manualPackage(trackID);
+    _getTrack(trackID);      // server
+    //_manualPackage(trackID); // local
   }
 
+  /// Returns active Track
   Track getTrack() => _activeTrack;
 
+  /// Launches next Activity in queue
   void promptNextActivity(BuildContext context) {
     int activityIndex = _activeTrack.activityIndex[
         _visitingIndex]; // Collects the correct index for the next activity
@@ -177,6 +144,7 @@ class ActiveSession {
   // TODO receive geoCache prompt with station ID and initiate activityManager
   // TODO launch activity from station ID
 
+  /// Clears session values
   void flush() {
     setSessionState(SessionState.Start);
     //_activeState = null;
@@ -193,6 +161,7 @@ class ActiveSession {
     return false;
   }
 
+  /// Saves user statistics
   void statSetter() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 

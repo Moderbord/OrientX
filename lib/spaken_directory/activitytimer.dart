@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Timer Widget which handles the amount of time an Activity is alive
 class ActivityTimer extends StatefulWidget {
    final int time;
    final void Function() onFinish;

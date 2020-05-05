@@ -7,6 +7,9 @@ import 'package:orientx/spaken_directory/extendedcheckboxgroup.dart';
 import 'package:orientx/spaken_directory/videoitem.dart';
 import 'package:orientx/spaken_directory/activitypackage.dart';
 
+/// Activity widget which contains questions and related media
+///
+/// Returns an AnswerPackage on exit
 class Activity extends StatelessWidget {
   final String activityName;
   final String id;
@@ -66,7 +69,7 @@ class Activity extends StatelessWidget {
                     result: answerCheck(userAnswers, answers) ? Result.Correct : Result.Incorrect,
                     selectedAnswers: userAnswers,
                     correctAnswers: answers,
-                    answerTime: 3,
+                    answerTime: 3, // not taken into account at the moment
                   )),
             ),
           ],
@@ -75,12 +78,13 @@ class Activity extends StatelessWidget {
     );
   }
 
+  /// Checks user answers with correct answers
   bool answerCheck(List<String> userAnswer, List<String> correctAnswer) {
     return DeepCollectionEquality.unordered().equals(userAnswer, correctAnswer);
   }
-
 }
 
+/// Container widget of the displayed media in the Activity
 Widget dataWidget(DataType type, String source) {
   switch (type) {
     case DataType.Undefined:
@@ -110,6 +114,4 @@ Widget dataWidget(DataType type, String source) {
         child: Text("Data switch default fallback"),
       );
   }
-
-
 }

@@ -4,12 +4,12 @@ import 'package:orientx/fredrik_directory/station.dart';
 import 'package:orientx/fredrik_directory/track.dart';
 import 'package:orientx/spaken_directory/activitypackage.dart';
 
+/// Singleton class which handles functionality with the database.
+///
 class Database {
   static final _databaseReference = Firestore.instance;
 
   static Database _database;
-
-  _Database() {}
 
   static Database getInstance() {
     if (_database == null) {
@@ -18,17 +18,7 @@ class Database {
     return _database;
   }
 
-/*  void createRecord(String collection, String doc, ) async {
-    await databaseReference
-        .collection("testboop")
-        .document("1")
-        .setData({'title': 'bladibla', 'desc': 'ladida'});
-    DocumentReference docRef = await databaseReference
-        .collection("testboop")
-        .add({'title': 'WOOOOP', 'desc': 'slurpad'});
-    print(docRef.documentID);
-  }*/
-
+  /// Fetches a Track from the database with corresponding Stations and Activities
   Future<Track> getTrack(String trackID) async {
     Track track;
     List<Station> stations = [];
@@ -78,6 +68,7 @@ class Database {
     return track;
   }
 
+  /// Converts retrieved data to Stations
   Station toStation(Map<String, dynamic> dataMap) {
     GeoPoint geoPoint = dataMap['Point']; //Extract GeoPoint
 
@@ -91,8 +82,9 @@ class Database {
     return station;
   }
 
+  /// Converts retrieved data to ActivityPackages
   ActivityPackage toActivityPackage(Map<String, dynamic> dataMap) {
-    List<dynamic> tmp = dataMap['Answers'];
+    List<dynamic> tmp = dataMap['Answers']; // Database list is structured different and needs to be converted
     List<String> answers = tmp.cast<String>();
 
     tmp = dataMap['Questions'];
@@ -112,54 +104,4 @@ class Database {
     return activityPackage;
   }
 
-  // TODO remove dependency
-  Future<List<ActivityPackage>> getData() async {
-    List<ActivityPackage> pList = [];
-    await _databaseReference
-        .collection("Activity")
-        .getDocuments()
-        .then((QuerySnapshot snapshot) {
-      pList = toPackages(snapshot);
-    });
-    return pList;
-  }
-
-  // TODO remove dependency
-  List<ActivityPackage> toPackages(QuerySnapshot snapshot) {
-    List<ActivityPackage> packageList = [];
-    snapshot.documents.forEach((f) {
-      Map<String, dynamic> tmpMap = f.data;
-
-      List<dynamic> tmp = tmpMap['Answers'];
-      List<String> answers = tmp.cast<String>();
-
-      tmp = tmpMap['Questions'];
-      List<String> questions = tmp.cast<String>();
-
-      ActivityPackage package = new ActivityPackage(
-          activityName: tmpMap['ActivityName'],
-          id: tmpMap['ID'],
-          description: tmpMap['Desc'],
-          answers: answers,
-          dataSource: tmpMap['DataSrc'],
-          dataType: DataType.values[tmpMap['DataType']],
-          duration: tmpMap['Duration'],
-          questions: questions,
-          questionType: QuestionType.values[tmpMap['QuestType']]);
-
-      packageList.add(package);
-    });
-    return packageList;
-  }
-
-/*  void deleteData(String collection, String doc) {
-    try {
-      databaseReference
-          .collection('testboop')
-          .document('1')
-          .delete();
-    } catch (e) {
-      print(e.toString());
-    }
-  }*/
 }

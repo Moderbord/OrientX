@@ -14,6 +14,7 @@ enum QuestionType {
   Multiple,
 }
 
+/// Activity package class
 class ActivityPackage {
   final String activityName;
   final String id;

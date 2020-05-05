@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 
+/// Widget with video functionality (only available on Android)
 class VideoItem extends StatefulWidget {
    final VideoPlayerController videoPlayerController;
    final bool looping;
