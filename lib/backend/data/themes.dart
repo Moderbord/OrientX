@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../themes/theme_export.dart' as themeImport;
+import '../../app/themes/theme_export.dart' as themeImport;
 
 /// Enumeration of available themes.
 enum Themes {

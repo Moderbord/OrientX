@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:orientx/spaken_directory/activitypackage.dart';
-import 'package:orientx/spaken_directory/answerpackage.dart';
-import 'activity.dart';
+import 'package:orientx/backend/activity/activitypackage.dart';
+import 'package:orientx/backend/activity/answerpackage.dart';
+import '../activity/activity.dart';
 
 class ActivityManager {
   String activityName;

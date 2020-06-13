@@ -1,0 +1,1 @@
+This folder contains app-wide data, such as themes.

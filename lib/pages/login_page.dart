@@ -4,8 +4,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import "sign_in.dart";
-import "first_screen.dart";
+import '../backend/auth/sign_in.dart';
+import 'main_page.dart';
 
 /// LoginPage class that just creates a state of the class below
 class LoginPage extends StatefulWidget {

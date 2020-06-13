@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:orientx/fredrik_directory/station.dart';
-import 'package:orientx/spaken_directory/activitypackage.dart';
+import 'package:orientx/backend/data/station.dart';
+import 'package:orientx/backend/activity/activitypackage.dart';
 
 /// Represents how stations are ordered on a track.
 enum courseType{

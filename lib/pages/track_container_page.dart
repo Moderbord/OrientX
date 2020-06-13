@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:orientx/fredrik_directory/destination.dart';
-import 'package:orientx/simon_directory/start_screen.dart';
-import 'package:orientx/fredrik_directory/map_screen.dart';
-import 'package:orientx/fredrik_directory/result_screen.dart';
-import 'package:orientx/spaken_directory/activesession.dart';
+import 'package:orientx/backend/data/destination.dart';
+import 'package:orientx/pages/start_track_page.dart';
+import 'package:orientx/pages/map_screen.dart';
+import 'package:orientx/pages/result_screen.dart';
+import 'package:orientx/backend/activity/activesession.dart';
 
 class TrackPage extends StatefulWidget {
   @override

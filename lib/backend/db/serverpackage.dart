@@ -1,6 +1,6 @@
-import 'package:orientx/spaken_directory/activitypackage.dart';
-import 'package:orientx/fredrik_directory/station.dart';
-import 'package:orientx/fredrik_directory/track.dart';
+import 'package:orientx/backend/activity/activitypackage.dart';
+import 'package:orientx/backend/data/station.dart';
+import 'package:orientx/backend/data/track.dart';
 import 'package:latlong/latlong.dart';
 
 /// A local server package made for testing

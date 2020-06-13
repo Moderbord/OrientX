@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'track.dart';
+import '../backend/data/track.dart';
 
-import 'package:orientx/spaken_directory/activesession.dart';
-import 'package:orientx/spaken_directory/answerpackage.dart';
+import 'package:orientx/backend/activity/activesession.dart';
+import 'package:orientx/backend/activity/answerpackage.dart';
 
 class ResultScreen extends StatefulWidget {
   @override

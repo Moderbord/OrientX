@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:orientx/spaken_directory/activesession.dart';
+import 'package:orientx/backend/activity/activesession.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-import 'station.dart';
-import 'track.dart';
+import '../backend/data/station.dart';
+import '../backend/data/track.dart';
 
-import 'map_view.dart';
+import '../widgets/map_view.dart';
 
 class MapScreen extends StatefulWidget {
   @override

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:orientx/simon_directory/settings_page.dart';
-import "simon_directory/login_page.dart";
+import 'package:orientx/pages/settings_page.dart';
+import 'pages/login_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:orientx/fredrik_directory/theme_notifier.dart';
-import 'package:orientx/fredrik_directory/themes.dart';
-import 'simon_directory/first_screen.dart';
+import 'package:orientx/backend/notifiers/theme_notifier.dart';
+import 'package:orientx/backend/data/themes.dart';
+import 'pages/main_page.dart';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;

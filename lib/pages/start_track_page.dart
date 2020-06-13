@@ -4,8 +4,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:orientx/spaken_directory/activesession.dart';
-import 'package:orientx/spaken_directory/serverpackage.dart';
+import 'package:orientx/backend/activity/activesession.dart';
+import 'package:orientx/backend/db/serverpackage.dart';
 
 /// Start Run state creator
 class StartRun extends StatefulWidget {

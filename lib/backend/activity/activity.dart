@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
-import 'package:orientx/spaken_directory/answerpackage.dart';
+import 'package:orientx/backend/activity/answerpackage.dart';
 import 'package:video_player/video_player.dart';
-import 'package:orientx/spaken_directory/activitytimer.dart';
-import 'package:orientx/spaken_directory/extendedcheckboxgroup.dart';
-import 'package:orientx/spaken_directory/videoitem.dart';
-import 'package:orientx/spaken_directory/activitypackage.dart';
+import 'package:orientx/widgets/activitytimer.dart';
+import 'package:orientx/widgets/extendedcheckboxgroup.dart';
+import 'package:orientx/widgets/videoitem.dart';
+import 'package:orientx/backend/activity/activitypackage.dart';
 
 /// Activity widget which contains questions and related media
 ///

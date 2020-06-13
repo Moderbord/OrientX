@@ -1,0 +1,1 @@
+This folder contains backend logic, such as database connection, geolocation, authentication, and theme notifiers.

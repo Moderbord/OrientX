@@ -8,8 +8,8 @@ import 'package:flutter_background_geolocation/flutter_background_geolocation.da
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong/latlong.dart';
-import 'package:orientx/fredrik_directory/station.dart';
-import 'package:orientx/spaken_directory/activesession.dart';
+import 'package:orientx/backend/data/station.dart';
+import 'package:orientx/backend/activity/activesession.dart';
 
 class MapView extends StatefulWidget {
   @override

@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:orientx/fredrik_directory/theme_notifier.dart';
-import 'package:orientx/fredrik_directory/themes.dart';
+import 'package:orientx/backend/notifiers/theme_notifier.dart';
+import 'package:orientx/backend/data/themes.dart';
 
 /// Settings Page state creator.
 class SettingsPage extends StatefulWidget {

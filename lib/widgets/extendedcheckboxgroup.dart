@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
-import 'package:orientx/spaken_directory/activitypackage.dart';
+import 'package:orientx/backend/activity/activitypackage.dart';
 
 /// Widget that handles button functionality
 class ExtendedCheckboxGroup extends StatefulWidget {

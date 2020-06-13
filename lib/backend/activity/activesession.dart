@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:orientx/fredrik_directory/track.dart';
-import 'package:orientx/fredrik_directory/station.dart';
-import 'package:orientx/spaken_directory/activitymanager.dart';
-import 'package:orientx/spaken_directory/answerpackage.dart';
-import 'package:orientx/spaken_directory/serverpackage.dart';
-import 'package:orientx/spaken_directory/activitypackage.dart';
-import 'package:orientx/luddw_dir/db.dart';
+import 'package:orientx/backend/data/track.dart';
+import 'package:orientx/backend/data/station.dart';
+import 'package:orientx/backend/managers/activitymanager.dart';
+import 'package:orientx/backend/activity/answerpackage.dart';
+import 'package:orientx/backend/db/serverpackage.dart';
+import 'package:orientx/backend/activity/activitypackage.dart';
+import 'package:orientx/backend/db/db.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum SessionState { Start, Run, Result, Finished }

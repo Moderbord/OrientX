@@ -1,13 +1,13 @@
 /// This page is the structure of the app, it contains means for getting around
 
 import 'package:flutter/material.dart';
-import 'package:orientx/fredrik_directory/add_station_page.dart';
-import 'package:orientx/simon_directory/sign_in.dart';
-import 'package:orientx/fredrik_directory/destination.dart';
+import 'package:orientx/pages/add_station_page.dart';
+import 'package:orientx/backend/auth/sign_in.dart';
+import 'package:orientx/backend/data/destination.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'profile_page.dart';
-import 'package:orientx/fredrik_directory/track_page.dart';
-import 'sign_in.dart';
+import 'package:orientx/pages/track_container_page.dart';
+import '../backend/auth/sign_in.dart';
 
 /// First screen state creator
 class FirstScreen extends StatefulWidget {

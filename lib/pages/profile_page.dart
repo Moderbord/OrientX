@@ -2,7 +2,7 @@
 /// This uses the staggered grid view plugin to create a grid with stats
 
 import 'package:flutter/material.dart';
-import 'sign_in.dart';
+import '../backend/auth/sign_in.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
